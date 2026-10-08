@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>6 Yards | Six Yards. Infinite Stories. — Luxury Handloom Sarees</title>
+  <meta name="description" content="Explore handcrafted pure silk Banarasi, Kanjivaram, Chanderi, and Tussar sarees at 6 Yards. Authentic Indian loomcraft, timeless elegance and modern grace." />
+
+  <!-- Google Fonts: Cormorant Garamond (Headings) & Jost (Body) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Jost:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+  <!-- FontAwesome Icons for UI -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="assets/favicon.png" />
+
+  <!-- Custom Luxury Stylesheet -->
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+
+  <!-- Main Navigation Header -->
+  <header class="header-main">
+    <div class="navbar">
+      <!-- Mobile Menu Hamburger Button -->
+      <button class="mobile-nav-toggle" id="mobile-nav-toggle-btn" aria-label="Toggle Navigation Menu">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+
+      <!-- Brand Logo -->
+      <a href="index.html" class="brand-logo-link">
+        <img src="assets/brand-logo-transparent.png" alt="6yards Sarees - Six Yards of Grace" class="brand-logo-img" />
+      </a>
+
+      <!-- Navigation Menu -->
+      <nav>
+        <ul class="nav-menu" id="nav-menu-list">
+          <li class="nav-item">
+            <a href="index.html" class="nav-link active">Home</a>
+          </li>
+          <li class="nav-item">
+            <a href="#products-section" class="nav-link">
+              Shop <i class="fa-solid fa-chevron-down dropdown-caret"></i>
+            </a>
+            <ul class="nav-dropdown">
+              <li><a href="#products-section" onclick="filterProductsByCollection('resham')">Banarasi Silk</a></li>
+              <li><a href="#products-section" onclick="filterProductsByCollection('riwayat')">Kanjivaram Silk</a></li>
+              <li><a href="#products-section" onclick="filterProductsByCollection('adaa')">Chanderi Silks</a></li>
+              <li><a href="#products-section" onclick="filterProductsByCollection('vastra')">Tussar & Kosa</a></li>
+              <li><a href="#products-section" onclick="filterProductsByCollection('leher')">Organza Silks</a></li>
+              <li><a href="#products-section" onclick="filterProductsByCollection('roop')">Georgette Chikankari</a></li>
+            </ul>
+          </li>
+          <li class="nav-item">
+            <a href="#collections-section" class="nav-link">
+              Collections <i class="fa-solid fa-chevron-down dropdown-caret"></i>
+            </a>
+            <ul class="nav-dropdown">
+              <li><a href="#collections-section" onclick="filterProductsByCollection('adaa')">01 Adaa (Modern Grace)</a></li>
+              <li><a href="#collections-section" onclick="filterProductsByCollection('vastra')">02 Vastra (Timeless Form)</a></li>
+              <li><a href="#collections-section" onclick="filterProductsByCollection('roop')">03 Roop (Bold Beauty)</a></li>
+              <li><a href="#collections-section" onclick="filterProductsByCollection('leher')">04 Leher (Fluid Drapes)</a></li>
+              <li><a href="#collections-section" onclick="filterProductsByCollection('resham')">05 Resham (The Silk Edit)</a></li>
+              <li><a href="#collections-section" onclick="filterProductsByCollection('riwayat')">06 Riwayat (Heritage Edit)</a></li>
+            </ul>
+          </li>
+          <li class="nav-item">
+            <a href="javascript:void(0)" class="nav-link" onclick="openStoryModal()">Our Story</a>
+          </li>
+          <li class="nav-item">
+            <a href="#craft-section" class="nav-link">Journal</a>
+          </li>
+          <li class="nav-item">
+            <a href="#footer-section" class="nav-link">Contact</a>
+          </li>
+        </ul>
+      </nav>
+
+      <!-- Right Header Actions (Search, Account, Wishlist, Cart) -->
+      <div class="header-actions">
+        <div class="search-wrapper">
+          <input type="text" id="header-search-input" class="search-input" placeholder="search for sarees..." />
+          <span class="search-icon-btn"><i class="fa-solid fa-magnifying-glass"></i></span>
+        </div>
+
+        <button class="action-icon-btn" title="Account / Profile" onclick="showToast('Welcome to 6 Yards Member Portal')">
+          <i class="fa-regular fa-user"></i>
+        </button>
+
+        <button class="action-icon-btn" id="wishlist-toggle-btn" title="Wishlist">
+          <i class="fa-regular fa-heart"></i>
+          <span class="badge-count" id="wishlist-badge-count">0</span>
+        </button>
+
+        <button class="action-icon-btn" id="cart-toggle-btn" title="Shopping Bag">
+          <i class="fa-solid fa-bag-shopping"></i>
+          <span class="badge-count" id="cart-badge-count">0</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero-section" id="hero-banner">
+    <!-- Background Video -->
+    <div class="hero-video-container">
+      <video class="hero-background-video" autoplay loop muted playsinline poster="https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&w=1600&q=90">
+        <source src="gemini_generated_video_9adb8229_gwr_video_mvp.mp4" type="video/mp4" />
+      </video>
+      <div class="hero-video-overlay"></div>
+      <!-- Subtle Motion Graphics: Floating Gold Silk Shimmer & Ambient Ring -->
+      <div class="hero-motion-graphics">
+        <div class="motion-glow motion-glow-1"></div>
+        <div class="motion-glow motion-glow-2"></div>
+        <div class="motion-particle particle-1"></div>
+        <div class="motion-particle particle-2"></div>
+        <div class="motion-particle particle-3"></div>
+        <div class="motion-particle particle-4"></div>
+      </div>
+    </div>
+
+    <div class="container hero-content">
+      <span class="hero-eyebrow">Traditional Sarees</span>
+      <h1 class="hero-title">Six Yards.<br />Infinite Stories.</h1>
+      <p class="hero-desc">
+        From timeless weaves to contemporary drapes, explore sarees that celebrate craft, culture and you.
+      </p>
+      <a href="#collections-section" class="hero-cta-btn">
+        Explore Collections <i class="fa-solid fa-arrow-right"></i>
+      </a>
+    </div>
+
+    <!-- Hero Video Controls / Badge -->
+    <div class="hero-controls">
+      <div class="hero-pagination" style="display: flex; align-items: center; gap: 12px;">
+        <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background-color: var(--color-gold); box-shadow: 0 0 10px var(--color-gold);"></span>
+        <span style="font-size: 0.8125rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--color-gold-light); font-weight: 500;">
+          Pure Silk Handloom Cinema
+        </span>
+      </div>
+
+      <div class="hero-nav-arrows">
+        <button class="hero-arrow-btn" id="hero-sound-toggle-btn" title="Toggle Audio" aria-label="Toggle Sound">
+          <i class="fa-solid fa-volume-xmark" id="hero-sound-icon"></i>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Collections Category Section ("Sutra") -->
+  <section class="sutra-section section-padding" id="collections-section">
+    <div class="container">
+      <div class="sutra-header">
+        <div class="sutra-title-box">
+          <span class="sub-label">The Collections</span>
+          <h2 class="main-title font-serif">Sutra</h2>
+          <p class="sutra-tagline">Curated stories, woven in six yards.</p>
+        </div>
+        <a href="#products-section" class="view-all-link" onclick="resetFilters()">
+          View All <i class="fa-solid fa-arrow-right"></i>
+        </a>
+      </div>
+
+      <!-- 6 Category Circular Cards -->
+      <div class="collections-grid" id="collections-grid-container">
+        <!-- Rendered dynamically by JavaScript -->
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured Duo Promo Section (Resham & Crafted in Tradition) -->
+  <section class="featured-duo-section" id="craft-section">
+    <div class="container">
+      <div class="featured-duo-grid">
+        <!-- Card 1: Resham -->
+        <div class="feature-banner-card" style="background-image: url('assets/featured-card-1.jpg');">
+          <div class="feature-banner-content">
+            <span class="feature-banner-eyebrow">Featured Collections</span>
+            <h3 class="feature-banner-title font-serif">Resham</h3>
+            <p class="feature-banner-desc">Pure silk. Timeless luxury.</p>
+            <a href="#products-section" class="feature-banner-cta" onclick="filterProductsByCollection('resham')">
+              Shop Now <i class="fa-solid fa-arrow-right"></i>
+            </a>
+          </div>
+        </div>
+
+        <!-- Card 2: The Weave Behind the Beauty -->
+        <div class="feature-banner-card" style="background-image: url('assets/featured-card-2.jpg');">
+          <div class="feature-banner-content">
+            <span class="feature-banner-eyebrow">Crafted in Tradition</span>
+            <h3 class="feature-banner-title font-serif">The Weave<br />Behind the Beauty</h3>
+            <p class="feature-banner-desc">Artisanal techniques, Generations of expertise. Every saree tells a story.</p>
+            <a href="javascript:void(0)" class="feature-banner-cta" onclick="openStoryModal()">
+              Explore Our Craft <i class="fa-solid fa-arrow-right"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Best Sellers / "Loved by Many" Section -->
+  <section class="bestsellers-section" id="products-section">
+    <div class="container">
+      <div class="section-header-row">
+        <div>
+          <span class="section-tag">Best Sellers</span>
+          <h2 class="section-heading-lg font-serif">Loved by Many</h2>
+          <p class="section-subheading">Our most popular sarees, handpicked for you.</p>
+        </div>
+        <a href="#products-section" class="view-all-link" onclick="resetFilters()">
+          View All <i class="fa-solid fa-arrow-right"></i>
+        </a>
+      </div>
+
+      <!-- Filter Tabs -->
+      <div class="category-filter-bar">
+        <button class="filter-pill active" data-category="all">All Sarees</button>
+        <button class="filter-pill" data-category="banarasi">Banarasi Silk</button>
+        <button class="filter-pill" data-category="kanjivaram">Kanjivaram</button>
+        <button class="filter-pill" data-category="chanderi">Chanderi</button>
+        <button class="filter-pill" data-category="tussar">Tussar Silk</button>
+        <button class="filter-pill" data-category="organza">Organza</button>
+        <button class="filter-pill" data-category="georgette">Georgette</button>
+      </div>
+
+      <!-- 6 Product Cards Grid -->
+      <div class="products-grid" id="products-grid-container">
+        <!-- Rendered dynamically by JavaScript -->
+      </div>
+    </div>
+  </section>
+
+  <!-- Special Offer Banner & Trust Badges -->
+  <section class="offer-banner-section">
+    <div class="container">
+      <div class="offer-banner-inner">
+        <div class="offer-text-box">
+          <span class="offer-eyebrow">Special Offer</span>
+          <h3 class="offer-title font-serif">Get 10% Off on your first order</h3>
+        </div>
+
+        <div class="promo-code-box" id="promo-coupon-trigger" title="Click to copy coupon code">
+          <span class="promo-code-text">Use Code: <strong>WELCOME10</strong></span>
+          <span class="promo-copy-icon"><i class="fa-regular fa-copy"></i></span>
+        </div>
+      </div>
+
+      <!-- Trust Badges Strip -->
+      <div class="trust-badges-strip">
+        <div class="trust-badge-item">
+          <div class="trust-badge-icon"><i class="fa-solid fa-truck-fast"></i></div>
+          <div class="trust-badge-text">
+            <h5>Free Shipping</h5>
+            <p>On orders above ₹5,000</p>
+          </div>
+        </div>
+
+        <div class="trust-badge-item">
+          <div class="trust-badge-icon"><i class="fa-solid fa-shield-halved"></i></div>
+          <div class="trust-badge-text">
+            <h5>Secure Payments</h5>
+            <p>100% safe & trusted</p>
+          </div>
+        </div>
+
+        <div class="trust-badge-item">
+          <div class="trust-badge-icon"><i class="fa-solid fa-rotate-left"></i></div>
+          <div class="trust-badge-text">
+            <h5>Easy Returns</h5>
+            <p>Hassle-free within 7 days</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="site-footer" id="footer-section">
+    <div class="container">
+      <div class="footer-top-grid">
+        <!-- Col 1: Brand Info -->
+        <div class="footer-brand-col">
+          <a href="index.html" class="brand-logo-link" style="margin-bottom: 16px; display: inline-block;">
+            <img src="assets/brand-logo-light.png" alt="6yards Sarees" class="footer-brand-logo-img" />
+          </a>
+          <p class="footer-tagline">Six yards. Infinite stories.</p>
+          <div class="social-links">
+            <a href="https://instagram.com" target="_blank" rel="noreferrer" class="social-icon-btn" title="Instagram">
+              <i class="fa-brands fa-instagram"></i>
+            </a>
+            <a href="https://pinterest.com" target="_blank" rel="noreferrer" class="social-icon-btn" title="Pinterest">
+              <i class="fa-brands fa-pinterest-p"></i>
+            </a>
+            <a href="https://facebook.com" target="_blank" rel="noreferrer" class="social-icon-btn" title="Facebook">
+              <i class="fa-brands fa-facebook-f"></i>
+            </a>
+            <a href="https://youtube.com" target="_blank" rel="noreferrer" class="social-icon-btn" title="YouTube">
+              <i class="fa-brands fa-youtube"></i>
+            </a>
+          </div>
+        </div>
+
+        <!-- Col 2: Quick Links -->
+        <div class="footer-nav-col">
+          <h4>Quick Links</h4>
+          <ul class="footer-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="#products-section">Shop</a></li>
+            <li><a href="#collections-section">Collections</a></li>
+            <li><a href="javascript:void(0)" onclick="openStoryModal()">Our Story</a></li>
+            <li><a href="#craft-section">Journal</a></li>
+            <li><a href="#footer-section">Contact</a></li>
+          </ul>
+        </div>
+
+        <!-- Col 3: Customer Care -->
+        <div class="footer-nav-col">
+          <h4>Customer Care</h4>
+          <ul class="footer-links">
+            <li><a href="javascript:void(0)" onclick="showToast('Shipping: Dispatched in 24-48 hrs with express tracking.')">Shipping Policy</a></li>
+            <li><a href="javascript:void(0)" onclick="showToast('Returns: 7-day hassle-free reverse pickup available.')">Returns & Exchanges</a></li>
+            <li><a href="javascript:void(0)" onclick="showToast('Standard Saree Length: 5.5m + 0.8m Blouse Piece.')">Size Guide</a></li>
+            <li><a href="javascript:void(0)" onclick="showToast('Need help? WhatsApp support: +91 98765 43210')">FAQs</a></li>
+            <li><a href="javascript:void(0)" onclick="showToast('Terms: Authentic Handloom Certified Goods.')">Terms & Conditions</a></li>
+            <li><a href="javascript:void(0)" onclick="showToast('Privacy: Your data is never shared.')">Privacy Policy</a></li>
+          </ul>
+        </div>
+
+        <!-- Col 4: Newsletter -->
+        <div class="footer-nav-col newsletter-box">
+          <h4>Join Our Newsletter</h4>
+          <p>Be the first to know about new arrivals, exclusive offers and more.</p>
+          <form class="newsletter-form" id="newsletter-form">
+            <input type="email" id="newsletter-email-input" class="newsletter-input" placeholder="Your email address" required />
+            <button type="submit" class="newsletter-submit-btn" title="Subscribe" aria-label="Subscribe">
+              <i class="fa-solid fa-arrow-right"></i>
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Footer Bottom -->
+      <div class="footer-bottom-row">
+        <span>&copy; 2026 6 Yards. All rights reserved.</span>
+        <button class="scroll-top-btn" id="scroll-top-btn" title="Back to top" aria-label="Back to Top">
+          <i class="fa-solid fa-arrow-up"></i>
+        </button>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ==========================================================================
+       SLIDE-OVER CART DRAWER
+       ========================================================================== -->
+  <div class="drawer-backdrop" id="cart-backdrop"></div>
+  <aside class="slide-drawer" id="cart-drawer">
+    <div class="drawer-header">
+      <h3 class="font-serif">Shopping Bag</h3>
+      <button class="drawer-close-btn" id="cart-close-btn" aria-label="Close Bag">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+
+    <div class="drawer-body">
+      <!-- Free Shipping Tracker -->
+      <div class="free-shipping-tracker">
+        <p id="shipping-tracker-text">Add <strong>₹ 5,000</strong> more to get <strong>FREE Express Shipping</strong>!</p>
+        <div class="shipping-progress-bg">
+          <div class="shipping-progress-fill" id="shipping-progress-bar" style="width: 0%;"></div>
+        </div>
+      </div>
+
+      <!-- Empty Cart View -->
+      <div id="cart-empty-state" style="display: none; text-align: center; padding: 40px 0;">
+        <i class="fa-solid fa-bag-shopping" style="font-size: 3rem; color: var(--color-blush); margin-bottom: 12px;"></i>
+        <h4 class="font-serif" style="font-size: 1.4rem; color: var(--color-maroon);">Your Bag is Empty</h4>
+        <p style="font-size: 0.875rem; color: var(--color-text-muted); margin-top: 6px;">Discover six yards of grace waiting for you.</p>
+        <button onclick="closeCartDrawer();" style="margin-top: 18px; padding: 10px 24px; background: var(--color-maroon); color: var(--color-cream); border-radius: 4px; font-weight: 500;">Start Shopping</button>
+      </div>
+
+      <!-- Cart Item Rows -->
+      <div id="cart-items-container"></div>
+    </div>
+
+    <!-- Cart Footer Summary -->
+    <div class="drawer-footer" id="cart-footer-content">
+      <!-- Promo Code Input -->
+      <div style="display: flex; gap: 8px; margin-bottom: 14px;">
+        <input type="text" id="promo-input-field" placeholder="Promo code (e.g. WELCOME10)" style="flex: 1; padding: 8px 12px; border: 1px solid var(--color-border); border-radius: 4px; font-size: 0.85rem;" />
+        <button id="apply-promo-btn" style="padding: 8px 14px; background-color: var(--color-maroon); color: var(--color-cream); border-radius: 4px; font-size: 0.8rem; font-weight: 600;">Apply</button>
+      </div>
+
+      <div class="cart-summary-subtotal">
+        <span>Subtotal:</span>
+        <span id="cart-subtotal-price">₹ 0</span>
+      </div>
+
+      <div id="cart-discount-row" style="display: none; justify-content: space-between; font-size: 0.9rem; color: #2E7D32; margin-bottom: 10px;">
+        <span>Promo Discount:</span>
+        <span id="cart-discount-value">- ₹ 0</span>
+      </div>
+
+      <div style="display: flex; justify-content: space-between; font-size: 1.15rem; font-weight: 700; color: var(--color-maroon); margin-bottom: 16px;">
+        <span>Total:</span>
+        <span id="cart-final-total">₹ 0</span>
+      </div>
+
+      <button class="checkout-btn" id="checkout-btn">
+        Proceed to Checkout <i class="fa-solid fa-arrow-right" style="margin-left: 6px;"></i>
+      </button>
+    </div>
+  </aside>
+
+  <!-- ==========================================================================
+       WISHLIST DRAWER
+       ========================================================================== -->
+  <div class="drawer-backdrop" id="wishlist-backdrop"></div>
+  <aside class="slide-drawer" id="wishlist-drawer">
+    <div class="drawer-header">
+      <h3 class="font-serif">Saved Sarees</h3>
+      <button class="drawer-close-btn" id="wishlist-close-btn" aria-label="Close Wishlist">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+
+    <div class="drawer-body">
+      <div id="wishlist-empty-state" style="display: none; text-align: center; padding: 40px 0;">
+        <i class="fa-regular fa-heart" style="font-size: 3rem; color: var(--color-blush); margin-bottom: 12px;"></i>
+        <h4 class="font-serif" style="font-size: 1.4rem; color: var(--color-maroon);">No Saved Items</h4>
+        <p style="font-size: 0.875rem; color: var(--color-text-muted); margin-top: 6px;">Tap the heart icon on any saree to save it for later.</p>
+      </div>
+      <div id="wishlist-items-container"></div>
+    </div>
+  </aside>
+
+  <!-- ==========================================================================
+       PRODUCT QUICK VIEW MODAL
+       ========================================================================== -->
+  <div class="modal-backdrop" id="quickview-backdrop">
+    <div class="quick-view-modal" id="quickview-modal">
+      <!-- Dynamic modal content loaded via JavaScript -->
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       OUR STORY & CRAFT HERITAGE MODAL
+       ========================================================================== -->
+  <div class="modal-backdrop" id="story-backdrop">
+    <div class="story-modal-content">
+      <button class="modal-close-icon" onclick="closeStoryModal()" aria-label="Close Story">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+      <span class="hero-eyebrow" style="color: var(--color-gold);">The 6 Yards Philosophy</span>
+      <h2 class="font-serif">Six Yards of Grace, Generations of Heritage</h2>
+      <p style="margin-bottom: 16px; color: var(--color-text-muted); line-height: 1.7;">
+        In an unstitched piece of fabric spanning six yards lies the entire soul of Indian craft. For millennia, the saree has celebrated the poetry of human hands—hand-spun silk, gold and silver zari drawn across wooden pit looms, and natural indigo baths that mirror twilight skies.
+      </p>
+      <div style="background-color: var(--color-cream-soft); padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid var(--color-maroon);">
+        <h4 class="font-serif" style="color: var(--color-maroon); font-size: 1.25rem; margin-bottom: 6px;">"A woman, a drape and a number."</h4>
+        <p style="font-size: 0.9rem; color: var(--color-text-main); font-style: italic;">
+          One flowing line turns the saree into the numeral 6, then into the brand name beside it. A single maroon colour on warm cream keeps it elegant, traditional and easy to recognise.
+        </p>
+      </div>
+      <h4 class="font-serif" style="color: var(--color-maroon); font-size: 1.3rem; margin-top: 24px; margin-bottom: 10px;">Our Master Weavers</h4>
+      <p style="color: var(--color-text-muted); line-height: 1.7; font-size: 0.95rem;">
+        Every 6 Yards saree is sourced directly from certified artisan clusters across Varanasi, Kanchipuram, Chanderi, Bhagalpur, and Yeola. When you drape 6 Yards, you preserve living loomcraft.
+      </p>
+      <button onclick="closeStoryModal()" class="checkout-btn" style="margin-top: 28px; width: auto; padding: 12px 30px;">
+        Explore Collections
+      </button>
+    </div>
+  </div>
+
+  <!-- JavaScript Modules -->
+  <script src="js/products.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
