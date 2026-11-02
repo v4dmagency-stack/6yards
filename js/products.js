@@ -505,6 +505,62 @@ const PRODUCTS_DATA = [
       "Heirloom keepsake packaging included",
       "Dry clean only"
     ]
+  },
+  {
+    id: "saree-12-d",
+    name: "Cerulean Teal & Plum Kanjivaram Silk Saree",
+    category: "riwayat",
+    collection: "riwayat",
+    collectionName: "Riwayat - Curated stories, woven in six yards.",
+    price: 15900,
+    originalPrice: 19200,
+    rating: 4.9,
+    reviewsCount: 95,
+    isBestSeller: true,
+    isNew: true,
+    tag: "Heritage Craft",
+    color: "Cerulean Mineral Teal & Deep Plum Border",
+    fabric: "Pure Heavy Mulberry Kanchipuram Silk",
+    weave: "Korvai Triple-Shuttle Weave with Contrast Border",
+    length: "6.3 Meters with grand contrast pallu",
+    origin: "Kanchipuram, Tamil Nadu",
+    description: "A breathtaking contrast drape featuring a calming cerulean mineral teal body framed by deep plum purple borders and pure gold metallic pinstripes.",
+    image: "assets/catalog/riwayat/riwayat-06-primary.jpg",
+    hoverImage: "assets/catalog/riwayat/riwayat-06-hover.jpg",
+    details: [
+      "Silk Mark Certified handloom weave with official QR verification label",
+      "Signature high-contrast deep plum and mineral teal palette",
+      "Triple-shuttle interlocking Korvai technique",
+      "Complimentary satin petticoat fabric included"
+    ]
+  },
+  {
+    id: "saree-12-e",
+    name: "Midnight Royal Blue Kadwa Brocade Silk Saree",
+    category: "riwayat",
+    collection: "riwayat",
+    collectionName: "Riwayat - Curated stories, woven in six yards.",
+    price: 18200,
+    originalPrice: 21900,
+    rating: 5.0,
+    reviewsCount: 110,
+    isBestSeller: true,
+    isNew: true,
+    tag: "Royal Brocade",
+    color: "Midnight Royal Blue & Antique Gold Floral Jaal",
+    fabric: "100% Pure Mulberry Katan Silk",
+    weave: "Heavy Kadwa Floral Medallion Weave with Fringed Tassels",
+    length: "6.3 Meters with heavy brocade blouse",
+    origin: "Varanasi, Uttar Pradesh",
+    description: "A queenly ceremonial drape in deep midnight royal blue, lavishly adorned with dense antique gold zari floral lattice (jaal) and hand-knotted royal blue silk tassels.",
+    image: "assets/catalog/riwayat/riwayat-07-primary.jpg",
+    hoverImage: "assets/catalog/riwayat/riwayat-07-hover.jpg",
+    details: [
+      "Pure Mulberry Katan silk woven with rich 2g gold zari alloy",
+      "Opulent floral diaper grid pattern across the entire body",
+      "Hand-finished lush blue silk tassels along the pallu edge",
+      "Silk Mark & Handloom Mark guaranteed"
+    ]
   }
 ];
 
