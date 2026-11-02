@@ -6,10 +6,16 @@
   <title>6 Yards | Six Yards. Infinite Stories. — Luxury Handloom Sarees</title>
   <meta name="description" content="Explore handcrafted pure silk Banarasi, Kanjivaram, Chanderi, and Tussar sarees at 6 Yards. Authentic Indian loomcraft, timeless elegance and modern grace." />
 
-  <!-- Google Fonts: Cormorant Garamond (Headings) & Jost (Body) -->
+  <!-- Preconnect to external font and icon CDNs -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin />
+
+  <!-- Google Fonts: Cormorant Garamond (Headings) & Jost (Body) with font-display: swap -->
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Jost:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+  <!-- Preload Critical Above-The-Fold Assets -->
+  <link rel="preload" href="assets/brand-logo-peacock-clean.png" as="image" type="image/png" />
 
   <!-- FontAwesome Icons for UI -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
@@ -105,7 +111,7 @@
   <section class="hero-section" id="hero-banner">
     <!-- Background Video -->
     <div class="hero-video-container">
-      <video class="hero-background-video" autoplay loop muted playsinline>
+      <video class="hero-background-video" autoplay loop muted playsinline preload="metadata" poster="assets/hero-poster.jpg">
         <source src="gemini_generated_video_9da2f281_gwr_video_mvp.mp4" type="video/mp4" />
       </video>
       <div class="hero-video-overlay"></div>
@@ -474,8 +480,8 @@
     </div>
   </div>
 
-  <!-- JavaScript Modules -->
-  <script src="js/products.js"></script>
-  <script src="js/app.js"></script>
+  <!-- JavaScript Modules with defer for non-blocking page render -->
+  <script src="js/products.js" defer></script>
+  <script src="js/app.js" defer></script>
 </body>
 </html>
