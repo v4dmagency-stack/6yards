@@ -162,10 +162,10 @@ img {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  min-height: 72px;
-  max-height: 84px;
-  padding: 8px 40px;
-  max-width: 1360px;
+  min-height: 84px;
+  max-height: 96px;
+  padding: 8px 44px;
+  max-width: 1400px;
   margin: 0 auto;
   pointer-events: auto;
   background: rgba(7, 22, 44, 0.45);
@@ -190,18 +190,18 @@ img {
   align-items: center;
   gap: 12px;
   text-decoration: none;
-  padding: 2px 0;
+  padding: 4px 0;
 }
 .brand-logo-img {
-  height: 58px;
+  height: 74px;
   width: auto;
-  max-width: 250px;
+  max-width: 320px;
   object-fit: contain;
   transition: transform var(--transition-smooth), filter var(--transition-smooth);
-  filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.3));
+  filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.35));
 }
 .brand-logo-link:hover .brand-logo-img {
-  transform: scale(1.03);
+  transform: scale(1.04);
 }
 .footer-brand-logo-img {
   height: 84px;
@@ -1818,13 +1818,13 @@ img {
     padding: 0 14px;
   }
   .navbar {
-    min-height: 64px;
-    padding: 6px 18px;
+    min-height: 70px;
+    padding: 6px 20px;
     border-radius: 9999px;
   }
   .brand-logo-img {
-    height: 44px;
-    max-width: 130px;
+    height: 52px;
+    max-width: 200px;
   }
   .mobile-nav-toggle {
     display: block;
