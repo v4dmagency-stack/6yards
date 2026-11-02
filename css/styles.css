@@ -162,9 +162,9 @@ img {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  min-height: 84px;
-  max-height: 96px;
-  padding: 8px 44px;
+  min-height: 76px;
+  max-height: 82px;
+  padding: 0 40px;
   max-width: 1400px;
   margin: 0 auto;
   pointer-events: auto;
@@ -190,18 +190,20 @@ img {
   align-items: center;
   gap: 12px;
   text-decoration: none;
-  padding: 4px 0;
+  padding: 0;
 }
 .brand-logo-img {
-  height: 74px;
+  height: 78px;
   width: auto;
-  max-width: 320px;
+  max-width: 380px;
   object-fit: contain;
+  transform: scale(1.24);
+  transform-origin: left center;
   transition: transform var(--transition-smooth), filter var(--transition-smooth);
-  filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.35));
+  filter: drop-shadow(0 3px 10px rgba(0, 0, 0, 0.45));
 }
 .brand-logo-link:hover .brand-logo-img {
-  transform: scale(1.04);
+  transform: scale(1.30);
 }
 .footer-brand-logo-img {
   height: 84px;
