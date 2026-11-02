@@ -8,8 +8,8 @@ const PRODUCTS_DATA = [
     id: "saree-01",
     name: "Banarasi Silk Saree",
     category: "banarasi",
-    collection: "resham",
-    collectionName: "Resham - The Silk Edit",
+    collection: "riwayat",
+    collectionName: "Riwayat - Curated stories, woven in six yards.",
     price: 12999,
     originalPrice: 15999,
     rating: 4.8,
@@ -235,47 +235,39 @@ const COLLECTIONS_DATA = [
     id: "adaa",
     number: "01",
     name: "Adaa",
-    tagline: "Modern Grace",
+    tagline: "Curated stories, woven in six yards.",
     image: "assets/collection-adaa.jpg",
     description: "Contemporary cuts and featherlight textures for modern celebrations."
   },
   {
-    id: "vastra",
-    number: "02",
-    name: "Vastra",
-    tagline: "Timeless Form",
-    image: "assets/collection-vastra.jpg",
-    description: "Pure geometric patterns and natural slubs celebrating traditional forms."
-  },
-  {
     id: "roop",
-    number: "03",
+    number: "02",
     name: "Roop",
-    tagline: "Bold Beauty",
+    tagline: "Curated stories, woven in six yards.",
     image: "assets/collection-roop.jpg",
     description: "Vibrant palettes and rich jewel tones that command every room."
+  },
+  {
+    id: "vastra",
+    number: "03",
+    name: "Vastra",
+    tagline: "Curated stories, woven in six yards.",
+    image: "assets/collection-vastra.jpg",
+    description: "Pure geometric patterns and natural slubs celebrating traditional forms."
   },
   {
     id: "leher",
     number: "04",
     name: "Leher",
-    tagline: "Fluid Drapes",
+    tagline: "Curated stories, woven in six yards.",
     image: "assets/collection-leher.jpg",
     description: "Whispering silks, lightweight organzas and airy chiffons that dance in motion."
   },
   {
-    id: "resham",
-    number: "05",
-    name: "Resham",
-    tagline: "The Silk Edit",
-    image: "assets/collection-resham.jpg",
-    description: "Pure mulberry, muga, and tussar silks handwoven for grand occasions."
-  },
-  {
     id: "riwayat",
-    number: "06",
+    number: "05",
     name: "Riwayat",
-    tagline: "Heritage Edit",
+    tagline: "Curated stories, woven in six yards.",
     image: "assets/collection-riwayat.jpg",
     description: "Royal Kanjivarams and Banarasi heirlooms honoring centuries of Indian loomcraft."
   }
