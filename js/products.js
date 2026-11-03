@@ -25,6 +25,14 @@ const PRODUCTS_DATA = [
     description: "Featuring intricate Pichwai temple motifs of the sacred Kamdhenu and blooming lotuses, framed by delicate tassels and a modern maze border on a soft mauve rose base.",
     image: "assets/catalog/adaa/adaa-01-primary.jpg",
     hoverImage: "assets/catalog/adaa/adaa-01-hover.jpg",
+    gallery: [
+      "assets/catalog/adaa/adaa-01-primary.jpg",
+      "assets/catalog/adaa/adaa-01-hover.jpg",
+      "assets/catalog/adaa/adaa-01-angle-drape.jpg",
+      "assets/catalog/adaa/adaa-01-angle-border.jpg",
+      "assets/catalog/adaa/adaa-01-angle-pleats.jpg",
+      "assets/catalog/adaa/adaa-01-angle-detail.jpg"
+    ],
     details: [
       "Item Code: AFC 0261/2",
       "Authentic Kamdhenu sacred cow & lotus motif handloom weave",

@@ -654,7 +654,17 @@ function openQuickViewModal(product) {
       <i class="fa-solid fa-xmark"></i>
     </button>
     <div class="modal-gallery-col">
-      <img src="${product.image}" alt="${product.name}" class="modal-main-img" />
+      <img src="${product.image}" alt="${product.name}" class="modal-main-img" id="quickview-main-image" />
+      ${Array.isArray(product.gallery) && product.gallery.length > 1 ? `
+        <div class="modal-thumbnails" style="display: flex; gap: 8px; margin-top: 10px; overflow-x: auto; padding-bottom: 4px;">
+          ${product.gallery.map((imgUrl, i) => `
+            <img src="${imgUrl}" alt="${product.name} angle ${i+1}" 
+                 class="modal-thumb-item ${i === 0 ? 'active' : ''}" 
+                 data-full="${imgUrl}"
+                 style="width: 58px; height: 58px; object-fit: cover; border-radius: 4px; cursor: pointer; border: 2px solid ${i === 0 ? 'var(--color-primary)' : 'transparent'}; opacity: ${i === 0 ? '1' : '0.75'}; transition: all 0.2s;" />
+          `).join('')}
+        </div>
+      ` : ''}
     </div>
     <div class="modal-details-col">
       <span class="modal-badge">${product.collectionName || 'Artisanal Craft'}</span>
@@ -691,6 +701,23 @@ function openQuickViewModal(product) {
 
   backdrop.classList.add('active');
   document.body.style.overflow = 'hidden';
+
+  // Thumbnail click handler
+  modal.querySelectorAll('.modal-thumb-item').forEach(thumb => {
+    thumb.addEventListener('click', (e) => {
+      const full = e.currentTarget.getAttribute('data-full');
+      const mainImg = modal.querySelector('#quickview-main-image');
+      if (mainImg && full) {
+        mainImg.src = full;
+      }
+      modal.querySelectorAll('.modal-thumb-item').forEach(t => {
+        t.style.borderColor = 'transparent';
+        t.style.opacity = '0.75';
+      });
+      e.currentTarget.style.borderColor = 'var(--color-primary)';
+      e.currentTarget.style.opacity = '1';
+    });
+  });
 
   // Attach modal close & CTA events
   document.getElementById('quickview-close-btn')?.addEventListener('click', closeQuickViewModal);
