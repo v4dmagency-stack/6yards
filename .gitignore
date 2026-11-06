@@ -1,8 +1,96 @@
+# Browser debug profiles (temp Chromium/Puppeteer sessions)
+.browser_*/
+
+# Large zip files
+*.zip
+
+# Temp server logs
+backend_server.log
+*.log
+
+# Node modules (backend)
+backend/node_modules/
+node_modules/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+
+# Screenshots / debug images at root level
+admin_after_login.png
+admin_inspect.png
+admin_login.png
+collections_no_breadcrumbs.png
+collections_page_preview.png
+collections_seamless_header.png
+editorial_cleaned_section.png
+figma_bottom_cards.png
+figma_canvas.png
+figma_right_crop.png
+figma_side_gallery.png
+figma_sub_crop.png
+figma_thumbnail.png
+figma_website_crop.png
+hero_seamless_header_video.png
+index_hero_video_live.png
+occasion_wedding_casual_comfort_festive.png
+product_detail_page_preview.png
+product_optimized_end_section.png
+product_you_may_also_like_preview.png
+shop_by_occasion_4_cards.png
+browser_verification_report.json
+
+# Backup files
+*.backup
+
+# Debug / utility scripts at root (not part of the website)
+capture_final_verification.js
+check_admin_build.js
+check_browser.js
+check_frames.py
+check_images_map.py
+check_medusa_meta.py
+check_port.js
+check_all_images.py
+clean_install_prep.js
+copy_admin_assets.js
+create_luxury_pallu.py
+debug_render.js
+fuzzy_match.py
+generate_pallu.py
+image_match.py
+inspect_admin.js
+inspect_auth.js
+inspect_auth_session.js
+inspect_provider.js
+list_thumbs.py
+localize_medusa_to_india.js
+match_manifest.py
+refine_pallu.py
+reset_password.js
+start_backend.js
+sync_catalog_data.py
+test_browser_login.js
+test_occasion_filters.py
+test_pg.js
+test_ws.js
+update_styles.js
+verify_admin_browser.js
+verify_collections_and_pdp.js
+verify_final_refinements.js
+verify_hero_and_craft.js
+verify_latest_requirements.js
+verify_login.js
+verify_occasion_and_cleanup.js
+verify_packages.js
+verify_pages.py
+verify_pallu_and_occasions.js
+verify_updates.js
+add_missing_sarees.py
+apply_categorized_sarees.py
+fuzzy_match.py
+
+# OS files
 .DS_Store
 Thumbs.db
-*.log
-.vscode/
-.idea/
-*.zip
-assets/raw_sarees/
-assets/thumbs/

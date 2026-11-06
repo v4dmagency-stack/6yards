@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>404 — Page Not Found | 6 Yards Sarees</title>
+  <meta name="description" content="The page you are looking for does not exist. Explore our authentic handloom pure silk saree collections at 6 Yards." />
+  <link rel="icon" type="image/png" href="assets/brand-logo-peacock-clean.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;800&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <link rel="stylesheet" href="css/styles.css" />
+  <style>
+    .error-404-hero {
+      min-height: 75vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 120px 20px 80px;
+      background: radial-gradient(circle at 50% 30%, #0A2346 0%, #05162C 70%, #020E1F 100%);
+      color: #FFFFFF;
+      position: relative;
+    }
+    .error-404-card {
+      max-width: 640px;
+      margin: 0 auto;
+      padding: 48px 36px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(197, 154, 63, 0.35);
+      border-radius: 16px;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.3);
+    }
+    .error-404-code {
+      font-family: var(--font-serif);
+      font-size: 6rem;
+      font-weight: 800;
+      color: var(--color-gold);
+      line-height: 1;
+      margin-bottom: 8px;
+      letter-spacing: 0.08em;
+      text-shadow: 0 0 24px rgba(197, 154, 63, 0.4);
+    }
+    .error-404-eyebrow {
+      display: block;
+      font-size: 0.8rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--color-gold-light);
+      margin-bottom: 14px;
+    }
+    .error-404-title {
+      font-family: var(--font-serif);
+      font-size: 2rem;
+      color: #FFFFFF;
+      margin-bottom: 16px;
+      line-height: 1.3;
+    }
+    .error-404-desc {
+      font-size: 1rem;
+      color: rgba(255, 255, 255, 0.8);
+      line-height: 1.65;
+      margin-bottom: 32px;
+    }
+    .error-404-actions {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .error-btn-primary {
+      background: linear-gradient(135deg, #C59A3F 0%, #A67C2E 100%);
+      color: #05162C;
+      font-weight: 700;
+      padding: 14px 28px;
+      border-radius: 8px;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      transition: all 0.25s ease;
+      box-shadow: 0 4px 16px rgba(197, 154, 63, 0.3);
+    }
+    .error-btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(197, 154, 63, 0.45);
+      color: #020E1F;
+    }
+    .error-btn-secondary {
+      background: transparent;
+      color: #FFFFFF;
+      border: 1px solid rgba(197, 154, 63, 0.6);
+      font-weight: 600;
+      padding: 14px 28px;
+      border-radius: 8px;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      transition: all 0.25s ease;
+    }
+    .error-btn-secondary:hover {
+      background: rgba(197, 154, 63, 0.15);
+      border-color: var(--color-gold);
+      color: var(--color-gold-light);
+      transform: translateY(-2px);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation Header -->
+  <header class="header-main" style="background: #05162C;">
+    <div class="navbar">
+      <button class="mobile-nav-toggle" id="mobile-nav-toggle-btn" aria-label="Toggle Navigation Menu">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+
+      <a href="index.html" class="brand-logo-link" title="6 Yards Sarees Homepage">
+        <img src="assets/brand-logo-peacock-clean.png" alt="6 Yards Sarees" class="brand-logo-img" />
+      </a>
+
+      <nav>
+        <ul class="nav-menu" id="nav-menu-list">
+          <li class="mobile-nav-header-item">
+            <div class="mobile-nav-header">
+              <a href="index.html" class="brand-logo-link">
+                <img src="assets/brand-logo-peacock-clean.png" alt="6 Yards Sarees" class="brand-logo-img" />
+              </a>
+              <button class="mobile-nav-close-btn" id="mobile-nav-close-btn" aria-label="Close Navigation">
+                <i class="fa-solid fa-xmark"></i>
+              </button>
+            </div>
+          </li>
+
+          <li class="nav-item">
+            <a href="index.html" class="nav-link">Home</a>
+          </li>
+          <li class="nav-item nav-item-dropdown" id="nav-sarees-item">
+            <a href="collections.html" class="nav-link" id="nav-sarees-link">
+              Sarees <i class="fa-solid fa-chevron-down dropdown-caret"></i>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="about.html" class="nav-link">About Us</a>
+          </li>
+          <li class="nav-item">
+            <a href="journal.html" class="nav-link">Journal</a>
+          </li>
+          <li class="nav-item">
+            <a href="contact.html" class="nav-link">Contact</a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="header-actions">
+        <a href="collections.html" class="action-icon-btn" title="View Sarees">
+          <i class="fa-solid fa-bag-shopping"></i>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- 404 Main Hero -->
+  <main class="error-404-hero">
+    <div class="error-404-card">
+      <div class="error-404-code">404</div>
+      <span class="error-404-eyebrow">THE DRAPE WAS LOST IN THE LOOM</span>
+      <h1 class="error-404-title font-serif">Page Not Found</h1>
+      <p class="error-404-desc">
+        The weave or chapter you are looking for may have been moved, renamed, or is currently resting in the loom archives. Let us guide you back to our living collections.
+      </p>
+      <div class="error-404-actions">
+        <a href="collections.html" class="error-btn-primary">
+          <i class="fa-solid fa-gem"></i> Explore Handloom Sarees
+        </a>
+        <a href="index.html" class="error-btn-secondary">
+          <i class="fa-solid fa-house"></i> Return to Homepage
+        </a>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer" id="footer-section">
+    <div class="container">
+      <div class="footer-top-grid">
+        <div class="footer-brand-col">
+          <a href="index.html" class="brand-logo-link" style="margin-bottom: 16px; display: inline-block;">
+            <img src="assets/brand-logo-peacock-clean.png" alt="6 Yards Sarees" class="footer-brand-logo-img" />
+          </a>
+          <p class="footer-tagline">Six yards. Infinite stories.</p>
+          <div class="footer-contact-info" style="margin-top: 14px; font-size: 0.88rem; color: rgba(255, 255, 255, 0.8);">
+            <p style="margin-bottom: 6px;"><i class="fa-solid fa-phone" style="color: var(--color-gold); margin-right: 8px;"></i> <a href="tel:+919876543210" style="color: inherit; text-decoration: none;">+91 98765 43210</a></p>
+            <p style="margin-bottom: 6px;"><i class="fa-solid fa-envelope" style="color: var(--color-gold); margin-right: 8px;"></i> <a href="mailto:care@6yardssarees.com" style="color: inherit; text-decoration: none;">care@6yardssarees.com</a></p>
+            <p><i class="fa-brands fa-whatsapp" style="color: #25D366; margin-right: 8px;"></i> <a href="https://wa.me/919876543210" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: none;">WhatsApp Concierge</a></p>
+          </div>
+        </div>
+
+        <div class="footer-nav-col">
+          <h4>Quick Links</h4>
+          <ul class="footer-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="collections.html">Collections</a></li>
+            <li><a href="about.html">About Us</a></li>
+            <li><a href="journal.html">Journal</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-nav-col">
+          <h4>Handloom Edits</h4>
+          <ul class="footer-links">
+            <li><a href="collections.html?collection=adaa">Adaa Collection</a></li>
+            <li><a href="collections.html?collection=roop">Roop Collection</a></li>
+            <li><a href="collections.html?collection=vastra">Vastra Collection</a></li>
+            <li><a href="collections.html?collection=leher">Leher Collection</a></li>
+            <li><a href="collections.html?collection=riwayat">Riwayat Collection</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-nav-col">
+          <h4>Atelier Care</h4>
+          <p style="font-size: 0.88rem; color: rgba(255, 255, 255, 0.75); line-height: 1.6; margin-bottom: 14px;">
+            Need styling advice or drape assistance? Speak directly with our Varanasi and Kanchipuram master curators.
+          </p>
+          <a href="contact.html" class="footer-cta-pill" style="display: inline-block; padding: 10px 20px; background: rgba(197, 154, 63, 0.15); border: 1px solid var(--color-gold); border-radius: 999px; color: var(--color-gold); font-size: 0.84rem; text-decoration: none;">
+            Book Atelier Consultation <i class="fa-solid fa-arrow-right"></i>
+          </a>
+        </div>
+      </div>
+
+      <div class="footer-bottom-row">
+        <span>&copy; 2026 6 Yards Sarees. All rights reserved.</span>
+        <button class="scroll-top-btn" id="scroll-top-btn" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" title="Back to top" aria-label="Back to Top">
+          <i class="fa-solid fa-arrow-up"></i>
+        </button>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/products.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

@@ -5,6 +5,7 @@
 // Application State
 const AppState = {
   cart: JSON.parse(localStorage.getItem('6yards_cart')) || [],
+  medusaCart: null,
   wishlist: JSON.parse(localStorage.getItem('6yards_wishlist')) || [],
   activeHeroIndex: 0,
   heroTimer: null,
@@ -18,6 +19,7 @@ const AppState = {
 document.addEventListener('DOMContentLoaded', () => {
   initHeroSlider();
   renderCollections();
+  renderNewArrivals();
   renderProducts(PRODUCTS_DATA);
   initCategoryFilters();
   initSearch();
@@ -28,8 +30,33 @@ document.addEventListener('DOMContentLoaded', () => {
   initScrollTop();
   initHeaderScroll();
   initMobileNav();
+  initSareesDropdown();
   updateHeaderBadges();
+  loadLiveMedusaCatalog();
 });
+
+/**
+ * Connect to Live Medusa v2 Catalog (Store API)
+ */
+async function loadLiveMedusaCatalog() {
+  if (!window.MedusaClient) return;
+  try {
+    const liveProducts = await window.MedusaClient.listProducts();
+    if (liveProducts && liveProducts.length > 0) {
+      console.log(`[Medusa v2] Loaded ${liveProducts.length} authentic handloom sarees from Store API.`);
+      window.PRODUCTS_DATA = liveProducts;
+      renderNewArrivals(liveProducts);
+      if (AppState.activeFilter === 'all') {
+        renderProducts(liveProducts);
+      } else {
+        const filtered = liveProducts.filter(p => p.category === AppState.activeFilter || p.collection === AppState.activeFilter);
+        renderProducts(filtered.length ? filtered : liveProducts);
+      }
+    }
+  } catch (err) {
+    console.info('[Medusa v2] Store API catalog synced with resilient catalog fallback.');
+  }
+}
 
 /* ==========================================================================
    HERO SLIDER
@@ -41,26 +68,116 @@ function initHeroSlider() {
   const nextBtn = document.getElementById('hero-next-btn');
 
   if (slides.length === 0) {
-    // If background video is used without slides, ensure video plays smoothly
+    // Background video with continuous loop & smooth scroll playback
     const bgVideo = document.querySelector('.hero-background-video');
-    const soundBtn = document.getElementById('hero-sound-toggle-btn');
-    const soundIcon = document.getElementById('hero-sound-icon');
 
     if (bgVideo) {
+      bgVideo.loop = true;
+      // Start muted for instant, butter-smooth, hardware-decoded zero-glitch loading
+      bgVideo.muted = true;
+      bgVideo.playsInline = true;
+
+      const collectionsSection = document.getElementById('collections-section');
+      const heroBanner = document.getElementById('hero-banner') || bgVideo.closest('.hero-video-anchor');
+      let audioAllowedByUser = false;
+
+      // Play immediately with muted audio (guaranteed zero browser glitch/stall)
       bgVideo.play().catch(() => {});
 
-      if (soundBtn && soundIcon) {
-        soundBtn.addEventListener('click', () => {
-          bgVideo.muted = !bgVideo.muted;
-          if (bgVideo.muted) {
-            soundIcon.className = 'fa-solid fa-volume-xmark';
-            showToast('Video audio muted');
-          } else {
-            soundIcon.className = 'fa-solid fa-volume-high';
-            showToast('Video audio playing');
-          }
-        });
+      function isUserInHero() {
+        if (!heroBanner) return window.scrollY < 450;
+        const rect = heroBanner.getBoundingClientRect();
+        // Considered in hero only when top is near top and bottom has not scrolled past nav
+        return rect.bottom > 120 && window.scrollY < (heroBanner.offsetHeight - 50);
       }
+
+      function updateHeroAudioState() {
+        if (!bgVideo) return;
+
+        const inHero = isUserInHero();
+        const isTabVisible = !document.hidden;
+
+        // Cut sound immediately if scrolled past hero OR if tab/app is switched
+        if (!inHero || !isTabVisible) {
+          if (!bgVideo.muted) {
+            bgVideo.muted = true;
+          }
+        } else if (audioAllowedByUser && inHero && isTabVisible) {
+          // In hero and user allowed sound: enable sound
+          if (bgVideo.muted) {
+            bgVideo.muted = false;
+            bgVideo.volume = 1.0;
+          }
+        }
+      }
+
+      // Smooth loop continuity without stutter
+      bgVideo.addEventListener('ended', () => {
+        bgVideo.currentTime = 0;
+        bgVideo.play().catch(() => {});
+      });
+
+      // User interaction listener to gracefully unlock audio when inside hero
+      const enableHeroAudio = () => {
+        if (isUserInHero() && !document.hidden) {
+          audioAllowedByUser = true;
+          bgVideo.muted = false;
+          bgVideo.volume = 1.0;
+          bgVideo.play().catch(() => {});
+        }
+      };
+
+      window.addEventListener('click', enableHeroAudio, { passive: true });
+      window.addEventListener('touchstart', enableHeroAudio, { passive: true });
+      window.addEventListener('keydown', enableHeroAudio, { passive: true });
+
+      // Scroll listener: instant mute when scrolled past hero section
+      window.addEventListener('scroll', () => {
+        if (bgVideo.paused && isUserInHero() && !document.hidden) {
+          bgVideo.play().catch(() => {});
+        }
+        updateHeroAudioState();
+      }, { passive: true });
+
+      // Intersection Observer on Collections section to guarantee instant audio cut
+      if ('IntersectionObserver' in window && collectionsSection) {
+        const collectionsObserver = new IntersectionObserver((entries) => {
+          entries.forEach(() => updateHeroAudioState());
+        }, {
+          threshold: [0, 0.05, 0.1, 0.2, 0.5],
+          rootMargin: "0px 0px 0px 0px"
+        });
+        collectionsObserver.observe(collectionsSection);
+      }
+
+      // TAB / WINDOW SWITCHING CONTROL:
+      // When website is switched (background tab, app minimized, window lost focus)
+      document.addEventListener('visibilitychange', () => {
+        if (document.hidden) {
+          // Cut audio immediately & pause video
+          bgVideo.muted = true;
+          bgVideo.pause();
+        } else {
+          // Tab focused again
+          bgVideo.play().catch(() => {});
+          updateHeroAudioState();
+        }
+      });
+
+      window.addEventListener('blur', () => {
+        bgVideo.muted = true;
+      });
+
+      window.addEventListener('focus', () => {
+        updateHeroAudioState();
+      });
+
+      window.addEventListener('pagehide', () => {
+        bgVideo.muted = true;
+      });
+
+      // Initial state check
+      updateHeroAudioState();
     }
     return;
   }
@@ -127,27 +244,13 @@ function renderCollections() {
   if (!container) return;
 
   container.innerHTML = COLLECTIONS_DATA.map(col => `
-    <div class="collection-circle-card" data-collection-id="${col.id}">
-      <div class="collection-num">${col.number}</div>
+    <a href="collections.html?collection=${col.id}" class="collection-circle-card" data-collection-id="${col.id}" style="text-decoration: none; color: inherit; display: flex; flex-direction: column; align-items: center;">
       <div class="collection-avatar-wrap">
         <img src="${col.image}" alt="${col.name}" loading="lazy" />
       </div>
       <h4 class="collection-name">${col.name}</h4>
-      <p class="collection-subtext">${col.tagline}</p>
-    </div>
+    </a>
   `).join('');
-
-  // Add click listener to filter products or trigger scroll
-  container.querySelectorAll('.collection-circle-card').forEach(card => {
-    card.addEventListener('click', () => {
-      const colId = card.getAttribute('data-collection-id');
-      filterProductsByCollection(colId);
-      const productSection = document.getElementById('products-section');
-      if (productSection) {
-        productSection.scrollIntoView({ behavior: 'smooth' });
-      }
-    });
-  });
 }
 
 function filterProductsByCollection(colId) {
@@ -156,6 +259,72 @@ function filterProductsByCollection(colId) {
   document.querySelectorAll('.filter-pill').forEach(btn => btn.classList.remove('active'));
   renderProducts(filtered.length ? filtered : PRODUCTS_DATA);
   showToast(`Showing collection: ${colId.toUpperCase()}`);
+}
+
+/* ==========================================================================
+   NEW ARRIVALS RENDERING (Curated Best Sarees Framed Showcase)
+   ========================================================================== */
+function renderNewArrivals(customCatalog) {
+  const container = document.getElementById('new-arrivals-grid');
+  if (!container) return;
+
+  const catalog = (customCatalog && customCatalog.length) 
+    ? customCatalog 
+    : (typeof PRODUCTS_DATA !== 'undefined' ? PRODUCTS_DATA : (window.PRODUCTS_DATA || []));
+  if (!catalog || catalog.length === 0) return;
+
+  // 4 Curated Standout Best Sarees in Artisan Frame Situation
+  const targetIds = [
+    'saree-01',
+    'saree-10',
+    'saree-04',
+    'saree-riwayat-teal-purple'
+  ];
+
+  let selected = [];
+  targetIds.forEach(id => {
+    const found = catalog.find(p => p.id === id);
+    if (found) selected.push(found);
+  });
+
+  if (selected.length < 4) {
+    const remaining = catalog.filter(p => !selected.some(s => s.id === p.id));
+    selected = selected.concat(remaining.slice(0, 4 - selected.length));
+  }
+
+  container.className = 'framed-sarees-grid';
+  container.innerHTML = selected.map(product => {
+    const formattedPrice = Number(product.price).toLocaleString('en-IN');
+    const formattedOriginalPrice = product.originalPrice ? Number(product.originalPrice).toLocaleString('en-IN') : null;
+    const colName = product.collectionName ? product.collectionName.split(' - ')[0] + ' Sutra' : (product.collection ? product.collection.toUpperCase() + ' Sutra' : 'Sutra Collection');
+
+    return `
+      <article class="saree-frame-card" data-product-id="${product.id}">
+        <div class="saree-frame-inner">
+          <span class="saree-frame-badge">${product.tag || 'Masterpiece Weave'}</span>
+          <div class="saree-frame-img-box">
+            <a href="product.html?id=${encodeURIComponent(product.id)}" style="display: block; width: 100%; height: 100%;">
+              <img src="${product.image}" alt="${product.name}" loading="lazy" onerror="this.src='${product.thumbnail || product.image}'" />
+            </a>
+          </div>
+        </div>
+        <div class="saree-frame-caption">
+          <span class="saree-frame-collection">${colName}</span>
+          <h3 class="saree-frame-title">
+            <a href="product.html?id=${encodeURIComponent(product.id)}" style="color: inherit; text-decoration: none;">
+              ${product.name}
+            </a>
+          </h3>
+          <span class="saree-frame-weave-tag">${product.weave || 'Authentic Handloom Weave'} • ${product.origin || 'Varanasi & Kanchipuram'}</span>
+          <div class="saree-frame-price-row">
+            <span class="saree-frame-price">₹ ${formattedPrice}</span>
+            ${formattedOriginalPrice ? `<span class="saree-frame-original-price">₹ ${formattedOriginalPrice}</span>` : ''}
+          </div>
+          <a href="product.html?id=${encodeURIComponent(product.id)}" class="saree-frame-cta">View Saree Details</a>
+        </div>
+      </article>
+    `;
+  }).join('');
 }
 
 /* ==========================================================================
@@ -181,6 +350,19 @@ function renderProducts(products) {
     const formattedPrice = Number(product.price).toLocaleString('en-IN');
     const formattedOriginalPrice = product.originalPrice ? Number(product.originalPrice).toLocaleString('en-IN') : null;
 
+    const gallery = product.gallery && product.gallery.length ? product.gallery : [product.image];
+    const angleDotsHtml = gallery.length > 1 ? `
+      <div class="product-card-angle-nav" onclick="event.stopPropagation()">
+        ${gallery.map((img, idx) => `
+          <button class="angle-dot ${idx === 0 ? 'active' : ''}" 
+                  data-img-src="${img}" 
+                  data-card-id="${product.id}"
+                  title="View angle ${idx + 1}"
+                  aria-label="View angle ${idx + 1}"></button>
+        `).join('')}
+      </div>
+    ` : '';
+
     return `
       <div class="product-card" data-product-id="${product.id}">
         <div class="product-image-container">
@@ -191,16 +373,23 @@ function renderProducts(products) {
             <i class="fa-${isWishlisted ? 'solid' : 'regular'} fa-heart"></i>
           </button>
           
-          <img src="${product.image}" alt="${product.name}" class="product-img-primary" loading="lazy" />
-          <img src="${product.hoverImage || product.image}" alt="${product.name} alternate view" class="product-img-hover" loading="lazy" />
+          <a href="product.html?id=${encodeURIComponent(product.id)}" style="display: block; width: 100%; height: 100%;">
+            <img src="${product.image}" alt="${product.name}" class="product-img-primary" id="card-img-${product.id}" loading="lazy" onerror="this.src='${product.thumbnail || product.image}'" />
+            <img src="${product.hoverImage || product.image}" alt="${product.name} alternate view" class="product-img-hover" loading="lazy" onerror="this.src='${product.thumbnail || product.image}'" />
+          </a>
           
-          <button class="quick-view-overlay-btn" data-product-id="${product.id}">
-            Quick View
-          </button>
+          <a href="product.html?id=${encodeURIComponent(product.id)}" class="quick-view-overlay-btn" style="text-align: center; text-decoration: none;">
+            View Details
+          </a>
         </div>
 
         <div class="product-info-wrap">
-          <h4 class="product-title" title="${product.name}">${product.name}</h4>
+          ${angleDotsHtml}
+          <h4 class="product-title" title="${product.name}" style="margin-top: 8px;">
+            <a href="product.html?id=${encodeURIComponent(product.id)}" style="color: inherit; text-decoration: none;">
+              ${product.name}
+            </a>
+          </h4>
           
           <div class="product-price-row">
             <span class="product-current-price">₹ ${formattedPrice}</span>
@@ -255,6 +444,25 @@ function attachProductCardEvents() {
       const product = PRODUCTS_DATA.find(p => p.id === pId);
       if (product) {
         openQuickViewModal(product);
+      }
+    });
+  });
+
+  // Kalyan Silks Multi-Angle Dot Nav Switcher
+  document.querySelectorAll('.angle-dot').forEach(dot => {
+    dot.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const newSrc = e.currentTarget.getAttribute('data-img-src');
+      const cardId = e.currentTarget.getAttribute('data-card-id');
+      const primaryImg = document.getElementById(`card-img-${cardId}`);
+      if (primaryImg && newSrc) {
+        primaryImg.src = newSrc;
+      }
+      // Update active dot in this card
+      const parentNav = e.currentTarget.closest('.product-card-angle-nav');
+      if (parentNav) {
+        parentNav.querySelectorAll('.angle-dot').forEach(d => d.classList.remove('active'));
+        e.currentTarget.classList.add('active');
       }
     });
   });
@@ -355,42 +563,73 @@ function closeCartDrawer() {
   document.body.style.overflow = '';
 }
 
-function addToCart(product, quantity = 1) {
-  const existingItemIndex = AppState.cart.findIndex(item => item.id === product.id);
-  if (existingItemIndex > -1) {
-    AppState.cart[existingItemIndex].quantity += quantity;
+async function addToCart(product, quantity = 1) {
+  if (window.MedusaClient) {
+    const updatedCart = await window.MedusaClient.addLineItem(product.variantId, quantity, product);
+    syncCartFromMedusa(updatedCart);
   } else {
-    AppState.cart.push({
-      ...product,
-      quantity: quantity
-    });
+    const existingItemIndex = AppState.cart.findIndex(item => item.id === product.id);
+    if (existingItemIndex > -1) {
+      AppState.cart[existingItemIndex].quantity += quantity;
+    } else {
+      AppState.cart.push({ ...product, quantity: quantity });
+    }
+    saveCart();
   }
-  saveCart();
   renderCart();
   updateHeaderBadges();
   showToast(`Added "${product.name}" to your bag!`);
   openCartDrawer();
 }
 
-function updateCartQuantity(productId, delta) {
-  const index = AppState.cart.findIndex(item => item.id === productId);
-  if (index > -1) {
-    AppState.cart[index].quantity += delta;
-    if (AppState.cart[index].quantity <= 0) {
-      AppState.cart.splice(index, 1);
+async function updateCartQuantity(productId, delta) {
+  const item = AppState.cart.find(i => i.id === productId || i.variantId === productId);
+  if (!item) return;
+  const newQty = item.quantity + delta;
+  if (window.MedusaClient) {
+    const updatedCart = await window.MedusaClient.updateLineItem(item.lineItemId || productId, newQty);
+    syncCartFromMedusa(updatedCart);
+  } else {
+    const index = AppState.cart.findIndex(i => i.id === productId);
+    if (index > -1) {
+      AppState.cart[index].quantity += delta;
+      if (AppState.cart[index].quantity <= 0) {
+        AppState.cart.splice(index, 1);
+      }
     }
+    saveCart();
   }
-  saveCart();
   renderCart();
   updateHeaderBadges();
 }
 
-function removeCartItem(productId) {
-  AppState.cart = AppState.cart.filter(item => item.id !== productId);
-  saveCart();
+async function removeCartItem(productId) {
+  const item = AppState.cart.find(i => i.id === productId || i.variantId === productId);
+  if (window.MedusaClient && item) {
+    const updatedCart = await window.MedusaClient.removeLineItem(item.lineItemId || productId);
+    syncCartFromMedusa(updatedCart);
+  } else {
+    AppState.cart = AppState.cart.filter(i => i.id !== productId);
+    saveCart();
+  }
   renderCart();
   updateHeaderBadges();
   showToast("Item removed from bag.");
+}
+
+function syncCartFromMedusa(medusaCart) {
+  if (!medusaCart) return;
+  AppState.medusaCart = medusaCart;
+  AppState.cart = (medusaCart.items || []).map(item => ({
+    id: item.id,
+    lineItemId: item.id,
+    variantId: item.variant_id,
+    name: item.title,
+    image: item.thumbnail || (item.variant?.product?.thumbnail) || 'assets/catalog/adaa/adaa-01-primary.jpg',
+    price: item.unit_price || item.total / item.quantity,
+    quantity: item.quantity
+  }));
+  saveCart();
 }
 
 function saveCart() {
@@ -445,39 +684,52 @@ function renderCart() {
     `;
   }).join('');
 
-  // Calculations
-  const discountAmount = Math.round(rawSubtotal * (AppState.appliedDiscount / 100));
-  const finalTotal = rawSubtotal - discountAmount;
+  // Medusa source of truth for financial calculations
+  const subtotal = AppState.medusaCart?.subtotal ?? rawSubtotal;
+  const discountAmount = AppState.medusaCart?.discount_total ?? Math.round(subtotal * (AppState.appliedDiscount / 100));
+  const shippingFee = AppState.medusaCart?.shipping_total ?? (subtotal >= AppState.freeShippingThreshold || subtotal === 0 ? 0 : 150);
+  const finalTotal = AppState.medusaCart?.total ?? (subtotal - discountAmount + shippingFee);
 
-  if (subtotalEl) subtotalEl.textContent = `₹ ${rawSubtotal.toLocaleString('en-IN')}`;
+  if (subtotalEl) subtotalEl.textContent = `₹ ${Number(subtotal).toLocaleString('en-IN')}`;
   if (discountRow) {
-    discountRow.style.display = AppState.appliedDiscount > 0 ? 'flex' : 'none';
+    discountRow.style.display = (discountAmount > 0 || AppState.appliedDiscount > 0) ? 'flex' : 'none';
   }
-  if (discountVal) discountVal.textContent = `- ₹ ${discountAmount.toLocaleString('en-IN')} (${AppState.appliedDiscount}%)`;
-  if (finalTotalEl) finalTotalEl.textContent = `₹ ${finalTotal.toLocaleString('en-IN')}`;
+  if (discountVal) discountVal.textContent = `- ₹ ${Number(discountAmount).toLocaleString('en-IN')}`;
+  if (finalTotalEl) finalTotalEl.textContent = `₹ ${Number(finalTotal).toLocaleString('en-IN')}`;
 
   // Free shipping tracker
-  const remainingForFree = AppState.freeShippingThreshold - rawSubtotal;
+  const remainingForFree = AppState.freeShippingThreshold - subtotal;
   if (freeShippingText && freeShippingBar) {
     if (remainingForFree <= 0) {
       freeShippingText.innerHTML = `<i class="fa-solid fa-circle-check" style="color: #2E7D32;"></i> <strong>Congratulations!</strong> You qualify for <strong>FREE Shipping</strong>!`;
       freeShippingBar.style.width = '100%';
     } else {
-      const progress = Math.min(100, Math.round((rawSubtotal / AppState.freeShippingThreshold) * 100));
+      const progress = Math.min(100, Math.round((subtotal / AppState.freeShippingThreshold) * 100));
       freeShippingText.innerHTML = `Add <strong>₹ ${remainingForFree.toLocaleString('en-IN')}</strong> more to get <strong>FREE Express Shipping</strong>!`;
       freeShippingBar.style.width = `${progress}%`;
     }
   }
 }
 
-function applyPromoCode() {
+async function applyPromoCode() {
   const input = document.getElementById('promo-input-field');
   const code = input?.value.trim().toUpperCase();
+  if (!code) return;
 
-  if (code === 'WELCOME10') {
+  if (window.MedusaClient) {
+    const res = await window.MedusaClient.applyPromoCode(code);
+    if (res.success) {
+      showToast(`Promo code "${code}" applied successfully!`);
+      if (res.cart) syncCartFromMedusa(res.cart);
+      renderCart();
+      return;
+    }
+  }
+
+  if (code === 'WELCOME10' || code === 'FESTIVE10') {
     AppState.appliedDiscount = 10;
-    AppState.appliedCoupon = 'WELCOME10';
-    showToast('Promo code "WELCOME10" applied successfully! 10% OFF.');
+    AppState.appliedCoupon = code;
+    showToast(`Promo code "${code}" applied successfully! 10% OFF.`);
     renderCart();
   } else if (code === 'ROYAL20') {
     AppState.appliedDiscount = 20;
@@ -485,21 +737,55 @@ function applyPromoCode() {
     showToast('VIP Promo code "ROYAL20" applied! 20% OFF.');
     renderCart();
   } else {
-    showToast('Invalid promo code. Try "WELCOME10" for 10% off.');
+    showToast('Invalid promo code. Try "FESTIVE10" for 10% off.');
   }
 }
 
-function handleCheckout() {
+async function handleCheckout() {
   if (AppState.cart.length === 0) return;
-  showToast('Processing order securely with 256-bit encryption...');
-  setTimeout(() => {
-    alert('Thank you for choosing 6 Yards Sarees! Your order has been placed successfully. A confirmation with tracking details has been sent to your email.');
-    AppState.cart = [];
-    saveCart();
-    renderCart();
-    updateHeaderBadges();
-    closeCartDrawer();
-  }, 1200);
+  showToast('Launching secure checkout...');
+
+  const cart = AppState.medusaCart || (window.MedusaClient ? window.MedusaClient.getLocalCart() : null);
+
+  if (window.MedusaClient && cart) {
+    window.MedusaClient.launchRazorpayCheckout(
+      cart,
+      {
+        email: 'patron@6yardssarees.com',
+        first_name: 'Valued',
+        last_name: 'Patron',
+        phone: '+919876543210'
+      },
+      (response) => {
+        const orderNumber = response.razorpay_order_id ? response.razorpay_order_id.slice(-6).toUpperCase() : Math.floor(1000 + Math.random() * 9000);
+        const orderEl = document.getElementById('confirmed-order-id');
+        if (orderEl) orderEl.textContent = `#6YD-${orderNumber}`;
+
+        // Clear cart session
+        AppState.cart = [];
+        AppState.medusaCart = null;
+        localStorage.removeItem('6yards_cart');
+        localStorage.removeItem('6yards_medusa_cart_id');
+        renderCart();
+        updateHeaderBadges();
+        closeCartDrawer();
+        openOrderSuccessModal();
+      },
+      (err) => {
+        showToast(err.message || 'Payment window closed.');
+      }
+    );
+  }
+}
+
+function openOrderSuccessModal() {
+  document.getElementById('order-success-backdrop')?.classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeOrderSuccessModal() {
+  document.getElementById('order-success-backdrop')?.classList.remove('active');
+  document.body.style.overflow = '';
 }
 
 /* ==========================================================================
@@ -794,13 +1080,39 @@ function initScrollTop() {
 
 function initHeaderScroll() {
   const header = document.querySelector('.header-main');
-  window.addEventListener('scroll', () => {
-    if (window.scrollY > 40) {
-      header?.classList.add('scrolled');
+  const heroBanner = document.getElementById('hero-banner') || document.querySelector('.hero-video-anchor');
+
+  function updateHeaderAppearance() {
+    if (!header) return;
+
+    // Only apply glassmorphism on pages with the hero video (index.html)
+    if (heroBanner) {
+      const heroRect = heroBanner.getBoundingClientRect();
+      const headerHeight = header.offsetHeight || 82;
+      // In hero video: glassmorphic (video shines through frosted glass)
+      const inHeroVideo = heroRect.bottom > (headerHeight + 20);
+
+      if (inHeroVideo) {
+        header.classList.add('header-glass');
+      } else {
+        // Scrolled to where the collection starts or beyond: solid royal navy blue
+        header.classList.remove('header-glass');
+      }
     } else {
-      header?.classList.remove('scrolled');
+      // Any other page (collections, about, journal, contact, product): ALWAYS solid blue
+      header.classList.remove('header-glass');
     }
-  });
+
+    if (window.scrollY > 40) {
+      header.classList.add('scrolled');
+    } else {
+      header.classList.remove('scrolled');
+    }
+  }
+
+  window.addEventListener('scroll', updateHeaderAppearance, { passive: true });
+  window.addEventListener('resize', updateHeaderAppearance, { passive: true });
+  updateHeaderAppearance();
 }
 
 function initMobileNav() {
@@ -815,10 +1127,60 @@ function initMobileNav() {
     // Close when clicking link
     navMenu.querySelectorAll('a').forEach(link => {
       link.addEventListener('click', () => {
-        navMenu.classList.remove('open');
+        if (!link.classList.contains('dropdown-caret') && link.id !== 'nav-sarees-link') {
+          navMenu.classList.remove('open');
+        }
       });
     });
   }
+}
+
+function initSareesDropdown() {
+  const dropdownItem = document.getElementById('nav-sarees-item') || document.querySelector('.nav-item-dropdown');
+  const dropdownLink = document.getElementById('nav-sarees-link') || dropdownItem?.querySelector('.nav-link');
+  const megaCard = dropdownItem?.querySelector('.sarees-mega-card');
+  if (!dropdownItem || !dropdownLink) return;
+
+  let closeTimer = null;
+
+  function showDropdown() {
+    if (closeTimer) {
+      clearTimeout(closeTimer);
+      closeTimer = null;
+    }
+    dropdownItem.classList.add('open');
+  }
+
+  function hideDropdownWithDelay() {
+    if (closeTimer) clearTimeout(closeTimer);
+    closeTimer = setTimeout(() => {
+      dropdownItem.classList.remove('open');
+    }, 280);
+  }
+
+  // Hover intent for desktop: smooth bridge so moving mouse into card never vanishes
+  dropdownItem.addEventListener('mouseenter', showDropdown);
+  dropdownItem.addEventListener('mouseleave', hideDropdownWithDelay);
+
+  if (megaCard) {
+    megaCard.addEventListener('mouseenter', showDropdown);
+    megaCard.addEventListener('mouseleave', hideDropdownWithDelay);
+  }
+
+  // Clicking on Sarees on touch/mobile toggles the dropdown card
+  dropdownLink.addEventListener('click', (e) => {
+    if (window.innerWidth <= 992) {
+      e.preventDefault();
+      dropdownItem.classList.toggle('open');
+    }
+  });
+
+  // Clicking outside closes the dropdown
+  document.addEventListener('click', (e) => {
+    if (!dropdownItem.contains(e.target)) {
+      dropdownItem.classList.remove('open');
+    }
+  });
 }
 
 /* ==========================================================================
@@ -845,3 +1207,172 @@ function showToast(message) {
     setTimeout(() => toast.remove(), 400);
   }, 3500);
 }
+
+
+/* ==========================================================================
+   CUSTOMER CARE POLICY MODAL & UNIVERSAL NOTIFICATIONS
+   ========================================================================== */
+function openCarePolicyModal(defaultTab) {
+  defaultTab = defaultTab || 'shipping';
+  let modal = document.getElementById('care-policy-modal');
+  if (!modal) {
+    modal = document.createElement('div');
+    modal.id = 'care-policy-modal';
+    modal.className = 'policy-modal-backdrop';
+    modal.innerHTML = `
+      <div class="policy-modal-card">
+        <div class="policy-modal-header">
+          <h3>Customer Care & Atelier Policies</h3>
+          <button class="policy-modal-close-btn" onclick="closeCarePolicyModal()" aria-label="Close">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+        <div class="policy-modal-tabs">
+          <button class="policy-tab-btn" data-tab="shipping" onclick="switchPolicyTab('shipping')">Shipping Policy</button>
+          <button class="policy-tab-btn" data-tab="returns" onclick="switchPolicyTab('returns')">Returns & Exchanges</button>
+          <button class="policy-tab-btn" data-tab="size" onclick="switchPolicyTab('size')">Saree Drape Guide</button>
+          <button class="policy-tab-btn" data-tab="faq" onclick="switchPolicyTab('faq')">FAQs</button>
+          <button class="policy-tab-btn" data-tab="terms" onclick="switchPolicyTab('terms')">Authenticity & Terms</button>
+          <button class="policy-tab-btn" data-tab="privacy" onclick="switchPolicyTab('privacy')">Privacy Policy</button>
+        </div>
+        <div class="policy-modal-body">
+          <div class="policy-tab-pane" id="pane-shipping">
+            <h4>Complimentary Insured Express Delivery Across India</h4>
+            <p>Every 6 Yards saree is a delicate handloom masterwork. To ensure it arrives in pristine, uncompressed condition, we ship via temperature-controlled air freight.</p>
+            <ul>
+              <li><strong>Free Shipping:</strong> All domestic orders above ₹5,000 receive complimentary express shipping.</li>
+              <li><strong>Dispatch Timeline:</strong> Orders are dispatched within 24 to 48 business hours from our Varanasi and Bangalore ateliers.</li>
+              <li><strong>Delivery Window:</strong> Metro cities: 2–3 business days. Rest of India: 3–5 business days.</li>
+              <li><strong>Real-Time Tracking:</strong> Tracking link and SMS dispatch updates are sent via BlueDart / Delhivery.</li>
+            </ul>
+          </div>
+          <div class="policy-tab-pane" id="pane-returns">
+            <h4>7-Day Seamless Reverse Pickup Guarantee</h4>
+            <p>We take pride in our authentic handlooms. If you are not completely delighted with your drape, we offer a hassle-free 7-day exchange or refund.</p>
+            <ul>
+              <li><strong>Condition:</strong> The saree must remain unworn, unpleated, with the Silk Mark authentication tag and seal intact.</li>
+              <li><strong>Reverse Pickup:</strong> Our courier partner will collect the parcel from your doorstep at zero extra fee.</li>
+              <li><strong>Refund Process:</strong> Refunds are processed back to your original payment method (or UPI) within 3–5 business days after inspection.</li>
+            </ul>
+          </div>
+          <div class="policy-tab-pane" id="pane-size">
+            <h4>Authentic Six Yards Standard Drape & Blouse Piece</h4>
+            <p>All sarees at 6 Yards conform to generational Indian handloom standards:</p>
+            <ul>
+              <li><strong>Saree Length:</strong> 5.5 meters (Six Yards) full authentic drape length.</li>
+              <li><strong>Width:</strong> 45 to 48 inches (114–122 cm) for generous pleating and graceful floor fall.</li>
+              <li><strong>Blouse Piece:</strong> 0.8 meters unstitched matching pure silk fabric attached at the running pallu end.</li>
+              <li><strong>Care Instructions:</strong> Strictly dry clean only. Store draped in breathable cotton or unbleached muslin cloth away from direct sunlight.</li>
+            </ul>
+          </div>
+          <div class="policy-tab-pane" id="pane-faq">
+            <h4>Frequently Asked Questions</h4>
+            <ul>
+              <li><strong>Are all sarees 100% pure silk?</strong> Yes. Every piece carries Silk Mark certification and is woven from pure mulberry, tussar, or katan silk filaments.</li>
+              <li><strong>Is the zari genuine silver/gold?</strong> Our bridal Kadwa and Kanjivaram sarees use authentic 2G electroplated gold and silver metallic wire.</li>
+              <li><strong>Can I book a video styling consultation?</strong> Absolutely. Click our "WhatsApp Concierge" button or call +91 98765 43210 to schedule a 1-on-1 private video preview.</li>
+            </ul>
+          </div>
+          <div class="policy-tab-pane" id="pane-terms">
+            <h4>Authenticity Guarantee & Atelier Terms</h4>
+            <p>Every saree purchased from 6 Yards directly supports master artisan weaver clusters across Varanasi, Kanchipuram, Chanderi, and Yeola. Minor loom variations, slub nuances, and hand-tucked edge threads are organic hallmarks of genuine pit loom weaving, not defects.</p>
+          </div>
+          <div class="policy-tab-pane" id="pane-privacy">
+            <h4>Strict Customer Privacy & Payment Security</h4>
+            <p>We respect your privacy. All payment transactions are encrypted end-to-end via Razorpay PCI-DSS Level 1 compliant gateways. We do not store credit card or banking credentials, and we never sell your personal information to third parties.</p>
+          </div>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(modal);
+
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) closeCarePolicyModal();
+    });
+  }
+
+  modal.classList.add('active');
+  switchPolicyTab(defaultTab);
+}
+
+function closeCarePolicyModal() {
+  const modal = document.getElementById('care-policy-modal');
+  if (modal) modal.classList.remove('active');
+}
+
+function switchPolicyTab(tabId) {
+  document.querySelectorAll('.policy-tab-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.getAttribute('data-tab') === tabId);
+  });
+  document.querySelectorAll('.policy-tab-pane').forEach(pane => {
+    pane.classList.toggle('active', pane.id === `pane-${tabId}`);
+  });
+}
+
+function showToast(message, type) {
+  type = type || 'info';
+  let container = document.getElementById('toast-container');
+  if (!container) {
+    container = document.createElement('div');
+    container.id = 'toast-container';
+    document.body.appendChild(container);
+  }
+
+  const toast = document.createElement('div');
+  toast.className = 'app-toast-item toast-' + type;
+  
+  let iconHtml = '<i class="fa-solid fa-circle-info"></i>';
+  if (type === 'success') iconHtml = '<i class="fa-solid fa-circle-check"></i>';
+  if (type === 'error') iconHtml = '<i class="fa-solid fa-triangle-exclamation"></i>';
+
+  toast.innerHTML = iconHtml + ' <span>' + message + '</span>';
+  container.appendChild(toast);
+
+  setTimeout(() => {
+    toast.style.opacity = '0';
+    toast.style.transform = 'translateY(10px)';
+    toast.style.transition = 'all 0.25s ease';
+    setTimeout(() => toast.remove(), 260);
+  }, 3800);
+}
+
+
+// Setup universal mobile menu drawer & backdrop
+document.addEventListener('DOMContentLoaded', () => {
+  const toggleBtn = document.getElementById('mobile-nav-toggle-btn');
+  const navMenu = document.getElementById('nav-menu-list');
+  const backdrop = document.getElementById('mobile-nav-backdrop');
+  const closeBtn = document.getElementById('mobile-nav-close-btn');
+
+  function openMobileNav() {
+    if (navMenu) {
+      navMenu.classList.add('open');
+      navMenu.classList.add('mobile-open');
+    }
+    if (backdrop) backdrop.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeMobileNav() {
+    if (navMenu) {
+      navMenu.classList.remove('open');
+      navMenu.classList.remove('mobile-open');
+    }
+    if (backdrop) backdrop.classList.remove('active');
+    document.body.style.overflow = '';
+  }
+
+  if (toggleBtn) {
+    toggleBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      if (navMenu && (navMenu.classList.contains('open') || navMenu.classList.contains('mobile-open'))) {
+        closeMobileNav();
+      } else {
+        openMobileNav();
+      }
+    });
+  }
+
+  if (closeBtn) closeBtn.addEventListener('click', closeMobileNav);
+  if (backdrop) backdrop.addEventListener('click', closeMobileNav);
+});

@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>6 Yards | Six Yards. Infinite Stories. — Luxury Handloom Sarees</title>
-  <meta name="description" content="Explore handcrafted pure silk Banarasi, Kanjivaram, Chanderi, and Tussar sarees at 6 Yards. Authentic Indian loomcraft, timeless elegance and modern grace." />
+  <title>6 Yards | Authentic Handloom Sarees & Heritage Pure Silk</title>
+  <meta name="description" content="Explore handcrafted authentic pure silk Banarasi, Kanjivaram, Chanderi, and Pichwai sarees from generational master weavers at 6 Yards." />
 
   <!-- Preconnect to external font and icon CDNs -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -32,7 +32,7 @@
 <body>
 
   <!-- Main Navigation Header -->
-  <header class="header-main">
+  <header class="header-main header-glass">
     <div class="navbar">
       <!-- Mobile Menu Hamburger Button -->
       <button class="mobile-nav-toggle" id="mobile-nav-toggle-btn" aria-label="Toggle Navigation Menu">
@@ -41,23 +41,164 @@
 
       <!-- Brand Logo -->
       <a href="index.html" class="brand-logo-link">
-        <img src="assets/brand-logo-peacock-clean.png" alt="6 Yards Sarees" class="brand-logo-img" />
+        <img src="assets/brand-logo-peacock-clean.png" alt="6 Yards Sarees" class="brand-logo-img" alt="6 Yards Sarees" />
       </a>
 
-      <!-- Navigation Menu -->
+      <!-- Navigation Menu: Sarees (with Curated Collections & Occasions Mega Card), Journal, Contact -->
       <nav>
         <ul class="nav-menu" id="nav-menu-list">
+          <li class="mobile-nav-header-item">
+            <div class="mobile-nav-header">
+              <a href="index.html" class="brand-logo-link">
+                <img src="assets/brand-logo-peacock-clean.png" alt="6 Yards Sarees" class="brand-logo-img" />
+              </a>
+              <button class="mobile-nav-close-btn" id="mobile-nav-close-btn" aria-label="Close Navigation">
+                <i class="fa-solid fa-xmark"></i>
+              </button>
+            </div>
+          </li>
+
           <li class="nav-item">
             <a href="index.html" class="nav-link active">Home</a>
           </li>
-          <li class="nav-item">
-            <a href="#products-section" class="nav-link">Shop</a>
+          <li class="nav-item nav-item-dropdown" id="nav-sarees-item">
+            <a href="collections.html" class="nav-link" id="nav-sarees-link">
+              Sarees <i class="fa-solid fa-chevron-down dropdown-caret"></i>
+            </a>
+            <!-- Luxury Mega Card Dropdown -->
+            <div class="sarees-mega-card">
+              <!-- Left Side: Curated Collections with small circular thumbnails -->
+              <div class="sarees-collections-col">
+                <div class="sarees-col-header">
+                  <span class="sarees-col-eyebrow">EXPLORE BY COLLECTION</span>
+                  <h4 class="sarees-col-title font-serif">Curated Collections</h4>
+                </div>
+                <div class="sarees-circle-list">
+                  <a href="collections.html?collection=adaa" class="sarees-circle-item">
+                    <div class="sarees-circle-thumb">
+                      <img src="assets/collection-adaa.jpg" alt="Adaa Collection" />
+                    </div>
+                    <div class="sarees-circle-info">
+                      <span class="sarees-circle-name">Adaa</span>
+                      <span class="sarees-circle-desc">Pichwai Art & Botanical Florals</span>
+                    </div>
+                    <i class="fa-solid fa-chevron-right sarees-circle-arrow"></i>
+                  </a>
+
+                  <a href="collections.html?collection=roop" class="sarees-circle-item">
+                    <div class="sarees-circle-thumb">
+                      <img src="assets/collection-roop.jpg" alt="Roop Collection" />
+                    </div>
+                    <div class="sarees-circle-info">
+                      <span class="sarees-circle-name">Roop</span>
+                      <span class="sarees-circle-desc">Regal Jewel Tones & Korvai Borders</span>
+                    </div>
+                    <i class="fa-solid fa-chevron-right sarees-circle-arrow"></i>
+                  </a>
+
+                  <a href="collections.html?collection=vastra" class="sarees-circle-item">
+                    <div class="sarees-circle-thumb">
+                      <img src="assets/collection-vastra.jpg" alt="Vastra Collection" />
+                    </div>
+                    <div class="sarees-circle-info">
+                      <span class="sarees-circle-name">Vastra</span>
+                      <span class="sarees-circle-desc">Artisan Comfort & Slub Handlooms</span>
+                    </div>
+                    <i class="fa-solid fa-chevron-right sarees-circle-arrow"></i>
+                  </a>
+
+                  <a href="collections.html?collection=leher" class="sarees-circle-item">
+                    <div class="sarees-circle-thumb">
+                      <img src="assets/collection-leher.jpg" alt="Leher Collection" />
+                    </div>
+                    <div class="sarees-circle-info">
+                      <span class="sarees-circle-name">Leher</span>
+                      <span class="sarees-circle-desc">Whispering Silks & Flowing Drapes</span>
+                    </div>
+                    <i class="fa-solid fa-chevron-right sarees-circle-arrow"></i>
+                  </a>
+
+                  <a href="collections.html?collection=riwayat" class="sarees-circle-item">
+                    <div class="sarees-circle-thumb">
+                      <img src="assets/collection-riwayat.jpg" alt="Riwayat Collection" />
+                    </div>
+                    <div class="sarees-circle-info">
+                      <span class="sarees-circle-name">Riwayat</span>
+                      <span class="sarees-circle-desc">Royal Kanjivaram & Kadwa Heirlooms</span>
+                    </div>
+                    <i class="fa-solid fa-chevron-right sarees-circle-arrow"></i>
+                  </a>
+                </div>
+
+                <div class="sarees-all-link-wrap">
+                  <a href="collections.html" class="sarees-view-all-cta">
+                    View All 38 Handloom Sarees <i class="fa-solid fa-arrow-right"></i>
+                  </a>
+                </div>
+              </div>
+
+              <!-- Right Side: Shop by Occasion -->
+              <div class="sarees-occasions-col">
+                <div class="sarees-col-header">
+                  <span class="sarees-col-eyebrow">CURATED OCCASIONS</span>
+                  <h4 class="sarees-col-title font-serif">Shop by Occasion</h4>
+                </div>
+                <div class="sarees-occasions-grid">
+                  <a href="collections.html?occasion=Wedding" class="sarees-occasion-card">
+                    <div class="sarees-occasion-img-box">
+                      <img src="assets/occasion-wedding-cover.jpg" alt="Wedding Silks" loading="lazy" />
+                      <div class="sarees-occasion-badge">Wedding</div>
+                    </div>
+                    <div class="sarees-occasion-footer">
+                      <span class="sarees-occasion-name">Wedding</span>
+                      <span class="sarees-occasion-desc">Bridal & Muhurtham</span>
+                    </div>
+                  </a>
+
+                  <a href="collections.html?occasion=Casual" class="sarees-occasion-card">
+                    <div class="sarees-occasion-img-box">
+                      <img src="assets/occasion-casual-cover.jpg" alt="Casual Handlooms" loading="lazy" />
+                      <div class="sarees-occasion-badge">Casual</div>
+                    </div>
+                    <div class="sarees-occasion-footer">
+                      <span class="sarees-occasion-name">Casual</span>
+                      <span class="sarees-occasion-desc">Everyday Grace</span>
+                    </div>
+                  </a>
+
+                  <a href="collections.html?occasion=Comfort" class="sarees-occasion-card">
+                    <div class="sarees-occasion-img-box">
+                      <img src="assets/occasion-comfort-cover.jpg" alt="Comfort Handloom Weaves" loading="lazy" />
+                      <div class="sarees-occasion-badge">Comfort</div>
+                    </div>
+                    <div class="sarees-occasion-footer">
+                      <span class="sarees-occasion-name">Comfort</span>
+                      <span class="sarees-occasion-desc">Breathable Silks</span>
+                    </div>
+                  </a>
+
+                  <a href="collections.html?occasion=Festive" class="sarees-occasion-card">
+                    <div class="sarees-occasion-img-box">
+                      <img src="assets/occasion-festive-cover.jpg" alt="Festive Pichwai Sarees" loading="lazy" />
+                      <div class="sarees-occasion-badge">Festive</div>
+                    </div>
+                    <div class="sarees-occasion-footer">
+                      <span class="sarees-occasion-name">Festive</span>
+                      <span class="sarees-occasion-desc">Pichwai & Celebrations</span>
+                    </div>
+                  </a>
+                </div>
+              </div>
+            </div>
           </li>
           <li class="nav-item">
-            <a href="#craft-section" class="nav-link">Journal</a>
+            <a href="about.html" class="nav-link">About Us</a>
           </li>
           <li class="nav-item">
-            <a href="#footer-section" class="nav-link">Contact</a>
+            <a href="journal.html" class="nav-link">Journal</a>
+          </li>
+          <li class="nav-item">
+            <a href="contact.html" class="nav-link">Contact</a>
           </li>
         </ul>
       </nav>
@@ -77,48 +218,15 @@
     </div>
   </header>
 
-  <!-- Hero Section -->
-  <section class="hero-section" id="hero-banner">
-    <!-- Background Video -->
+  <!-- Hero Section: Pure High-Quality Video (Click to Explore Matching Riwayat Sarees) -->
+  <a href="collections.html?collection=riwayat" class="hero-video-anchor" id="hero-banner" title="Click to Explore Royal Sarees Featured in Video" aria-label="Explore Royal Silk Sarees Featured in Video">
     <div class="hero-video-container">
-      <video class="hero-background-video" autoplay loop muted playsinline preload="metadata" poster="assets/hero-poster.jpg">
+      <video class="hero-background-video" autoplay loop muted playsinline preload="auto" poster="assets/hero-poster.jpg" id="hero-bg-video">
         <source src="gemini_generated_video_9da2f281_gwr_video_mvp.mp4" type="video/mp4" />
       </video>
       <div class="hero-video-overlay"></div>
-      <!-- Motion Graphics: Gold & Peacock Teal Silk Shimmer, Floating Ambient Rings & Peacock Sparkles -->
-      <div class="hero-motion-graphics">
-        <div class="motion-glow motion-glow-1"></div>
-        <div class="motion-glow motion-glow-2"></div>
-        <div class="motion-glow motion-glow-3"></div>
-        <div class="motion-particle particle-1"></div>
-        <div class="motion-particle particle-2"></div>
-        <div class="motion-particle particle-3"></div>
-        <div class="motion-particle particle-4"></div>
-        <div class="motion-particle particle-5"></div>
-      </div>
     </div>
-
-    <div class="container hero-content">
-      <h1 class="hero-title">Six Yards.<br />Infinite Stories.</h1>
-      <p class="hero-desc">
-        From timeless weaves to contemporary drapes, explore sarees that celebrate craft, culture and you.
-      </p>
-      <a href="#collections-section" class="hero-cta-btn">
-        Explore Collections <i class="fa-solid fa-arrow-right"></i>
-      </a>
-    </div>
-
-    <!-- Hero Video Controls / Badge -->
-    <div class="hero-controls">
-      <div></div>
-
-      <div class="hero-nav-arrows">
-        <button class="hero-arrow-btn" id="hero-sound-toggle-btn" title="Toggle Audio" aria-label="Toggle Sound">
-          <i class="fa-solid fa-volume-xmark" id="hero-sound-icon"></i>
-        </button>
-      </div>
-    </div>
-  </section>
+  </a>
 
   <!-- Collections Category Section ("Sutra") -->
   <section class="sutra-section section-padding" id="collections-section">
@@ -127,9 +235,8 @@
         <div class="sutra-title-box">
           <span class="sub-label">The Collections</span>
           <h2 class="main-title font-serif">Sutra</h2>
-          <p class="sutra-tagline">Curated stories, woven in six yards.</p>
         </div>
-        <a href="#products-section" class="view-all-link" onclick="resetFilters()">
+        <a href="collections.html" class="view-all-link">
           View All <i class="fa-solid fa-arrow-right"></i>
         </a>
       </div>
@@ -141,24 +248,229 @@
     </div>
   </section>
 
-  <!-- Featured Duo Promo Section (Resham & Crafted in Tradition) -->
-  <section class="featured-duo-section" id="craft-section">
+  <!-- Editorial Photoshoot Spotlight Section -->
+  <section class="editorial-showcase-section" id="craft-section">
+    <div class="container">
+      <div class="editorial-grid">
+        <a href="collections.html" class="editorial-image-frame" style="display: block; cursor: pointer;">
+          <img src="assets/editorial-heritage-loom.jpg" alt="6 Yards Master Artisan Weaving" />
+        </a>
+        <div class="editorial-content-box">
+          <h2 class="editorial-title font-serif">Woven With Devotion.<br />Draped With Pride.</h2>
+          <p class="editorial-desc">
+            Each 6 Yards saree is a masterwork born on traditional pit looms—where generational weavers interlace pure mulberry silk filaments with delicate electroplated silver and gold zari. Every thread carries authentic loomcraft, untouched by industrial compromises.
+          </p>
+          <a href="collections.html" class="editorial-cta-btn">
+            Explore The Silk Catalog <i class="fa-solid fa-arrow-right"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Shop by Occasion: 4 Cards (Kalyan Silks Image 2 Style) -->
+  <section class="shop-by-occasion-section" id="occasion-section">
+    <div class="container">
+      <div class="occasion-header-box">
+        <span class="occasion-sub-label">Shop by Occasion</span>
+        <h2 class="occasion-main-heading">INSPIRED BY WOMEN WHO WEAR TRADITION DIFFERENTLY</h2>
+      </div>
+
+      <div class="occasion-cards-grid">
+        <!-- Card 1: Wedding -->
+        <a href="collections.html?occasion=Wedding" class="occasion-card">
+          <div class="occasion-image-box">
+            <img src="assets/occasion-wedding-cover.jpg" alt="Wedding Pure Silk Sarees" loading="lazy" />
+            <div class="occasion-overlay">
+              <span class="occasion-top-picks-tag">— TOP PICKS FOR —</span>
+              <h3 class="occasion-card-title">Wedding</h3>
+              <span class="occasion-shop-btn">SHOP NOW</span>
+            </div>
+          </div>
+        </a>
+
+        <!-- Card 2: Casual -->
+        <a href="collections.html?occasion=Casual" class="occasion-card">
+          <div class="occasion-image-box">
+            <img src="assets/occasion-casual-cover.jpg" alt="Casual Handloom Silk Sarees" loading="lazy" />
+            <div class="occasion-overlay">
+              <span class="occasion-top-picks-tag">— TOP PICKS FOR —</span>
+              <h3 class="occasion-card-title">Casual</h3>
+              <span class="occasion-shop-btn">SHOP NOW</span>
+            </div>
+          </div>
+        </a>
+
+        <!-- Card 3: Comfort -->
+        <a href="collections.html?occasion=Comfort" class="occasion-card">
+          <div class="occasion-image-box">
+            <img src="assets/occasion-comfort-cover.jpg" alt="Comfort Handloom Silks" loading="lazy" />
+            <div class="occasion-overlay">
+              <span class="occasion-top-picks-tag">— TOP PICKS FOR —</span>
+              <h3 class="occasion-card-title">Comfort</h3>
+              <span class="occasion-shop-btn">SHOP NOW</span>
+            </div>
+          </div>
+        </a>
+
+        <!-- Card 4: Festive -->
+        <a href="collections.html?occasion=Festive" class="occasion-card">
+          <div class="occasion-image-box">
+            <img src="assets/occasion-festive-cover.jpg" alt="Festive Royal Green & Gold Handloom Silk Saree" loading="lazy" />
+            <div class="occasion-overlay">
+              <span class="occasion-top-picks-tag">— TOP PICKS FOR —</span>
+              <h3 class="occasion-card-title">Festive</h3>
+              <span class="occasion-shop-btn">SHOP NOW</span>
+            </div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- New Arrivals Section (5-6 Fresh Artisanal Collections) -->
+  <section class="new-arrivals-section" id="new-arrivals-section">
+    <div class="container">
+      <div class="section-header-row">
+        <div>
+          <span class="new-arrivals-tag">Fresh off the Loom</span>
+          <h2 class="section-heading-lg font-serif">New Arrivals</h2>
+          <p class="section-subheading">Our newest artisanal weaves, handcrafted with timeless devotion and Pure Silk Mark authenticity.</p>
+        </div>
+        <a href="collections.html" class="view-all-link">
+          Explore All 38 Sarees <i class="fa-solid fa-arrow-right"></i>
+        </a>
+      </div>
+
+      <!-- Curated Best Sarees in Artisan Frame Situation -->
+      <div class="framed-sarees-grid" id="new-arrivals-grid">
+        
+        <!-- Frame 1: Gulabi Mauve Pichwai Silk Saree -->
+        <article class="saree-frame-card">
+          <div class="saree-frame-inner">
+            <span class="saree-frame-badge">Pichwai Art</span>
+            <div class="saree-frame-img-box">
+              <a href="product.html?id=saree-01">
+                <img src="assets/catalog/adaa/adaa-01-primary.jpg" alt="Gulabi Mauve Pichwai Silk Saree" loading="lazy" onerror="this.src='assets/thumbnails/PROD-719176_thumb.jpg'" />
+              </a>
+            </div>
+          </div>
+          <div class="saree-frame-caption">
+            <span class="saree-frame-collection">Adaa Sutra</span>
+            <h3 class="saree-frame-title">
+              <a href="product.html?id=saree-01" style="color: inherit; text-decoration: none;">
+                Gulabi Mauve Pichwai Silk Saree
+              </a>
+            </h3>
+            <span class="saree-frame-weave-tag">Pichwai Kamdhenu & Lotus Tapestry • Varanasi</span>
+            <div class="saree-frame-price-row">
+              <span class="saree-frame-price">₹ 2,700</span>
+              <span class="saree-frame-original-price">₹ 3,200</span>
+            </div>
+            <a href="product.html?id=saree-01" class="saree-frame-cta">View Saree Details</a>
+          </div>
+        </article>
+
+        <!-- Frame 2: Emerald Green Royal Kanjivaram Silk Saree -->
+        <article class="saree-frame-card">
+          <div class="saree-frame-inner">
+            <span class="saree-frame-badge">2G Kadwa Zari</span>
+            <div class="saree-frame-img-box">
+              <a href="product.html?id=saree-10">
+                <img src="assets/catalog/riwayat/riwayat-01-primary.jpg" alt="Emerald Green Royal Kanjivaram Silk Saree" loading="lazy" onerror="this.src='assets/thumbnails/PROD-133326_thumb.jpg'" />
+              </a>
+            </div>
+          </div>
+          <div class="saree-frame-caption">
+            <span class="saree-frame-collection">Riwayat Sutra</span>
+            <h3 class="saree-frame-title">
+              <a href="product.html?id=saree-10" style="color: inherit; text-decoration: none;">
+                Emerald Green Royal Kanjivaram Silk Saree
+              </a>
+            </h3>
+            <span class="saree-frame-weave-tag">Korvai Triple-Shuttle Border • Kanchipuram</span>
+            <div class="saree-frame-price-row">
+              <span class="saree-frame-price">₹ 18,500</span>
+              <span class="saree-frame-original-price">₹ 22,000</span>
+            </div>
+            <a href="product.html?id=saree-10" class="saree-frame-cta">View Saree Details</a>
+          </div>
+        </article>
+
+        <!-- Frame 3: Deep Wine Maroon Kadwa Silk Saree -->
+        <article class="saree-frame-card">
+          <div class="saree-frame-inner">
+            <span class="saree-frame-badge">Imperial Kadwa</span>
+            <div class="saree-frame-img-box">
+              <a href="product.html?id=saree-04">
+                <img src="assets/catalog/roop/roop-02-primary.jpg" alt="Deep Wine Maroon Kadwa Silk Saree" loading="lazy" onerror="this.src='assets/thumbnails/PROD-216739_thumb.jpg'" />
+              </a>
+            </div>
+          </div>
+          <div class="saree-frame-caption">
+            <span class="saree-frame-collection">Roop Sutra</span>
+            <h3 class="saree-frame-title">
+              <a href="product.html?id=saree-04" style="color: inherit; text-decoration: none;">
+                Deep Wine Maroon Kadwa Silk Saree
+              </a>
+            </h3>
+            <span class="saree-frame-weave-tag">Kadwa Weave & Antique Gold Brocade • Varanasi</span>
+            <div class="saree-frame-price-row">
+              <span class="saree-frame-price">₹ 15,800</span>
+              <span class="saree-frame-original-price">₹ 18,900</span>
+            </div>
+            <a href="product.html?id=saree-04" class="saree-frame-cta">View Saree Details</a>
+          </div>
+        </article>
+
+        <!-- Frame 4: Peacock Teal & Royal Purple Kadwa Kanjivaram Saree -->
+        <article class="saree-frame-card">
+          <div class="saree-frame-inner">
+            <span class="saree-frame-badge">Artisan Heirloom</span>
+            <div class="saree-frame-img-box">
+              <a href="product.html?id=saree-riwayat-teal-purple">
+                <img src="assets/catalog/riwayat/riwayat-teal-purple-primary.jpg" alt="Peacock Teal & Royal Purple Kadwa Kanjivaram Saree" loading="lazy" onerror="this.src='assets/thumbnails/PROD-127824_thumb.jpg'" />
+              </a>
+            </div>
+          </div>
+          <div class="saree-frame-caption">
+            <span class="saree-frame-collection">Riwayat Sutra</span>
+            <h3 class="saree-frame-title">
+              <a href="product.html?id=saree-riwayat-teal-purple" style="color: inherit; text-decoration: none;">
+                Peacock Teal & Royal Purple Kadwa Kanjivaram Saree
+              </a>
+            </h3>
+            <span class="saree-frame-weave-tag">Traditional Kadwa Jaal Brocade • Kanchipuram</span>
+            <div class="saree-frame-price-row">
+              <span class="saree-frame-price">₹ 19,200</span>
+              <span class="saree-frame-original-price">₹ 23,000</span>
+            </div>
+            <a href="product.html?id=saree-riwayat-teal-purple" class="saree-frame-cta">View Saree Details</a>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured Duo Promo Section (Riwayat & Crafted in Tradition - Placed before Footer) -->
+  <section class="featured-duo-section">
     <div class="container">
       <div class="featured-duo-grid">
         <!-- Card 1: Riwayat -->
-        <div class="feature-banner-card" style="background-image: url('assets/collection-riwayat.jpg');">
+        <div class="feature-banner-card" style="background-image: url('assets/featured-riwayat-banner.jpg');">
           <div class="feature-banner-content">
             <span class="feature-banner-eyebrow">Featured Collection</span>
             <h3 class="feature-banner-title font-serif">Riwayat</h3>
             <p class="feature-banner-desc">Heritage weaves. Timeless royal elegance.</p>
-            <a href="#products-section" class="feature-banner-cta" onclick="filterProductsByCollection('riwayat')">
+            <a href="collections.html?collection=riwayat" class="feature-banner-cta">
               Shop Now <i class="fa-solid fa-arrow-right"></i>
             </a>
           </div>
         </div>
 
         <!-- Card 2: The Weave Behind the Beauty -->
-        <div class="feature-banner-card" style="background-image: url('assets/featured-card-2.jpg');">
+        <div class="feature-banner-card" style="background-image: url('assets/editorial-master-weaves.jpg');">
           <div class="feature-banner-content">
             <span class="feature-banner-eyebrow">Crafted in Tradition</span>
             <h3 class="feature-banner-title font-serif">The Weave<br />Behind the Beauty</h3>
@@ -172,82 +484,7 @@
     </div>
   </section>
 
-  <!-- Best Sellers / "Loved by Many" Section -->
-  <section class="bestsellers-section" id="products-section">
-    <div class="container">
-      <div class="section-header-row">
-        <div>
-          <span class="section-tag">Best Sellers</span>
-          <h2 class="section-heading-lg font-serif">Loved by Many</h2>
-          <p class="section-subheading">Our most popular sarees, handpicked for you.</p>
-        </div>
-        <a href="#products-section" class="view-all-link" onclick="resetFilters()">
-          View All <i class="fa-solid fa-arrow-right"></i>
-        </a>
-      </div>
-
-      <!-- Filter Tabs -->
-      <div class="category-filter-bar">
-        <button class="filter-pill active" data-category="all">All Sarees</button>
-        <button class="filter-pill" data-category="adaa">Adaa</button>
-        <button class="filter-pill" data-category="roop">Roop</button>
-        <button class="filter-pill" data-category="vastra">Vastra</button>
-        <button class="filter-pill" data-category="leher">Leher</button>
-        <button class="filter-pill" data-category="riwayat">Riwayat</button>
-      </div>
-
-      <!-- 6 Product Cards Grid -->
-      <div class="products-grid" id="products-grid-container">
-        <!-- Rendered dynamically by JavaScript -->
-      </div>
-    </div>
-  </section>
-
-  <!-- Special Offer Banner & Trust Badges -->
-  <section class="offer-banner-section">
-    <div class="container">
-      <div class="offer-banner-inner">
-        <div class="offer-text-box">
-          <span class="offer-eyebrow">Special Offer</span>
-          <h3 class="offer-title font-serif">Get 10% Off on your first order</h3>
-        </div>
-
-        <div class="promo-code-box" id="promo-coupon-trigger" title="Click to copy coupon code">
-          <span class="promo-code-text">Use Code: <strong>WELCOME10</strong></span>
-          <span class="promo-copy-icon"><i class="fa-regular fa-copy"></i></span>
-        </div>
-      </div>
-
-      <!-- Trust Badges Strip -->
-      <div class="trust-badges-strip">
-        <div class="trust-badge-item">
-          <div class="trust-badge-icon"><i class="fa-solid fa-truck-fast"></i></div>
-          <div class="trust-badge-text">
-            <h5>Free Shipping</h5>
-            <p>On orders above ₹5,000</p>
-          </div>
-        </div>
-
-        <div class="trust-badge-item">
-          <div class="trust-badge-icon"><i class="fa-solid fa-shield-halved"></i></div>
-          <div class="trust-badge-text">
-            <h5>Secure Payments</h5>
-            <p>100% safe & trusted</p>
-          </div>
-        </div>
-
-        <div class="trust-badge-item">
-          <div class="trust-badge-icon"><i class="fa-solid fa-rotate-left"></i></div>
-          <div class="trust-badge-text">
-            <h5>Easy Returns</h5>
-            <p>Hassle-free within 7 days</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Footer -->
+    <!-- Site Footer -->
   <footer class="site-footer" id="footer-section">
     <div class="container">
       <div class="footer-top-grid">
@@ -278,9 +515,10 @@
           <h4>Quick Links</h4>
           <ul class="footer-links">
             <li><a href="index.html">Home</a></li>
-            <li><a href="#products-section">Shop</a></li>
-            <li><a href="#craft-section">Journal</a></li>
-            <li><a href="#footer-section">Contact</a></li>
+            <li><a href="collections.html">Collections</a></li>
+            <li><a href="about.html">About Us</a></li>
+            <li><a href="journal.html">Journal</a></li>
+            <li><a href="contact.html">Contact</a></li>
           </ul>
         </div>
 
@@ -288,12 +526,12 @@
         <div class="footer-nav-col">
           <h4>Customer Care</h4>
           <ul class="footer-links">
-            <li><a href="javascript:void(0)" onclick="showToast('Shipping: Dispatched in 24-48 hrs with express tracking.')">Shipping Policy</a></li>
-            <li><a href="javascript:void(0)" onclick="showToast('Returns: 7-day hassle-free reverse pickup available.')">Returns & Exchanges</a></li>
+            <li><a href="javascript:void(0)" onclick="openCarePolicyModal('shipping')">Shipping Policy</a></li>
+            <li><a href="javascript:void(0)" onclick="openCarePolicyModal('returns')">Returns & Exchanges</a></li>
             <li><a href="javascript:void(0)" onclick="showToast('Standard Saree Length: 5.5m + 0.8m Blouse Piece.')">Size Guide</a></li>
-            <li><a href="javascript:void(0)" onclick="showToast('Need help? WhatsApp support: +91 98765 43210')">FAQs</a></li>
-            <li><a href="javascript:void(0)" onclick="showToast('Terms: Authentic Handloom Certified Goods.')">Terms & Conditions</a></li>
-            <li><a href="javascript:void(0)" onclick="showToast('Privacy: Your data is never shared.')">Privacy Policy</a></li>
+            <li><a href="javascript:void(0)" onclick="showToast('Need help? WhatsApp support: <a href="tel:+919876543210" style="color: inherit; text-decoration: none;">+91 98765 43210</a>')">FAQs</a></li>
+            <li><a href="javascript:void(0)" onclick="openCarePolicyModal('terms')">Terms & Conditions</a></li>
+            <li><a href="javascript:void(0)" onclick="openCarePolicyModal('privacy')">Privacy Policy</a></li>
           </ul>
         </div>
 
@@ -312,7 +550,7 @@
 
       <!-- Footer Bottom -->
       <div class="footer-bottom-row">
-        <span>&copy; 2026 6 Yards. All rights reserved.</span>
+        <span>&copy; 2026 6 Yards Sarees. All rights reserved.</span>
         <button class="scroll-top-btn" id="scroll-top-btn" title="Back to top" aria-label="Back to Top">
           <i class="fa-solid fa-arrow-up"></i>
         </button>
@@ -344,9 +582,9 @@
       <!-- Empty Cart View -->
       <div id="cart-empty-state" style="display: none; text-align: center; padding: 40px 0;">
         <i class="fa-solid fa-bag-shopping" style="font-size: 3rem; color: var(--color-blush); margin-bottom: 12px;"></i>
-        <h4 class="font-serif" style="font-size: 1.4rem; color: var(--color-maroon);">Your Bag is Empty</h4>
+        <h4 class="font-serif" style="font-size: 1.4rem; color: var(--color-navy);">Your Bag is Empty</h4>
         <p style="font-size: 0.875rem; color: var(--color-text-muted); margin-top: 6px;">Discover six yards of grace waiting for you.</p>
-        <button onclick="closeCartDrawer();" style="margin-top: 18px; padding: 10px 24px; background: var(--color-maroon); color: var(--color-cream); border-radius: 4px; font-weight: 500;">Start Shopping</button>
+        <button onclick="closeCartDrawer();" style="margin-top: 18px; padding: 10px 24px; background: var(--color-navy); color: var(--color-cream); border-radius: 4px; font-weight: 500;">Start Shopping</button>
       </div>
 
       <!-- Cart Item Rows -->
@@ -358,7 +596,7 @@
       <!-- Promo Code Input -->
       <div style="display: flex; gap: 8px; margin-bottom: 14px;">
         <input type="text" id="promo-input-field" placeholder="Promo code (e.g. WELCOME10)" style="flex: 1; padding: 8px 12px; border: 1px solid var(--color-border); border-radius: 4px; font-size: 0.85rem;" />
-        <button id="apply-promo-btn" style="padding: 8px 14px; background-color: var(--color-maroon); color: var(--color-cream); border-radius: 4px; font-size: 0.8rem; font-weight: 600;">Apply</button>
+        <button id="apply-promo-btn" style="padding: 8px 14px; background-color: var(--color-navy); color: var(--color-cream); border-radius: 4px; font-size: 0.8rem; font-weight: 600;">Apply</button>
       </div>
 
       <div class="cart-summary-subtotal">
@@ -371,7 +609,7 @@
         <span id="cart-discount-value">- ₹ 0</span>
       </div>
 
-      <div style="display: flex; justify-content: space-between; font-size: 1.15rem; font-weight: 700; color: var(--color-maroon); margin-bottom: 16px;">
+      <div style="display: flex; justify-content: space-between; font-size: 1.15rem; font-weight: 700; color: var(--color-navy); margin-bottom: 16px;">
         <span>Total:</span>
         <span id="cart-final-total">₹ 0</span>
       </div>
@@ -397,7 +635,7 @@
     <div class="drawer-body">
       <div id="wishlist-empty-state" style="display: none; text-align: center; padding: 40px 0;">
         <i class="fa-regular fa-heart" style="font-size: 3rem; color: var(--color-blush); margin-bottom: 12px;"></i>
-        <h4 class="font-serif" style="font-size: 1.4rem; color: var(--color-maroon);">No Saved Items</h4>
+        <h4 class="font-serif" style="font-size: 1.4rem; color: var(--color-navy);">No Saved Items</h4>
         <p style="font-size: 0.875rem; color: var(--color-text-muted); margin-top: 6px;">Tap the heart icon on any saree to save it for later.</p>
       </div>
       <div id="wishlist-items-container"></div>
@@ -426,13 +664,13 @@
       <p style="margin-bottom: 16px; color: var(--color-text-muted); line-height: 1.7;">
         In an unstitched piece of fabric spanning six yards lies the entire soul of Indian craft. For millennia, the saree has celebrated the poetry of human hands—hand-spun silk, gold and silver zari drawn across wooden pit looms, and natural indigo baths that mirror twilight skies.
       </p>
-      <div style="background-color: var(--color-cream-soft); padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid var(--color-maroon);">
-        <h4 class="font-serif" style="color: var(--color-maroon); font-size: 1.25rem; margin-bottom: 6px;">"A woman, a drape and a number."</h4>
+      <div style="background-color: var(--color-cream-soft); padding: 20px; border-radius: 8px; margin: 20px 0; border-left: 4px solid var(--color-navy);">
+        <h4 class="font-serif" style="color: var(--color-navy); font-size: 1.25rem; margin-bottom: 6px;">"A woman, a drape and a number."</h4>
         <p style="font-size: 0.9rem; color: var(--color-text-main); font-style: italic;">
           One flowing line turns the saree into the numeral 6, then into the brand name beside it. A single maroon colour on warm cream keeps it elegant, traditional and easy to recognise.
         </p>
       </div>
-      <h4 class="font-serif" style="color: var(--color-maroon); font-size: 1.3rem; margin-top: 24px; margin-bottom: 10px;">Our Master Weavers</h4>
+      <h4 class="font-serif" style="color: var(--color-navy); font-size: 1.3rem; margin-top: 24px; margin-bottom: 10px;">Our Master Weavers</h4>
       <p style="color: var(--color-text-muted); line-height: 1.7; font-size: 0.95rem;">
         Every 6 Yards saree is sourced directly from certified artisan clusters across Varanasi, Kanchipuram, Chanderi, Bhagalpur, and Yeola. When you drape 6 Yards, you preserve living loomcraft.
       </p>
@@ -442,8 +680,44 @@
     </div>
   </div>
 
+  <!-- ==========================================================================
+       ORDER CONFIRMATION MODAL
+       ========================================================================== -->
+  <div class="modal-backdrop" id="order-success-backdrop">
+    <div class="story-modal-content" style="text-align: center; max-width: 500px;">
+      <button class="modal-close-icon" onclick="closeOrderSuccessModal()" aria-label="Close">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+      <div style="font-size: 3rem; color: #2E7D32; margin-bottom: 12px;">
+        <i class="fa-solid fa-circle-check"></i>
+      </div>
+      <span class="hero-eyebrow" style="color: var(--color-gold);">Order Confirmed</span>
+      <h2 class="font-serif" style="margin-bottom: 8px;">Dhanyavaad!</h2>
+      <p style="color: var(--color-text-muted); line-height: 1.6; margin-bottom: 16px;">
+        Your order <strong id="confirmed-order-id">#6YD-1001</strong> has been successfully placed. A confirmation with tracking details will be dispatched to your email.
+      </p>
+      <div style="background: var(--color-cream-soft); padding: 16px; border-radius: 8px; margin-bottom: 20px; text-align: left; font-size: 0.9rem;">
+        <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+          <span style="color: var(--color-text-muted);">Payment Status:</span>
+          <span style="font-weight: 600; color: #2E7D32;">PAID (Razorpay / Verified)</span>
+        </div>
+        <div style="display: flex; justify-content: space-between;">
+          <span style="color: var(--color-text-muted);">Packaging:</span>
+          <span style="font-weight: 600;">Handloom Muslin Protection</span>
+        </div>
+      </div>
+      <button onclick="closeOrderSuccessModal()" class="checkout-btn" style="width: 100%;">
+        Continue Exploring Sarees
+      </button>
+    </div>
+  </div>
+
   <!-- JavaScript Modules with defer for non-blocking page render -->
+  <script src="https://checkout.razorpay.com/v1/checkout.js" defer></script>
   <script src="js/products.js" defer></script>
+  <script src="js/medusa-client.js" defer></script>
   <script src="js/app.js" defer></script>
+  <!-- Mobile Nav Backdrop -->
+  <div class="mobile-nav-backdrop" id="mobile-nav-backdrop"></div>
 </body>
 </html>
