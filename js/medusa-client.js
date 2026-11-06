@@ -473,7 +473,7 @@ class MedusaStoreClient {
         currency: 'INR',
         name: '6 Yards Sarees',
         description: 'Authentic Handloom Sarees Order',
-        image: 'assets/logo.png',
+        image: 'assets/brand-logo-peacock-clean.png',
         prefill: {
           name: `${customerDetails.first_name || ''} ${customerDetails.last_name || ''}`.trim() || 'Valued Patron',
           email: customerDetails.email || '',

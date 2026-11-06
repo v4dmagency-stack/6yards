@@ -754,7 +754,7 @@ async function handleCheckout() {
         email: 'patron@6yardssarees.com',
         first_name: 'Valued',
         last_name: 'Patron',
-        phone: '+919876543210'
+        phone: '+919845714481'
       },
       (response) => {
         const orderNumber = response.razorpay_order_id ? response.razorpay_order_id.slice(-6).toUpperCase() : Math.floor(1000 + Math.random() * 9000);
@@ -1270,7 +1270,7 @@ function openCarePolicyModal(defaultTab) {
             <ul>
               <li><strong>Are all sarees 100% pure silk?</strong> Yes. Every piece carries Silk Mark certification and is woven from pure mulberry, tussar, or katan silk filaments.</li>
               <li><strong>Is the zari genuine silver/gold?</strong> Our bridal Kadwa and Kanjivaram sarees use authentic 2G electroplated gold and silver metallic wire.</li>
-              <li><strong>Can I book a video styling consultation?</strong> Absolutely. Click our "WhatsApp Concierge" button or call +91 98765 43210 to schedule a 1-on-1 private video preview.</li>
+              <li><strong>Can I book a video styling consultation?</strong> Absolutely. Click our "WhatsApp Concierge" button or call +91 98457 14481 to schedule a 1-on-1 private video preview.</li>
             </ul>
           </div>
           <div class="policy-tab-pane" id="pane-terms">
