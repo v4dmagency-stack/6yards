@@ -552,6 +552,7 @@ function initCart() {
 }
 
 function openCartDrawer() {
+  closeWishlistDrawer();
   document.getElementById('cart-drawer')?.classList.add('active');
   document.getElementById('cart-backdrop')?.classList.add('active');
   document.body.style.overflow = 'hidden';
@@ -797,6 +798,7 @@ function initWishlist() {
 }
 
 function openWishlistDrawer() {
+  closeCartDrawer();
   document.getElementById('wishlist-drawer')?.classList.add('active');
   document.getElementById('wishlist-backdrop')?.classList.add('active');
   document.body.style.overflow = 'hidden';

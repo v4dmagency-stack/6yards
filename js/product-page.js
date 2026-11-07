@@ -346,18 +346,19 @@ function initCart() {
 }
 
 function openCartDrawer() {
+  closeWishlistDrawer();
   const drawer = document.getElementById('cart-drawer');
   const backdrop = document.getElementById('cart-backdrop');
-  if (drawer) drawer.classList.add('open');
-  if (backdrop) backdrop.classList.add('open');
+  if (drawer) drawer.classList.add('active');
+  if (backdrop) backdrop.classList.add('active');
   document.body.style.overflow = 'hidden';
 }
 
 function closeCartDrawer() {
   const drawer = document.getElementById('cart-drawer');
   const backdrop = document.getElementById('cart-backdrop');
-  if (drawer) drawer.classList.remove('open');
-  if (backdrop) backdrop.classList.remove('open');
+  if (drawer) drawer.classList.remove('active');
+  if (backdrop) backdrop.classList.remove('active');
   document.body.style.overflow = '';
 }
 
@@ -578,18 +579,19 @@ function initWishlist() {
 }
 
 function openWishlistDrawer() {
+  closeCartDrawer();
   const drawer = document.getElementById('wishlist-drawer');
   const backdrop = document.getElementById('wishlist-backdrop');
-  if (drawer) drawer.classList.add('open');
-  if (backdrop) backdrop.classList.add('open');
+  if (drawer) drawer.classList.add('active');
+  if (backdrop) backdrop.classList.add('active');
   document.body.style.overflow = 'hidden';
 }
 
 function closeWishlistDrawer() {
   const drawer = document.getElementById('wishlist-drawer');
   const backdrop = document.getElementById('wishlist-backdrop');
-  if (drawer) drawer.classList.remove('open');
-  if (backdrop) backdrop.classList.remove('open');
+  if (drawer) drawer.classList.remove('active');
+  if (backdrop) backdrop.classList.remove('active');
   document.body.style.overflow = '';
 }
 
