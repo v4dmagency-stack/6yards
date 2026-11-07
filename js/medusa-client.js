@@ -11,10 +11,10 @@
 
 // Storefront Configuration
 const MEDUSA_CONFIG = {
-  baseUrl: window.MEDUSA_BACKEND_URL || 'http://localhost:9000',
+  baseUrl: window.MEDUSA_BACKEND_URL || (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' ? 'http://localhost:9000' : window.location.origin),
   publishableApiKey: window.MEDUSA_PUBLISHABLE_KEY || 'pk_55634989086e01785152d5cd133bc48512f9cad0323bc140bfd40c74fa79b001',
   cartStorageKey: '6yards_medusa_cart_id',
-  regionId: 'reg_01M6KWWT5R6MD2M5XKB3C7K4SK',
+  regionId: null,
   currencyCode: 'inr',
   razorpayKeyId: window.RAZORPAY_KEY_ID || 'rzp_test_6yards_storefront'
 };
@@ -108,6 +108,24 @@ class MedusaStoreClient {
     return this.isBackendAvailable;
   }
 
+  async resolveRegionId() {
+    if (this.config.regionId) {
+      return this.config.regionId;
+    }
+
+    const data = await this.request('/store/regions?limit=100');
+    const region = (data.regions || []).find(
+      region => region.currency_code?.toLowerCase() === this.config.currencyCode
+    );
+
+    if (!region) {
+      throw new Error(`No Medusa region found for ${this.config.currencyCode.toUpperCase()}`);
+    }
+
+    this.config.regionId = region.id;
+    return region.id;
+  }
+
   /* ==========================================================================
      CATALOG & PRODUCTS (PHASE 4)
      ========================================================================== */
@@ -121,9 +139,12 @@ class MedusaStoreClient {
     }
 
     try {
+      const regionId = await this.resolveRegionId();
+
       if (this.sdk?.store?.product?.list) {
         const res = await this.sdk.store.product.list({
           fields: '*variants,*variants.calculated_price,*categories,*collection,*images',
+          region_id: regionId,
           ...params
         });
         return this.normalizeMedusaProducts(res.products || []);
@@ -138,7 +159,7 @@ class MedusaStoreClient {
         const cols = Array.isArray(params.collection_id) ? params.collection_id : [params.collection_id];
         cols.forEach(c => query.append('collection_id[]', c));
       }
-      query.set('region_id', this.config.regionId);
+      query.set('region_id', regionId);
       query.set('fields', '*variants,*variants.calculated_price,*categories,*collection,*images');
 
       const data = await this.request(`/store/products?${query.toString()}`);
@@ -158,7 +179,12 @@ class MedusaStoreClient {
     }
 
     try {
-      const data = await this.request(`/store/products/${idOrHandle}?region_id=${this.config.regionId}&fields=*variants,*variants.calculated_price,*categories,*collection,*images`);
+      const regionId = await this.resolveRegionId();
+      const query = new URLSearchParams({
+        region_id: regionId,
+        fields: '*variants,*variants.calculated_price,*categories,*collection,*images'
+      });
+      const data = await this.request(`/store/products/${encodeURIComponent(idOrHandle)}?${query.toString()}`);
       const normalized = this.normalizeMedusaProducts([data.product]);
       return normalized[0] || null;
     } catch (err) {
@@ -272,7 +298,7 @@ class MedusaStoreClient {
       const res = await this.request('/store/carts', {
         method: 'POST',
         body: JSON.stringify({
-          region_id: this.config.regionId
+          region_id: await this.resolveRegionId()
         })
       });
 

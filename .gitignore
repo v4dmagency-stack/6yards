@@ -43,6 +43,8 @@ browser_verification_report.json
 
 # Backup files
 *.backup
+dist/storefront/
+.env.production
 
 # Debug / utility scripts at root (not part of the website)
 capture_final_verification.js

@@ -1,0 +1,30 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "services": {
+    "storefront": {
+      "root": ".",
+      "framework": "other",
+      "buildCommand": "node scripts/prepare-vercel-storefront.mjs",
+      "outputDirectory": "dist/storefront"
+    },
+    "medusa": {
+      "root": "backend/",
+      "runtime": "container",
+      "entrypoint": "apps/backend/Dockerfile"
+    }
+  },
+  "rewrites": [
+    { "source": "/app", "destination": { "service": "medusa" } },
+    { "source": "/app/(.*)", "destination": { "service": "medusa" } },
+    { "source": "/admin", "destination": { "service": "medusa" } },
+    { "source": "/admin/(.*)", "destination": { "service": "medusa" } },
+    { "source": "/auth", "destination": { "service": "medusa" } },
+    { "source": "/auth/(.*)", "destination": { "service": "medusa" } },
+    { "source": "/store", "destination": { "service": "medusa" } },
+    { "source": "/store/(.*)", "destination": { "service": "medusa" } },
+    { "source": "/health", "destination": { "service": "medusa" } },
+    { "source": "/files", "destination": { "service": "medusa" } },
+    { "source": "/files/(.*)", "destination": { "service": "medusa" } },
+    { "source": "/(.*)", "destination": { "service": "storefront" } }
+  ]
+}
