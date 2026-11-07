@@ -1,9 +1,10 @@
-import { cp, mkdir, readdir, readFile, writeFile } from "node:fs/promises";
+import { copyFile, cp, mkdir, readdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const output = path.join(root, "dist", "storefront");
+const heroVideo = "gemini_generated_video_9da2f281_gwr_video_mvp.mp4";
 const publicDirectories = ["assets", "css", "js", "Categorized_Sarees", "Saree"];
 
 await mkdir(output, { recursive: true });
@@ -24,6 +25,8 @@ for (const directory of publicDirectories) {
     }
   }
 }
+
+await copyFile(path.join(root, heroVideo), path.join(output, heroVideo));
 
 const configPath = path.join(output, "js", "medusa-config.js");
 const config = await readFile(configPath, "utf8");
