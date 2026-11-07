@@ -3,7 +3,6 @@
   "services": {
     "storefront": {
       "root": ".",
-      "framework": "other",
       "buildCommand": "node scripts/prepare-vercel-storefront.mjs",
       "outputDirectory": "dist/storefront"
     },
