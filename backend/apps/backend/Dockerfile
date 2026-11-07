@@ -3,12 +3,10 @@ FROM node:24-bookworm-slim
 WORKDIR /app
 
 COPY package.json package-lock.json ./
-COPY apps/backend/package.json apps/backend/package.json
-RUN npm ci --workspace=@dtc/backend
+RUN npm ci
 
-COPY apps/backend apps/backend
+COPY . .
 
-WORKDIR /app/apps/backend
 RUN NODE_OPTIONS=--max-old-space-size=4096 npm run build
 
 ENV NODE_ENV=production

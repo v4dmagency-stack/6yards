@@ -13,7 +13,6 @@ const CollectionsState = {
   priceRange: { min: 1000, max: 30000 },
   appliedDiscount: 0,
   appliedCoupon: null,
-  freeShippingThreshold: 5000
 };
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -537,8 +536,6 @@ function renderCart() {
   const footerContent = document.getElementById('cart-footer-content');
   const subtotalEl = document.getElementById('cart-subtotal-price');
   const totalEl = document.getElementById('cart-final-total');
-  const shippingText = document.getElementById('shipping-tracker-text');
-  const shippingBar = document.getElementById('shipping-progress-bar');
   const discountRow = document.getElementById('cart-discount-row');
   const discountVal = document.getElementById('cart-discount-value');
 
@@ -550,7 +547,6 @@ function renderCart() {
     if (footerContent) footerContent.style.opacity = '0.5';
     if (subtotalEl) subtotalEl.innerText = '₹ 0';
     if (totalEl) totalEl.innerText = '₹ 0';
-    if (shippingBar) shippingBar.style.width = '0%';
     return;
   }
 
@@ -589,17 +585,6 @@ function renderCart() {
     discountVal.innerText = `- ₹ ${discountAmount.toLocaleString('en-IN')} (${CollectionsState.appliedDiscount}%)`;
   }
 
-  // Free shipping progress
-  const progressPercent = Math.min(100, Math.round((subtotal / CollectionsState.freeShippingThreshold) * 100));
-  if (shippingBar) shippingBar.style.width = `${progressPercent}%`;
-  if (shippingText) {
-    if (subtotal >= CollectionsState.freeShippingThreshold) {
-      shippingText.innerHTML = `🎉 <strong>Congratulations!</strong> You unlocked <strong>FREE Insured Express Shipping</strong>.`;
-    } else {
-      const remaining = CollectionsState.freeShippingThreshold - subtotal;
-      shippingText.innerHTML = `Add <strong>₹ ${remaining.toLocaleString('en-IN')}</strong> more to unlock <strong>FREE Express Shipping</strong>!`;
-    }
-  }
 }
 
 function applyPromoCode() {

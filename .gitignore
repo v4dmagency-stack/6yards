@@ -96,3 +96,6 @@ fuzzy_match.py
 # OS files
 .DS_Store
 Thumbs.db
+
+# Large local saree archive
+/Saree-20261102T131527-1-001.zip

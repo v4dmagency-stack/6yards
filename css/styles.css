@@ -1617,27 +1617,6 @@ img {
   color: #D92534;
 }
 
-.free-shipping-tracker {
-  background-color: var(--color-cream-soft);
-  padding: 12px 16px;
-  border-radius: var(--radius-sm);
-  margin-bottom: 16px;
-  font-size: 0.8125rem;
-}
-.shipping-progress-bg {
-  height: 6px;
-  background-color: rgba(5, 22, 44, 0.1);
-  border-radius: var(--radius-pill);
-  margin-top: 6px;
-  overflow: hidden;
-}
-.shipping-progress-fill {
-  height: 100%;
-  background-color: var(--color-gold);
-  border-radius: var(--radius-pill);
-  transition: width 0.4s ease;
-}
-
 .cart-summary-subtotal {
   display: flex;
   justify-content: space-between;

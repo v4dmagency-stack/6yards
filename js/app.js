@@ -642,8 +642,6 @@ function renderCart() {
   const discountRow = document.getElementById('cart-discount-row');
   const discountVal = document.getElementById('cart-discount-value');
   const finalTotalEl = document.getElementById('cart-final-total');
-  const freeShippingText = document.getElementById('shipping-tracker-text');
-  const freeShippingBar = document.getElementById('shipping-progress-bar');
   const emptyState = document.getElementById('cart-empty-state');
   const footerContent = document.getElementById('cart-footer-content');
 
@@ -697,18 +695,6 @@ function renderCart() {
   if (discountVal) discountVal.textContent = `- ₹ ${Number(discountAmount).toLocaleString('en-IN')}`;
   if (finalTotalEl) finalTotalEl.textContent = `₹ ${Number(finalTotal).toLocaleString('en-IN')}`;
 
-  // Free shipping tracker
-  const remainingForFree = AppState.freeShippingThreshold - subtotal;
-  if (freeShippingText && freeShippingBar) {
-    if (remainingForFree <= 0) {
-      freeShippingText.innerHTML = `<i class="fa-solid fa-circle-check" style="color: #2E7D32;"></i> <strong>Congratulations!</strong> You qualify for <strong>FREE Shipping</strong>!`;
-      freeShippingBar.style.width = '100%';
-    } else {
-      const progress = Math.min(100, Math.round((subtotal / AppState.freeShippingThreshold) * 100));
-      freeShippingText.innerHTML = `Add <strong>₹ ${remainingForFree.toLocaleString('en-IN')}</strong> more to get <strong>FREE Express Shipping</strong>!`;
-      freeShippingBar.style.width = `${progress}%`;
-    }
-  }
 }
 
 async function applyPromoCode() {

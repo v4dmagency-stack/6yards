@@ -1,0 +1,902 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Six Yards | Curated Occasion Saree Catalog (Refined Vibes)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primary-maroon: #6B1426;
+    --primary-dark: #12161A;
+    --gold: #B08A4A;
+    --gold-light: #DFCA9B;
+    --cream: #FAF7F2;
+    --card-bg: #FFFFFF;
+    --text-muted: #666666;
+    --border-color: #E8E2D9;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background-color: var(--cream);
+    color: #2B2625;
+    font-family: 'Jost', sans-serif;
+    line-height: 1.5;
+    padding-bottom: 60px;
+  }
+  header {
+    background: #0f171e;
+    color: #fff;
+    padding: 30px 20px;
+    text-align: center;
+    border-bottom: 2px solid var(--gold);
+  }
+  .brand-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.8rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--gold-light);
+  }
+  .brand-subtitle {
+    font-size: 0.95rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #b8c2cc;
+    margin-top: 6px;
+  }
+  .container {
+    max-width: 1380px;
+    margin: 30px auto;
+    padding: 0 20px;
+  }
+  .controls-bar {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 25px;
+    background: #fff;
+    padding: 16px 24px;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+    border: 1px solid var(--border-color);
+  }
+  .tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .tab-btn {
+    border: 1px solid var(--border-color);
+    background: var(--cream);
+    padding: 9px 18px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    border-radius: 20px;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .tab-btn:hover { background: #efe9de; }
+  .tab-btn.active {
+    background: var(--primary-maroon);
+    color: #fff;
+    border-color: var(--primary-maroon);
+  }
+  .tab-badge {
+    background: rgba(0,0,0,0.1);
+    padding: 2px 7px;
+    border-radius: 10px;
+    font-size: 0.75rem;
+  }
+  .tab-btn.active .tab-badge { background: rgba(255,255,255,0.25); }
+  .search-box {
+    position: relative;
+    min-width: 280px;
+  }
+  .search-input {
+    width: 100%;
+    padding: 9px 16px;
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    font-size: 0.9rem;
+    outline: none;
+    background: var(--cream);
+  }
+  .search-input:focus {
+    border-color: var(--gold);
+    background: #fff;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 25px;
+  }
+  .saree-card {
+    background: var(--card-bg);
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+  }
+  .saree-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+  }
+  .img-wrapper {
+    position: relative;
+    width: 100%;
+    height: 380px;
+    background: #f0ece6;
+    overflow: hidden;
+  }
+  .img-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+  }
+  .saree-card:hover .img-wrapper img { transform: scale(1.04); }
+  .badge-category {
+    position: absolute;
+    top: 14px;
+    left: 14px;
+    padding: 5px 12px;
+    border-radius: 14px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  }
+  .badge-Wedding { background: #6B1426; color: #fff; }
+  .badge-Casual { background: #335C67; color: #fff; }
+  .badge-Comfort { background: #588157; color: #fff; }
+  .badge-Festive { background: #9E2A2B; color: #fff; }
+  
+  .badge-source {
+    position: absolute;
+    bottom: 12px;
+    right: 12px;
+    background: rgba(18, 22, 26, 0.75);
+    backdrop-filter: blur(4px);
+    color: #fff;
+    font-size: 0.7rem;
+    padding: 3px 8px;
+    border-radius: 4px;
+  }
+  .card-content {
+    padding: 18px 20px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+  }
+  .prod-id {
+    font-size: 0.75rem;
+    color: var(--gold);
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .saree-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    line-height: 1.25;
+    margin-bottom: 8px;
+  }
+  .vibe-pill {
+    display: inline-block;
+    align-self: flex-start;
+    background: #F4EBE1;
+    color: #6B1426;
+    font-size: 0.76rem;
+    font-weight: 600;
+    padding: 3px 9px;
+    border-radius: 12px;
+    margin-bottom: 10px;
+  }
+  .spec-row {
+    font-size: 0.82rem;
+    color: #4a4a4a;
+    margin-bottom: 4px;
+  }
+  .spec-row strong { color: #111; }
+  .stats-banner {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+    margin-bottom: 25px;
+  }
+  .stat-card {
+    background: #fff;
+    padding: 18px 20px;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    text-align: center;
+  }
+  .stat-number {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.2rem;
+    font-weight: 700;
+    line-height: 1;
+  }
+  .stat-card.w .stat-number { color: #6B1426; }
+  .stat-card.ca .stat-number { color: #335C67; }
+  .stat-card.co .stat-number { color: #588157; }
+  .stat-card.fe .stat-number { color: #9E2A2B; }
+  .stat-label {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: #777;
+    margin-top: 6px;
+  }
+  @media(max-width: 800px) {
+    .stats-banner { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand-title">Six Yards Collection</div>
+  <div class="brand-subtitle">Refined Non-Repeating Occasion Categorization</div>
+</header>
+
+<div class="container">
+  
+  <div class="stats-banner">
+    <div class="stat-card w">
+      <div class="stat-number">7</div>
+      <div class="stat-label">Wedding (Bridal)</div>
+    </div>
+    <div class="stat-card ca">
+      <div class="stat-number">7</div>
+      <div class="stat-label">Casual (Checks & Prints)</div>
+    </div>
+    <div class="stat-card co">
+      <div class="stat-number">7</div>
+      <div class="stat-label">Comfort (Linens & Tussar)</div>
+    </div>
+    <div class="stat-card fe">
+      <div class="stat-number">17</div>
+      <div class="stat-label">Festive (Art & Shimmer)</div>
+    </div>
+  </div>
+
+  <div class="controls-bar">
+    <div class="tabs">
+      <button class="tab-btn active" onclick="filterCategory('All', this)">All <span class="tab-badge">38</span></button>
+      <button class="tab-btn" onclick="filterCategory('Wedding', this)">💍 Wedding <span class="tab-badge">7</span></button>
+      <button class="tab-btn" onclick="filterCategory('Casual', this)">🌿 Casual <span class="tab-badge">7</span></button>
+      <button class="tab-btn" onclick="filterCategory('Comfort', this)">☁️ Comfort <span class="tab-badge">7</span></button>
+      <button class="tab-btn" onclick="filterCategory('Festive', this)">✨ Festive <span class="tab-badge">17</span></button>
+    </div>
+    <div class="search-box">
+      <input type="text" class="search-input" id="search" placeholder="Search sarees, weaves, colors..." oninput="handleSearch()">
+    </div>
+  </div>
+
+  <div class="grid" id="sareeGrid">
+
+    <div class="saree-card" data-category="Wedding" data-search="crimson red royal silk saree with gold zari pure silk traditional bridal gold zari brocade prod-131244 auspicious bridal muhurtham red">
+      <div class="img-wrapper">
+        <span class="badge-category badge-Wedding">Wedding</span>
+        <span class="badge-source">Saree-20261104</span>
+        <img src="Wedding/thumbnails/PROD-131244_thumb.jpg" alt="Crimson Red Royal Silk Saree with Gold Zari" loading="lazy">
+      </div>
+      <div class="card-content">
+        <div class="prod-id">PROD-131244</div>
+        <h3 class="saree-title">Crimson Red Royal Silk Saree with Gold Zari</h3>
+        <div class="vibe-pill">✨ Auspicious Bridal Muhurtham Red</div>
+        <div class="spec-row"><strong>Fabric:</strong> Pure Silk</div>
+        <div class="spec-row"><strong>Weave:</strong> Traditional Bridal Gold Zari Brocade</div>
+      </div>
+    </div>
+    
+    <div class="saree-card" data-category="Wedding" data-search="emerald green royal kanjivaram silk saree pure kanjivaram silk gold zari floral & peacock motifs prod-133326 six yards signature wedding top pick">
+      <div class="img-wrapper">
+        <span class="badge-category badge-Wedding">Wedding</span>
+        <span class="badge-source">Saree-20261104</span>
+        <img src="Wedding/thumbnails/PROD-133326_thumb.jpg" alt="Emerald Green Royal Kanjivaram Silk Saree" loading="lazy">
+      </div>
+      <div class="card-content">
+        <div class="prod-id">PROD-133326</div>
+        <h3 class="saree-title">Emerald Green Royal Kanjivaram Silk Saree</h3>
+        <div class="vibe-pill">✨ Six Yards Signature Wedding Top Pick</div>
+        <div class="spec-row"><strong>Fabric:</strong> Pure Kanjivaram Silk</div>
+        <div class="spec-row"><strong>Weave:</strong> Gold Zari Floral & Peacock Motifs</div>
+      </div>
+    </div>
+    
+    <div class="saree-card" data-category="Wedding" data-search="imperial wine maroon temple brocade saree pure kanjivaram silk architectural gold temple border & heavy pallu prod-531849 grand architectural heirloom maroon">
+      <div class="img-wrapper">
+        <span class="badge-category badge-Wedding">Wedding</span>
+        <span class="badge-source">New folder-20261103</span>
+        <img src="Wedding/thumbnails/PROD-531849_thumb.jpg" alt="Imperial Wine Maroon Temple Brocade Saree" loading="lazy">
+      </div>
+      <div class="card-content">
+        <div class="prod-id">PROD-531849</div>
+        <h3 class="saree-title">Imperial Wine Maroon Temple Brocade Saree</h3>
+        <div class="vibe-pill">✨ Grand Architectural Heirloom Maroon</div>
+        <div class="spec-row"><strong>Fabric:</strong> Pure Kanjivaram Silk</div>
+        <div class="spec-row"><strong>Weave:</strong> Architectural Gold Temple Border & Heavy Pallu</div>
+      </div>
+    </div>
+    
+    <div class="saree-card" data-category="Wedding" data-search="rani pink silk saree with emerald green zari border pure kanjivaram silk traditional ganga-jamuna contrast zari prod-849201 classic vibrant bridal contrast pink">
+      <div class="img-wrapper">
+        <span class="badge-category badge-Wedding">Wedding</span>
+        <span class="badge-source">New folder-20261103</span>
+        <img src="Wedding/thumbnails/PROD-849201_thumb.jpg" alt="Rani Pink Silk Saree with Emerald Green Zari Border" loading="lazy">
+      </div>
+      <div class="card-content">
+        <div class="prod-id">PROD-849201</div>
+        <h3 class="saree-title">Rani Pink Silk Saree with Emerald Green Zari Border</h3>
+        <div class="vibe-pill">✨ Classic Vibrant Bridal Contrast Pink</div>
+        <div class="spec-row"><strong>Fabric:</strong> Pure Kanjivaram Silk</div>
+        <div class="spec-row"><strong>Weave:</strong> Traditional Ganga-Jamuna Contrast Zari</div>
+      </div>
+    </div>
+    
+    <div class="saree-card" data-category="Wedding" data-search="cerulean blue saree with magenta pallu & zari buttis pure kanjivaram silk all-over zari buttis & grand contrast pallu prod-614728 royal blue & magenta wedding banquet drape">
+      <div class="img-wrapper">
+        <span class="badge-category badge-Wedding">Wedding</span>
+        <span class="badge-source">New folder-20261103</span>
+        <img src="Wedding/thumbnails/PROD-614728_thumb.jpg" alt="Cerulean Blue Saree with Magenta Pallu & Zari Buttis" loading="lazy">
+      </div>
+      <div class="card-content">
+        <div class="prod-id">PROD-614728</div>
+        <h3 class="saree-title">Cerulean Blue Saree with Magenta Pallu & Zari Buttis</h3>
+        <div class="vibe-pill">✨ Royal Blue & Magenta Wedding Banquet Drape</div>
+        <div class="spec-row"><strong>Fabric:</strong> Pure Kanjivaram Silk</div>
+        <div class="spec-row"><strong>Weave:</strong> All-over Zari Buttis & Grand Contrast Pallu</div>
+      </div>
+    </div>
+    
+    <div class="saree-card" data-category="Wedding" data-search="royal purple silk saree with gold zari border pure kanjivaram silk intricate gold zari temple border prod-343962 majestic imperial purple reception silk">
+      <div class="img-wrapper">
+        <span class="badge-category badge-Wedding">Wedding</span>
+        <span class="badge-source">Saree-20261104</span>
+        <img src="Wedding/thumbnails/PROD-343962_thumb.jpg" alt="Royal Purple Silk Saree with Gold Zari Border" loading="lazy">
+      </div>
+      <div class="card-content">
+        <div class="prod-id">PROD-343962</div>
+        <h3 class="saree-title">Royal Purple Silk Saree with Gold Zari Border</h3>
+        <div class="vibe-pill">✨ Majestic Imperial Purple Reception Silk</div>
+        <div class="spec-row"><strong>Fabric:</strong> Pure Kanjivaram Silk</div>
+        <div class="spec-row"><strong>Weave:</strong> Intricate Gold Zari Temple Border</div>
+      </div>
+    </div>
+    
+    <div class="saree-card" data-category="Wedding" data-search="bottle green royal kanjivaram with purple & gold zari pure silk aubergine purple contrast pallu & gold temple border prod-716382 heritage forest green & purple muhurtham classic">
+      <div class="img-wrapper">
+        <span class="badge-category badge-Wedding">Wedding</span>
+        <span class="badge-source">New folder-20261103</span>
+        <img src="Wedding/thumbnails/PROD-716382_thumb.jpg" alt="Bottle Green Royal Kanjivaram with Purple & Gold Zari" loading="lazy">
+      </div>
+      <div class="card-content">
+        <div class="prod-id">PROD-716382</div>
+        <h3 class="saree-title">Bottle Green Royal Kanjivaram with Purple & Gold Zari</h3>
+        <div class="vibe-pill">✨ Heritage Forest Green & Purple Muhurtham Classic</div>
+        <div class="spec-row"><strong>Fabric:</strong> Pure Silk</div>
+        <div class="spec-row"><strong>Weave:</strong> Aubergine Purple Contrast Pallu & Gold Temple Border</div>
+      </div>
+    </div>
+    
+    <div class="saree-card" data-category="Casual" data-search="charcoal black & bronze tapestry check saree fine linen silk geometric tapestry grid checks prod-334053 urban monochrome smart casual">
+      <div class="img-wrapper">
+        <span class="badge-category badge-Casual">Casual</span>
+        <span class="badge-source">Saree-20261104</span>
+        <img src="Casual/thumbnails/PROD-334053_thumb.jpg" alt="Charcoal Black & Bronze Tapestry Check Saree" loading="lazy">
+      </div>
+      <div class="card-content">
+        <div class="prod-id">PROD-334053</div>
+        <h3 class="saree-title">Charcoal Black & Bronze Tapestry Check Saree</h3>
+        <div class="vibe-pill">✨ Urban Monochrome Smart Casual</div>
+        <div class="spec-row"><strong>Fabric:</strong> Fine Linen Silk</div>
+        <div class="spec-row"><strong>Weave:</strong> Geometric Tapestry Grid Checks</div>
+      </div>
+    </div>
+    
+    <div class="saree-card" data-category="Casual" data-search="coral salmon checked handloom saree soft cotton silk micro geometric grid checks prod-246316 fresh pastel daytime checks">
+      <div class="img-wrapper">
+        <span class="badge-category badge-Casual">Casual</span>
+        <span class="badge-source">Saree-20261104</span>
+        <img src="Casual/thumbnails/PROD-246316_thumb.jpg" alt="Coral Salmon Checked Handloom Saree" loading="lazy">
+      </div>
+      <div class="card-content">
+        <div class="prod-id">PROD-246316</div>
+        <h3 class="saree-title">Coral Salmon Checked Handloom Saree</h3>
+        <div class="vibe-pill">✨ Fresh Pastel Daytime Checks</div>
+        <div class="spec-row"><strong>Fabric:</strong> Soft Cotton Silk</div>
+        <div class="spec-row"><strong>Weave:</strong> Micro Geometric Grid Checks</div>
+      </div>
+    </div>
+    
+    <div class="saree-card" data-category="Casual" data-search="mustard olive checked artisan saree natural handloom cotton-silk muted olive & mustard tartan checks prod-872246 earthy dual-tone weekend casual">
+      <div class="img-wrapper">
+        <span class="badge-category badge-Casual">Casual</span>
+        <span class="badge-source">Saree-20261104</span>
+        <img src="Casual/thumbnails/PROD-872246_thumb.jpg" alt="Mustard Olive Checked Artisan Saree" loading="lazy">
+      </div>
+      <div class="card-content">
+        <div class="prod-id">PROD-872246</div>
+        <h3 class="saree-title">Mustard Olive Checked Artisan Saree</h3>
+        <div class="vibe-pill">✨ Earthy Dual-Tone Weekend Casual</div>
+        <div class="spec-row"><strong>Fabric:</strong> Natural Handloom Cotton-Silk</div>
+        <div class="spec-row"><strong>Weave:</strong> Muted Olive & Mustard Tartan Checks</div>
+      </div>
+    </div>
+    
+    <div class="saree-card" data-category="Casual" data-search="forest green & mustard soft handloom saree organic slub cotton-silk comfort grid weave with soft finish prod-809570 relaxed deep emerald handloom checks">
+      <div class="img-wrapper">
+        <span class="badge-category badge-Casual">Casual</span>
+        <span class="badge-source">Saree-20261104</span>
+        <img src="Casual/thumbnails/PROD-809570_thumb.jpg" alt="Forest Green & Mustard Soft Handloom Saree" loading="lazy">
+      </div>
+      <div class="card-content">
+        <div class="prod-id">PROD-809570</div>
+        <h3 class="saree-title">Forest Green & Mustard Soft Handloom Saree</h3>
+        <div class="vibe-pill">✨ Relaxed Deep Emerald Handloom Checks</div>
+        <div class="spec-row"><strong>Fabric:</strong> Organic Slub Cotton-Silk</div>
+        <div class="spec-row"><strong>Weave:</strong> Comfort Grid Weave with Soft Finish</div>
+      </div>
+    </div>
+    
+    <div class="saree-card" data-category="Casual" data-search="peach beige flamingo botanical linen saree fine breathable linen blend artisan illustrated botanical & avian print prod-163948 playful illustrated daytime chic">
+      <div class="img-wrapper">
+        <span class="badge-category badge-Casual">Casual</span>
+        <span class="badge-source">New folder-20261103</span>
+        <img src="Casual/thumbnails/PROD-163948_thumb.jpg" alt="Peach Beige Flamingo Botanical Linen Saree" loading="lazy">
+      </div>
+      <div class="card-content">
+        <div class="prod-id">PROD-163948</div>
+        <h3 class="saree-title">Peach Beige Flamingo Botanical Linen Saree</h3>
+        <div class="vibe-pill">✨ Playful Illustrated Daytime Chic</div>
+        <div class="spec-row"><strong>Fabric:</strong> Fine Breathable Linen Blend</div>
+        <div class="spec-row"><strong>Weave:</strong> Artisan Illustrated Botanical & Avian Print</div>
+      </div>
+    </div>
+    
+    <div class="saree-card" data-category="Casual" data-search="slate smoke grey saree with subtle silver paisley modal silk blend understated silver kalka paisleys prod-692154 contemporary neutral work-to-dinner chic">
+      <div class="img-wrapper">
+        <span class="badge-category badge-Casual">Casual</span>
+        <span class="badge-source">New folder-20261103</span>
+        <img src="Casual/thumbnails/PROD-692154_thumb.jpg" alt="Slate Smoke Grey Saree with Subtle Silver Paisley" loading="lazy">
+      </div>
+      <div class="card-content">
+        <div class="prod-id">PROD-692154</div>
+        <h3 class="saree-title">Slate Smoke Grey Saree with Subtle Silver Paisley</h3>
+        <div class="vibe-pill">✨ Contemporary Neutral Work-to-Dinner Chic</div>
+        <div class="spec-row"><strong>Fabric:</strong> Modal Silk Blend</div>
+        <div class="spec-row"><strong>Weave:</strong> Understated Silver Kalka Paisleys</div>
+      </div>
+    </div>
+    
+    <div class="saree-card" data-category="Casual" data-search="brick red terracotta striped handloom saree organic cotton-linen blend earthy ribbed stripes with woven borders prod-207473 artisanal warm terracotta everyday wear">
+      <div class="img-wrapper">
+        <span class="badge-category badge-Casual">Casual</span>
+        <span class="badge-source">Saree-20261104</span>
+        <img src="Casual/thumbnails/PROD-207473_thumb.jpg" alt="Brick Red Terracotta Striped Handloom Saree" loading="lazy">
+      </div>
+      <div class="card-content">
+        <div class="prod-id">PROD-207473</div>
+        <h3 class="saree-title">Brick Red Terracotta Striped Handloom Saree</h3>
+        <div class="vibe-pill">✨ Artisanal Warm Terracotta Everyday Wear</div>
+        <div class="spec-row"><strong>Fabric:</strong> Organic Cotton-Linen Blend</div>
+        <div class="spec-row"><strong>Weave:</strong> Earthy Ribbed Stripes with Woven Borders</div>
+      </div>
+    </div>
+    
+    <div class="saree-card" data-category="Comfort" data-search="mauve lavender striped handloom saree handloom tussar silk-linen fine linear metallic stripes prod-388389 six yards casual/comfort signature drape">
+      <div class="img-wrapper">
+        <span class="badge-category badge-Comfort">Comfort</span>
+        <span class="badge-source">Saree-20261104</span>
+        <img src="Comfort/thumbnails/PROD-388389_thumb.jpg" alt="Mauve Lavender Striped Handloom Saree" loading="lazy">
+      </div>
+      <div class="card-content">
+        <div class="prod-id">PROD-388389</div>
+        <h3 class="saree-title">Mauve Lavender Striped Handloom Saree</h3>
+        <div class="vibe-pill">✨ Six Yards Casual/Comfort Signature Drape</div>
+        <div class="spec-row"><strong>Fabric:</strong> Handloom Tussar Silk-Linen</div>
+        <div class="spec-row"><strong>Weave:</strong> Fine Linear Metallic Stripes</div>
+      </div>
+    </div>
+    
+    <div class="saree-card" data-category="Comfort" data-search="crimson maroon striped comfort silk saree handloom tussar silk supple breathable weave with zari selvedge prod-356787 six yards comfort top pick — featherlight tussar">
+      <div class="img-wrapper">
+        <span class="badge-category badge-Comfort">Comfort</span>
+        <span class="badge-source">Saree-20261104</span>
+        <img src="Comfort/thumbnails/PROD-356787_thumb.jpg" alt="Crimson Maroon Striped Comfort Silk Saree" loading="lazy">
+      </div>
+      <div class="card-content">
+        <div class="prod-id">PROD-356787</div>
+        <h3 class="saree-title">Crimson Maroon Striped Comfort Silk Saree</h3>
+        <div class="vibe-pill">✨ Six Yards Comfort Top Pick — Featherlight Tussar</div>
+        <div class="spec-row"><strong>Fabric:</strong> Handloom Tussar Silk</div>
+        <div class="spec-row"><strong>Weave:</strong> Supple Breathable Weave with Zari Selvedge</div>
+      </div>
+    </div>
+    
+    <div class="saree-card" data-category="Comfort" data-search="natural golden beige raw tussar silk saree 100% pure wild raw tussar silk textured slub weave with natural luster prod-372950 organic temperature-regulating raw silk">
+      <div class="img-wrapper">
+        <span class="badge-category badge-Comfort">Comfort</span>
+        <span class="badge-source">New folder-20261103</span>
+        <img src="Comfort/thumbnails/PROD-372950_thumb.jpg" alt="Natural Golden Beige Raw Tussar Silk Saree" loading="lazy">
+      </div>
+      <div class="card-content">
+        <div class="prod-id">PROD-372950</div>
+        <h3 class="saree-title">Natural Golden Beige Raw Tussar Silk Saree</h3>
+        <div class="vibe-pill">✨ Organic Temperature-Regulating Raw Silk</div>
+        <div class="spec-row"><strong>Fabric:</strong> 100% Pure Wild Raw Tussar Silk</div>
+        <div class="spec-row"><strong>Weave:</strong> Textured Slub Weave with Natural Luster</div>
+      </div>
+    </div>
+    
+    <div class="saree-card" data-category="Comfort" data-search="sky blue striped airy linen saree high-thread pure linen pinstripe texture with tasseled border prod-671858 ultra-lightweight breathable summer linen">
+      <div class="img-wrapper">
+        <span class="badge-category badge-Comfort">Comfort</span>
+        <span class="badge-source">Saree-20261104</span>
+        <img src="Comfort/thumbnails/PROD-671858_thumb.jpg" alt="Sky Blue Striped Airy Linen Saree" loading="lazy">
+      </div>
+      <div class="card-content">
+        <div class="prod-id">PROD-671858</div>
+        <h3 class="saree-title">Sky Blue Striped Airy Linen Saree</h3>
+        <div class="vibe-pill">✨ Ultra-lightweight Breathable Summer Linen</div>
+        <div class="spec-row"><strong>Fabric:</strong> High-Thread Pure Linen</div>
+        <div class="spec-row"><strong>Weave:</strong> Pinstripe Texture with Tasseled Border</div>
+      </div>
+    </div>
+    
+    <div class="saree-card" data-category="Comfort" data-search="mint sage green striped linen saree natural flax linen gentle ribbed stripes with soft bio-wash prod-876646 soothing pastel butter-soft flax linen">
+      <div class="img-wrapper">
+        <span class="badge-category badge-Comfort">Comfort</span>
+        <span class="badge-source">Saree-20261104</span>
+        <img src="Comfort/thumbnails/PROD-876646_thumb.jpg" alt="Mint Sage Green Striped Linen Saree" loading="lazy">
+      </div>
+      <div class="card-content">
+        <div class="prod-id">PROD-876646</div>
+        <h3 class="saree-title">Mint Sage Green Striped Linen Saree</h3>
+        <div class="vibe-pill">✨ Soothing Pastel Butter-soft Flax Linen</div>
+        <div class="spec-row"><strong>Fabric:</strong> Natural Flax Linen</div>
+        <div class="spec-row"><strong>Weave:</strong> Gentle Ribbed Stripes with Soft Bio-wash</div>
+      </div>
+    </div>
+    
+    <div class="saree-card" data-category="Comfort" data-search="mauve grey striped linen saree pure handloom linen modern parallel stripes with selvedge accent prod-191161 airy soft draped handloom linen">
+      <div class="img-wrapper">
+        <span class="badge-category badge-Comfort">Comfort</span>
+        <span class="badge-source">Saree-20261104</span>
+        <img src="Comfort/thumbnails/PROD-191161_thumb.jpg" alt="Mauve Grey Striped Linen Saree" loading="lazy">
+      </div>
+      <div class="card-content">
+        <div class="prod-id">PROD-191161</div>
+        <h3 class="saree-title">Mauve Grey Striped Linen Saree</h3>
+        <div class="vibe-pill">✨ Airy Soft Draped Handloom Linen</div>
+        <div class="spec-row"><strong>Fabric:</strong> Pure Handloom Linen</div>
+        <div class="spec-row"><strong>Weave:</strong> Modern Parallel Stripes with Selvedge Accent</div>
+      </div>
+    </div>
+    
+    <div class="saree-card" data-category="Comfort" data-search="mint sea green embossed leaf silk saree soft lightweight chanderi silk self-embossed botanical leaf jacquard prod-506183 featherlight floating botanical silk">
+      <div class="img-wrapper">
+        <span class="badge-category badge-Comfort">Comfort</span>
+        <span class="badge-source">New folder-20261103</span>
+        <img src="Comfort/thumbnails/PROD-506183_thumb.jpg" alt="Mint Sea Green Embossed Leaf Silk Saree" loading="lazy">
+      </div>
+      <div class="card-content">
+        <div class="prod-id">PROD-506183</div>
+        <h3 class="saree-title">Mint Sea Green Embossed Leaf Silk Saree</h3>
+        <div class="vibe-pill">✨ Featherlight Floating Botanical Silk</div>
+        <div class="spec-row"><strong>Fabric:</strong> Soft Lightweight Chanderi Silk</div>
+        <div class="spec-row"><strong>Weave:</strong> Self-embossed Botanical Leaf Jacquard</div>
+      </div>
+    </div>
+    
+    <div class="saree-card" data-category="Festive" data-search="olive beige pichwai sacred kamdhenu saree chanderi silk cotton traditional pichwai lotus & cow temple art print prod-542417 shrinathji sacred temple art for diwali & pujas">
+      <div class="img-wrapper">
+        <span class="badge-category badge-Festive">Festive</span>
+        <span class="badge-source">Saree-20261104</span>
+        <img src="Festive/thumbnails/PROD-542417_thumb.jpg" alt="Olive Beige Pichwai Sacred Kamdhenu Saree" loading="lazy">
+      </div>
+      <div class="card-content">
+        <div class="prod-id">PROD-542417</div>
+        <h3 class="saree-title">Olive Beige Pichwai Sacred Kamdhenu Saree</h3>
+        <div class="vibe-pill">✨ Shrinathji Sacred Temple Art for Diwali & Pujas</div>
+        <div class="spec-row"><strong>Fabric:</strong> Chanderi Silk Cotton</div>
+        <div class="spec-row"><strong>Weave:</strong> Traditional Pichwai Lotus & Cow Temple Art Print</div>
+      </div>
+    </div>
+    
+    <div class="saree-card" data-category="Festive" data-search="dusty pink pichwai floral & kamal saree handloom silk cotton blend pichwai art with zari border & tassels prod-719176 festive devotional pink pichwai art">
+      <div class="img-wrapper">
+        <span class="badge-category badge-Festive">Festive</span>
+        <span class="badge-source">Saree-20261104</span>
+        <img src="Festive/thumbnails/PROD-719176_thumb.jpg" alt="Dusty Pink Pichwai Floral & Kamal Saree" loading="lazy">
+      </div>
+      <div class="card-content">
+        <div class="prod-id">PROD-719176</div>
+        <h3 class="saree-title">Dusty Pink Pichwai Floral & Kamal Saree</h3>
+        <div class="vibe-pill">✨ Festive Devotional Pink Pichwai Art</div>
+        <div class="spec-row"><strong>Fabric:</strong> Handloom Silk Cotton Blend</div>
+        <div class="spec-row"><strong>Weave:</strong> Pichwai Art with Zari Border & Tassels</div>
+      </div>
+    </div>
+    
+    <div class="saree-card" data-category="Festive" data-search="lilac silver floral botanical sketch saree fine organza silk fine botanical sketch print with gold zari pallu prod-927461 six yards festive top pick — modern celebratory organza">
+      <div class="img-wrapper">
+        <span class="badge-category badge-Festive">Festive</span>
+        <span class="badge-source">New folder-20261103</span>
+        <img src="Festive/thumbnails/PROD-927461_thumb.jpg" alt="Lilac Silver Floral Botanical Sketch Saree" loading="lazy">
+      </div>
+      <div class="card-content">
+        <div class="prod-id">PROD-927461</div>
+        <h3 class="saree-title">Lilac Silver Floral Botanical Sketch Saree</h3>
+        <div class="vibe-pill">✨ Six Yards Festive Top Pick — Modern Celebratory Organza</div>
+        <div class="spec-row"><strong>Fabric:</strong> Fine Organza Silk</div>
+        <div class="spec-row"><strong>Weave:</strong> Fine Botanical Sketch Print with Gold Zari Pallu</div>
+      </div>
+    </div>
+    
+    <div class="saree-card" data-category="Festive" data-search="ivory cream floral & songbird paithani saree pure silk cotton paithani-inspired bird & floral vines pallu prod-408275 auspicious nature & songbird celebration canvas">
+      <div class="img-wrapper">
+        <span class="badge-category badge-Festive">Festive</span>
+        <span class="badge-source">New folder-20261103</span>
+        <img src="Festive/thumbnails/PROD-408275_thumb.jpg" alt="Ivory Cream Floral & Songbird Paithani Saree" loading="lazy">
+      </div>
+      <div class="card-content">
+        <div class="prod-id">PROD-408275</div>
+        <h3 class="saree-title">Ivory Cream Floral & Songbird Paithani Saree</h3>
+        <div class="vibe-pill">✨ Auspicious Nature & Songbird Celebration Canvas</div>
+        <div class="spec-row"><strong>Fabric:</strong> Pure Silk Cotton</div>
+        <div class="spec-row"><strong>Weave:</strong> Paithani-inspired Bird & Floral Vines Pallu</div>
+      </div>
+    </div>
+    
+    <div class="saree-card" data-category="Festive" data-search="bronze ochre grid with hand-painted kalamkari pallu tussar silk handloom kalamkari mythological floral artwork pallu prod-850193 handcrafted folk art narrative pallu for navratri">
+      <div class="img-wrapper">
+        <span class="badge-category badge-Festive">Festive</span>
+        <span class="badge-source">New folder-20261103</span>
+        <img src="Festive/thumbnails/PROD-850193_thumb.jpg" alt="Bronze Ochre Grid with Hand-painted Kalamkari Pallu" loading="lazy">
+      </div>
+      <div class="card-content">
+        <div class="prod-id">PROD-850193</div>
+        <h3 class="saree-title">Bronze Ochre Grid with Hand-painted Kalamkari Pallu</h3>
+        <div class="vibe-pill">✨ Handcrafted Folk Art Narrative Pallu for Navratri</div>
+        <div class="spec-row"><strong>Fabric:</strong> Tussar Silk Handloom</div>
+        <div class="spec-row"><strong>Weave:</strong> Kalamkari Mythological Floral Artwork Pallu</div>
+      </div>
+    </div>
+    
+    <div class="saree-card" data-category="Festive" data-search="peacock teal kalpavriksha & hathi heritage saree silk blend kalpavriksha (tree of life) & royal elephant jacquard prod-749320 tree of life & prosperity symbolism">
+      <div class="img-wrapper">
+        <span class="badge-category badge-Festive">Festive</span>
+        <span class="badge-source">New folder-20261103</span>
+        <img src="Festive/thumbnails/PROD-749320_thumb.jpg" alt="Peacock Teal Kalpavriksha & Hathi Heritage Saree" loading="lazy">
+      </div>
+      <div class="card-content">
+        <div class="prod-id">PROD-749320</div>
+        <h3 class="saree-title">Peacock Teal Kalpavriksha & Hathi Heritage Saree</h3>
+        <div class="vibe-pill">✨ Tree of Life & Prosperity Symbolism</div>
+        <div class="spec-row"><strong>Fabric:</strong> Silk Blend</div>
+        <div class="spec-row"><strong>Weave:</strong> Kalpavriksha (Tree of Life) & Royal Elephant Jacquard</div>
+      </div>
+    </div>
+    
+    <div class="saree-card" data-category="Festive" data-search="turquoise cyan saree with glistening silver zari soft katan silk silver zari floral brocade border prod-126225 shimmering silver brocade festive jewel tone">
+      <div class="img-wrapper">
+        <span class="badge-category badge-Festive">Festive</span>
+        <span class="badge-source">Saree-20261104</span>
+        <img src="Festive/thumbnails/PROD-126225_thumb.jpg" alt="Turquoise Cyan Saree with Glistening Silver Zari" loading="lazy">
+      </div>
+      <div class="card-content">
+        <div class="prod-id">PROD-126225</div>
+        <h3 class="saree-title">Turquoise Cyan Saree with Glistening Silver Zari</h3>
+        <div class="vibe-pill">✨ Shimmering Silver Brocade Festive Jewel Tone</div>
+        <div class="spec-row"><strong>Fabric:</strong> Soft Katan Silk</div>
+        <div class="spec-row"><strong>Weave:</strong> Silver Zari Floral Brocade Border</div>
+      </div>
+    </div>
+    
+    <div class="saree-card" data-category="Festive" data-search="rust amber orange silk saree with gold border pure silk sunlit ochre silk with antique gold selvedge prod-198246 warm marigold festive autumn color">
+      <div class="img-wrapper">
+        <span class="badge-category badge-Festive">Festive</span>
+        <span class="badge-source">Saree-20261104</span>
+        <img src="Festive/thumbnails/PROD-198246_thumb.jpg" alt="Rust Amber Orange Silk Saree with Gold Border" loading="lazy">
+      </div>
+      <div class="card-content">
+        <div class="prod-id">PROD-198246</div>
+        <h3 class="saree-title">Rust Amber Orange Silk Saree with Gold Border</h3>
+        <div class="vibe-pill">✨ Warm Marigold Festive Autumn Color</div>
+        <div class="spec-row"><strong>Fabric:</strong> Pure Silk</div>
+        <div class="spec-row"><strong>Weave:</strong> Sunlit Ochre Silk with Antique Gold Selvedge</div>
+      </div>
+    </div>
+    
+    <div class="saree-card" data-category="Festive" data-search="fawn champagne beige silk saree with intricate border tussar dupion silk intricate antique gold zari paisley lace border prod-329258 subtle festive champagne & gold lace">
+      <div class="img-wrapper">
+        <span class="badge-category badge-Festive">Festive</span>
+        <span class="badge-source">Saree-20261104</span>
+        <img src="Festive/thumbnails/PROD-329258_thumb.jpg" alt="Fawn Champagne Beige Silk Saree with Intricate Border" loading="lazy">
+      </div>
+      <div class="card-content">
+        <div class="prod-id">PROD-329258</div>
+        <h3 class="saree-title">Fawn Champagne Beige Silk Saree with Intricate Border</h3>
+        <div class="vibe-pill">✨ Subtle Festive Champagne & Gold Lace</div>
+        <div class="spec-row"><strong>Fabric:</strong> Tussar Dupion Silk</div>
+        <div class="spec-row"><strong>Weave:</strong> Intricate Antique Gold Zari Paisley Lace Border</div>
+      </div>
+    </div>
+    
+    <div class="saree-card" data-category="Festive" data-search="imperial violet purple saree with silver paisley motifs pure kadwa silk silver zari intricate paisley (kalka) brocade prod-294716 radiant sangeet violet silver zari paisleys">
+      <div class="img-wrapper">
+        <span class="badge-category badge-Festive">Festive</span>
+        <span class="badge-source">New folder-20261103</span>
+        <img src="Festive/thumbnails/PROD-294716_thumb.jpg" alt="Imperial Violet Purple Saree with Silver Paisley Motifs" loading="lazy">
+      </div>
+      <div class="card-content">
+        <div class="prod-id">PROD-294716</div>
+        <h3 class="saree-title">Imperial Violet Purple Saree with Silver Paisley Motifs</h3>
+        <div class="vibe-pill">✨ Radiant Sangeet Violet Silver Zari Paisleys</div>
+        <div class="spec-row"><strong>Fabric:</strong> Pure Kadwa Silk</div>
+        <div class="spec-row"><strong>Weave:</strong> Silver Zari Intricate Paisley (Kalka) Brocade</div>
+      </div>
+    </div>
+    
+    <div class="saree-card" data-category="Festive" data-search="deep wine maroon silk saree with circular zari motifs pure silk circular floral ashavali buttis with zari border prod-216739 festive evening medallion ashavali buttis">
+      <div class="img-wrapper">
+        <span class="badge-category badge-Festive">Festive</span>
+        <span class="badge-source">Saree-20261104</span>
+        <img src="Festive/thumbnails/PROD-216739_thumb.jpg" alt="Deep Wine Maroon Silk Saree with Circular Zari Motifs" loading="lazy">
+      </div>
+      <div class="card-content">
+        <div class="prod-id">PROD-216739</div>
+        <h3 class="saree-title">Deep Wine Maroon Silk Saree with Circular Zari Motifs</h3>
+        <div class="vibe-pill">✨ Festive Evening Medallion Ashavali Buttis</div>
+        <div class="spec-row"><strong>Fabric:</strong> Pure Silk</div>
+        <div class="spec-row"><strong>Weave:</strong> Circular Floral Ashavali Buttis with Zari Border</div>
+      </div>
+    </div>
+    
+    <div class="saree-card" data-category="Festive" data-search="teal peacock katan silk paisley brocade saree pure katan silk gold zari floral jaal & paisley motifs prod-385017 opulent festive evening gold jaal">
+      <div class="img-wrapper">
+        <span class="badge-category badge-Festive">Festive</span>
+        <span class="badge-source">New folder-20261103</span>
+        <img src="Festive/thumbnails/PROD-385017_thumb.jpg" alt="Teal Peacock Katan Silk Paisley Brocade Saree" loading="lazy">
+      </div>
+      <div class="card-content">
+        <div class="prod-id">PROD-385017</div>
+        <h3 class="saree-title">Teal Peacock Katan Silk Paisley Brocade Saree</h3>
+        <div class="vibe-pill">✨ Opulent Festive Evening Gold Jaal</div>
+        <div class="spec-row"><strong>Fabric:</strong> Pure Katan Silk</div>
+        <div class="spec-row"><strong>Weave:</strong> Gold Zari Floral Jaal & Paisley Motifs</div>
+      </div>
+    </div>
+    
+    <div class="saree-card" data-category="Festive" data-search="teal cyan silk saree with magenta contrast border pure handloom silk contrast selvedge with fine zari buttis prod-731262 high-spirit celebratory contrast palette">
+      <div class="img-wrapper">
+        <span class="badge-category badge-Festive">Festive</span>
+        <span class="badge-source">Saree-20261104</span>
+        <img src="Festive/thumbnails/PROD-731262_thumb.jpg" alt="Teal Cyan Silk Saree with Magenta Contrast Border" loading="lazy">
+      </div>
+      <div class="card-content">
+        <div class="prod-id">PROD-731262</div>
+        <h3 class="saree-title">Teal Cyan Silk Saree with Magenta Contrast Border</h3>
+        <div class="vibe-pill">✨ High-Spirit Celebratory Contrast Palette</div>
+        <div class="spec-row"><strong>Fabric:</strong> Pure Handloom Silk</div>
+        <div class="spec-row"><strong>Weave:</strong> Contrast Selvedge with Fine Zari Buttis</div>
+      </div>
+    </div>
+    
+    <div class="saree-card" data-category="Festive" data-search="olive temple silk saree with maroon border handloom silk traditional temple motifs with rich maroon border prod-770487 temple festivals & traditional pujas">
+      <div class="img-wrapper">
+        <span class="badge-category badge-Festive">Festive</span>
+        <span class="badge-source">Saree-20261104</span>
+        <img src="Festive/thumbnails/PROD-770487_thumb.jpg" alt="Olive Temple Silk Saree with Maroon Border" loading="lazy">
+      </div>
+      <div class="card-content">
+        <div class="prod-id">PROD-770487</div>
+        <h3 class="saree-title">Olive Temple Silk Saree with Maroon Border</h3>
+        <div class="vibe-pill">✨ Temple Festivals & Traditional Pujas</div>
+        <div class="spec-row"><strong>Fabric:</strong> Handloom Silk</div>
+        <div class="spec-row"><strong>Weave:</strong> Traditional Temple Motifs with Rich Maroon Border</div>
+      </div>
+    </div>
+    
+    <div class="saree-card" data-category="Festive" data-search="plum purple-brown saree with gold zari pinstripes chanderi silk blend lustrous metallic pinstripes & zari pallu prod-877572 dramatic festive evening metallic shimmer">
+      <div class="img-wrapper">
+        <span class="badge-category badge-Festive">Festive</span>
+        <span class="badge-source">Saree-20261104</span>
+        <img src="Festive/thumbnails/PROD-877572_thumb.jpg" alt="Plum Purple-Brown Saree with Gold Zari Pinstripes" loading="lazy">
+      </div>
+      <div class="card-content">
+        <div class="prod-id">PROD-877572</div>
+        <h3 class="saree-title">Plum Purple-Brown Saree with Gold Zari Pinstripes</h3>
+        <div class="vibe-pill">✨ Dramatic Festive Evening Metallic Shimmer</div>
+        <div class="spec-row"><strong>Fabric:</strong> Chanderi Silk Blend</div>
+        <div class="spec-row"><strong>Weave:</strong> Lustrous Metallic Pinstripes & Zari Pallu</div>
+      </div>
+    </div>
+    
+    <div class="saree-card" data-category="Festive" data-search="peacock sapphire teal silk saree with purple pallu pure handloom silk contrast kanjivaram pallu with gold zari prod-127824 rich contrast festive sangeet silk">
+      <div class="img-wrapper">
+        <span class="badge-category badge-Festive">Festive</span>
+        <span class="badge-source">Saree-20261104</span>
+        <img src="Festive/thumbnails/PROD-127824_thumb.jpg" alt="Peacock Sapphire Teal Silk Saree with Purple Pallu" loading="lazy">
+      </div>
+      <div class="card-content">
+        <div class="prod-id">PROD-127824</div>
+        <h3 class="saree-title">Peacock Sapphire Teal Silk Saree with Purple Pallu</h3>
+        <div class="vibe-pill">✨ Rich Contrast Festive Sangeet Silk</div>
+        <div class="spec-row"><strong>Fabric:</strong> Pure Handloom Silk</div>
+        <div class="spec-row"><strong>Weave:</strong> Contrast Kanjivaram Pallu with Gold Zari</div>
+      </div>
+    </div>
+    
+    <div class="saree-card" data-category="Festive" data-search="midnight royal blue silk saree with magenta border pure katan silk kadwa brocade with contrast magenta border prod-629903 celebratory royal blue & magenta brocade">
+      <div class="img-wrapper">
+        <span class="badge-category badge-Festive">Festive</span>
+        <span class="badge-source">Saree-20261104</span>
+        <img src="Festive/thumbnails/PROD-629903_thumb.jpg" alt="Midnight Royal Blue Silk Saree with Magenta Border" loading="lazy">
+      </div>
+      <div class="card-content">
+        <div class="prod-id">PROD-629903</div>
+        <h3 class="saree-title">Midnight Royal Blue Silk Saree with Magenta Border</h3>
+        <div class="vibe-pill">✨ Celebratory Royal Blue & Magenta Brocade</div>
+        <div class="spec-row"><strong>Fabric:</strong> Pure Katan Silk</div>
+        <div class="spec-row"><strong>Weave:</strong> Kadwa Brocade with Contrast Magenta Border</div>
+      </div>
+    </div>
+    
+  </div>
+</div>
+
+<script>
+let currentCategory = 'All';
+
+function filterCategory(cat, btn) {
+  currentCategory = cat;
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  applyFilters();
+}
+
+function handleSearch() {
+  applyFilters();
+}
+
+function applyFilters() {
+  const query = document.getElementById('search').value.toLowerCase().trim();
+  const cards = document.querySelectorAll('.saree-card');
+  
+  cards.forEach(card => {
+    const cardCat = card.getAttribute('data-category');
+    const cardSearch = card.getAttribute('data-search');
+    
+    const matchesCat = (currentCategory === 'All' || cardCat === currentCategory);
+    const matchesQuery = (!query || cardSearch.includes(query));
+    
+    if (matchesCat && matchesQuery) {
+      card.style.display = 'flex';
+    } else {
+      card.style.display = 'none';
+    }
+  });
+}
+</script>
+
+</body>
+</html>

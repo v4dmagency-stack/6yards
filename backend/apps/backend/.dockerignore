@@ -1,0 +1,8 @@
+node_modules
+.medusa
+.env
+.env.*
+coverage
+dist
+build
+.git
