@@ -1,8 +1,17 @@
 # Browser debug profiles (temp Chromium/Puppeteer sessions)
 .browser_*/
 
-# Large zip files
+# Local archives
 *.zip
+*.7z
+*.rar
+*.tar
+*.tar.gz
+*.tgz
+
+# Generated video renders (keep the storefront hero video)
+gemini_generated_video_*.mp4
+!/gemini_generated_video_9da2f281_gwr_video_mvp.mp4
 
 # Temp server logs
 backend_server.log
@@ -45,6 +54,19 @@ browser_verification_report.json
 *.backup
 dist/storefront/
 .env.production
+
+# Build and temporary outputs
+.next/
+build/
+coverage/
+out/
+.cache/
+tmp/
+temp/
+*.tmp
+*.temp
+*.swp
+*.swo
 
 # Debug / utility scripts at root (not part of the website)
 capture_final_verification.js
