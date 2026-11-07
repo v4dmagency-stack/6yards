@@ -347,18 +347,19 @@ function initCart() {
 }
 
 function openCartDrawer() {
+  closeWishlistDrawer();
   const drawer = document.getElementById('cart-drawer');
   const backdrop = document.getElementById('cart-backdrop');
-  if (drawer) drawer.classList.add('open');
-  if (backdrop) backdrop.classList.add('open');
+  if (drawer) drawer.classList.add('active');
+  if (backdrop) backdrop.classList.add('active');
   document.body.style.overflow = 'hidden';
 }
 
 function closeCartDrawer() {
   const drawer = document.getElementById('cart-drawer');
   const backdrop = document.getElementById('cart-backdrop');
-  if (drawer) drawer.classList.remove('open');
-  if (backdrop) backdrop.classList.remove('open');
+  if (drawer) drawer.classList.remove('active');
+  if (backdrop) backdrop.classList.remove('active');
   document.body.style.overflow = '';
 }
 
@@ -593,18 +594,19 @@ function initWishlist() {
 }
 
 function openWishlistDrawer() {
+  closeCartDrawer();
   const drawer = document.getElementById('wishlist-drawer');
   const backdrop = document.getElementById('wishlist-backdrop');
-  if (drawer) drawer.classList.add('open');
-  if (backdrop) backdrop.classList.add('open');
+  if (drawer) drawer.classList.add('active');
+  if (backdrop) backdrop.classList.add('active');
   document.body.style.overflow = 'hidden';
 }
 
 function closeWishlistDrawer() {
   const drawer = document.getElementById('wishlist-drawer');
   const backdrop = document.getElementById('wishlist-backdrop');
-  if (drawer) drawer.classList.remove('open');
-  if (backdrop) backdrop.classList.remove('open');
+  if (drawer) drawer.classList.remove('active');
+  if (backdrop) backdrop.classList.remove('active');
   document.body.style.overflow = '';
 }
 
@@ -628,7 +630,7 @@ function renderWishlist() {
         <h5 style="font-size: 0.9rem; font-weight: 500; margin-bottom: 4px;">${item.name}</h5>
         <div style="font-size: 0.85rem; color: var(--color-maroon); font-weight: 600; margin-bottom: 8px;">₹ ${Number(item.price).toLocaleString('en-IN')}</div>
         <div style="display: flex; gap: 8px;">
-          <button onclick="addToCartFromWishlist('${item.id}')" style="padding: 6px 12px; background: var(--color-maroon); color: #FFF; font-size: 0.78rem; border-radius: 4px;">Add to Bag</button>
+          <button onclick="addToCartFromWishlist('${item.id}')" style="padding: 6px 12px; background: var(--color-maroon); color: #FFF; font-size: 0.78rem; border-radius: 4px;">Move to Cart</button>
           <button onclick="removeWishlistItem('${item.id}')" style="color: var(--color-text-light); font-size: 0.78rem;">Remove</button>
         </div>
       </div>
@@ -639,8 +641,12 @@ function renderWishlist() {
 function addToCartFromWishlist(productId) {
   const product = PdpState.wishlist.find(p => p.id === productId);
   if (product) {
-    addToCart(product);
+    PdpState.wishlist = PdpState.wishlist.filter(p => p.id !== productId);
+    localStorage.setItem('6yards_wishlist', JSON.stringify(PdpState.wishlist));
+    updateHeaderBadges();
+    renderWishlist();
     closeWishlistDrawer();
+    addToCart(product);
   }
 }
 

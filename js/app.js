@@ -552,6 +552,7 @@ function initCart() {
 }
 
 function openCartDrawer() {
+  closeWishlistDrawer();
   document.getElementById('cart-drawer')?.classList.add('active');
   document.getElementById('cart-backdrop')?.classList.add('active');
   document.body.style.overflow = 'hidden';
@@ -811,6 +812,7 @@ function initWishlist() {
 }
 
 function openWishlistDrawer() {
+  closeCartDrawer();
   document.getElementById('wishlist-drawer')?.classList.add('active');
   document.getElementById('wishlist-backdrop')?.classList.add('active');
   document.body.style.overflow = 'hidden';
@@ -864,7 +866,7 @@ function renderWishlist() {
         <h5>${item.name}</h5>
         <div class="cart-item-price">₹ ${Number(item.price).toLocaleString('en-IN')}</div>
         <button class="add-to-cart-btn" style="padding: 4px 10px; margin-top: 4px; display: inline-block; width: auto;" onclick="moveWishlistToCart('${item.id}')">
-          Move to Bag
+          Move to Cart
         </button>
       </div>
       <button class="remove-cart-item" onclick="removeWishlistItem('${item.id}')" title="Remove">
@@ -874,16 +876,16 @@ function renderWishlist() {
   `).join('');
 }
 
-function moveWishlistToCart(productId) {
+async function moveWishlistToCart(productId) {
   const product = AppState.wishlist.find(p => p.id === productId);
   if (product) {
-    addToCart(product);
     AppState.wishlist = AppState.wishlist.filter(p => p.id !== productId);
     localStorage.setItem('6yards_wishlist', JSON.stringify(AppState.wishlist));
     renderWishlist();
     updateHeaderBadges();
-    // Re-render product grid to update heart icon state
     renderProducts(PRODUCTS_DATA);
+    closeWishlistDrawer();
+    await addToCart(product);
   }
 }
 
