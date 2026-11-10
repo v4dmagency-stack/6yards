@@ -65,6 +65,7 @@ html, body {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+  min-width: 0;
 }
 
 html {
@@ -3479,6 +3480,10 @@ img {
 }
 
 @media (max-width: 768px) {
+  .container {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
   .catalog-layout {
     grid-template-columns: 1fr;
   }
@@ -3503,10 +3508,40 @@ img {
     flex-direction: column;
     align-items: flex-start;
     gap: 16px;
+    width: 100%;
   }
   .catalog-meta-controls {
     width: 100%;
     justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .catalog-sort-group {
+    width: 100%;
+    justify-content: space-between;
+  }
+  .catalog-sort-select {
+    width: 100%;
+    max-width: 100%;
+  }
+  .collections-circles-strip {
+    gap: 14px;
+  }
+  .collection-circle-filter {
+    width: 88px;
+  }
+  .pdp-stage {
+    min-width: 0;
+    width: 100%;
+  }
+  .pdp-gallery-wrap,
+  .pdp-details-wrap {
+    min-width: 0;
+    width: 100%;
+  }
+  .pdp-container {
+    padding-left: 16px;
+    padding-right: 16px;
   }
   .pdp-trust-grid {
     grid-template-columns: 1fr;
@@ -4416,6 +4451,12 @@ img {
   }
   .contact-layout-grid {
     grid-template-columns: 1fr;
+  }
+  .contact-form-row {
+    grid-template-columns: 1fr;
+  }
+  .contact-card-box {
+    padding: 28px 20px;
   }
 }
 

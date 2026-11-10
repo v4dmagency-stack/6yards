@@ -1022,6 +1022,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const backdrop = document.getElementById('mobile-nav-backdrop');
   const closeBtn = document.getElementById('mobile-nav-close-btn');
 
+  if (!toggleBtn || !navMenu || toggleBtn.dataset.mobileNavBound === 'true') return;
+  toggleBtn.dataset.mobileNavBound = 'true';
+
   function openMobileNav() {
     if (navMenu) {
       navMenu.classList.add('open');

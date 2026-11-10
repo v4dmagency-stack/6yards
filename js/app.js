@@ -1106,21 +1106,45 @@ function initHeaderScroll() {
 function initMobileNav() {
   const toggleBtn = document.getElementById('mobile-nav-toggle-btn');
   const navMenu = document.getElementById('nav-menu-list');
+  const backdrop = document.getElementById('mobile-nav-backdrop');
+  const closeBtn = document.getElementById('mobile-nav-close-btn');
 
-  if (toggleBtn && navMenu) {
-    toggleBtn.addEventListener('click', () => {
-      navMenu.classList.toggle('open');
-    });
+  if (!toggleBtn || !navMenu || toggleBtn.dataset.mobileNavBound === 'true') return;
+  toggleBtn.dataset.mobileNavBound = 'true';
 
-    // Close when clicking link
-    navMenu.querySelectorAll('a').forEach(link => {
-      link.addEventListener('click', () => {
-        if (!link.classList.contains('dropdown-caret') && link.id !== 'nav-sarees-link') {
-          navMenu.classList.remove('open');
-        }
-      });
-    });
+  function openMobileNav() {
+    navMenu.classList.add('open');
+    navMenu.classList.add('mobile-open');
+    if (backdrop) backdrop.classList.add('active');
+    document.body.style.overflow = 'hidden';
   }
+
+  function closeMobileNav() {
+    navMenu.classList.remove('open');
+    navMenu.classList.remove('mobile-open');
+    if (backdrop) backdrop.classList.remove('active');
+    document.body.style.overflow = '';
+  }
+
+  toggleBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    if (navMenu.classList.contains('open') || navMenu.classList.contains('mobile-open')) {
+      closeMobileNav();
+    } else {
+      openMobileNav();
+    }
+  });
+
+  if (closeBtn) closeBtn.addEventListener('click', closeMobileNav);
+  if (backdrop) backdrop.addEventListener('click', closeMobileNav);
+
+  navMenu.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+      if (!link.classList.contains('dropdown-caret') && link.id !== 'nav-sarees-link') {
+        closeMobileNav();
+      }
+    });
+  });
 }
 
 function initSareesDropdown() {
@@ -1331,6 +1355,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const navMenu = document.getElementById('nav-menu-list');
   const backdrop = document.getElementById('mobile-nav-backdrop');
   const closeBtn = document.getElementById('mobile-nav-close-btn');
+
+  if (!toggleBtn || !navMenu || toggleBtn.dataset.mobileNavBound === 'true') return;
+  toggleBtn.dataset.mobileNavBound = 'true';
 
   function openMobileNav() {
     if (navMenu) {
