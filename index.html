@@ -35,7 +35,7 @@
   <header class="header-main header-glass">
     <div class="navbar">
       <!-- Mobile Menu Hamburger Button -->
-      <button class="mobile-nav-toggle" id="mobile-nav-toggle-btn" aria-label="Toggle Navigation Menu">
+      <button class="mobile-nav-toggle" id="mobile-nav-toggle-btn" type="button" aria-label="Toggle Navigation Menu" aria-controls="nav-menu-list" aria-expanded="false">
         <i class="fa-solid fa-bars"></i>
       </button>
 
@@ -205,12 +205,12 @@
 
       <!-- Right Header Actions (Wishlist & Cart only) -->
       <div class="header-actions">
-        <button class="action-icon-btn" id="wishlist-toggle-btn" title="Wishlist">
+        <button class="action-icon-btn" id="wishlist-toggle-btn" type="button" title="Wishlist" aria-label="Open wishlist">
           <i class="fa-regular fa-heart"></i>
           <span class="badge-count" id="wishlist-badge-count">0</span>
         </button>
 
-        <button class="action-icon-btn" id="cart-toggle-btn" title="Shopping Bag">
+        <button class="action-icon-btn" id="cart-toggle-btn" type="button" title="Shopping Bag" aria-label="Open shopping bag">
           <i class="fa-solid fa-bag-shopping"></i>
           <span class="badge-count" id="cart-badge-count">0</span>
         </button>
@@ -221,8 +221,11 @@
   <!-- Hero Section: Pure High-Quality Video (Click to Explore Matching Riwayat Sarees) -->
   <a href="collections.html?collection=riwayat" class="hero-video-anchor" id="hero-banner" title="Click to Explore Royal Sarees Featured in Video" aria-label="Explore Royal Silk Sarees Featured in Video">
     <div class="hero-video-container">
-      <video class="hero-background-video" autoplay loop muted playsinline preload="auto" poster="assets/hero-poster.jpg" id="hero-bg-video">
-        <source src="gemini_generated_video_9da2f281_gwr_video_mvp.mp4" type="video/mp4" />
+      <video class="hero-background-video" autoplay loop muted playsinline preload="none" id="hero-bg-video"
+        data-desktop-src="gemini_generated_video_9da2f281_gwr_video_mvp.mp4"
+        data-mobile-src="assets/hero-mobile.mp4"
+        data-desktop-poster="assets/hero-poster.jpg"
+        data-mobile-poster="assets/hero-mobile-poster.jpg">
       </video>
       <div class="hero-video-overlay"></div>
     </div>
@@ -568,7 +571,7 @@
   <aside class="slide-drawer" id="cart-drawer">
     <div class="drawer-header">
       <h3 class="font-serif">Shopping Bag</h3>
-      <button class="drawer-close-btn" id="cart-close-btn" aria-label="Close Bag">
+      <button class="drawer-close-btn" id="cart-close-btn" type="button" aria-label="Close cart">
         <i class="fa-solid fa-xmark"></i>
       </button>
     </div>
@@ -622,7 +625,7 @@
   <aside class="slide-drawer" id="wishlist-drawer">
     <div class="drawer-header">
       <h3 class="font-serif">Saved Sarees</h3>
-      <button class="drawer-close-btn" id="wishlist-close-btn" aria-label="Close Wishlist">
+      <button class="drawer-close-btn" id="wishlist-close-btn" type="button" aria-label="Close wishlist">
         <i class="fa-solid fa-xmark"></i>
       </button>
     </div>

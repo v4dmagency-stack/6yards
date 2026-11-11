@@ -457,6 +457,12 @@ function initCart() {
   if (checkoutBtn) checkoutBtn.addEventListener('click', handleCheckout);
   if (promoBtn) promoBtn.addEventListener('click', applyPromoCode);
 
+  document.addEventListener('keydown', (event) => {
+    if (event.key !== 'Escape' || !document.querySelector('.slide-drawer.active')) return;
+    closeCartDrawer();
+    closeWishlistDrawer();
+  });
+
   renderCart();
 }
 
@@ -803,11 +809,42 @@ function updateHeaderBadges() {
 function initMobileNav() {
   const toggleBtn = document.getElementById('mobile-nav-toggle-btn');
   const navMenu = document.getElementById('nav-menu-list');
-  if (toggleBtn && navMenu) {
-    toggleBtn.addEventListener('click', () => {
-      navMenu.classList.toggle('mobile-open');
-    });
+  const backdrop = document.getElementById('mobile-nav-backdrop');
+  const closeBtn = document.getElementById('mobile-nav-close-btn');
+  if (!toggleBtn || !navMenu || toggleBtn.dataset.mobileNavBound === 'true') return;
+  toggleBtn.dataset.mobileNavBound = 'true';
+
+  function openMobileNav() {
+    navMenu.classList.add('open', 'mobile-open');
+    if (backdrop) backdrop.classList.add('active');
+    document.body.classList.add('mobile-nav-open');
+    toggleBtn.setAttribute('aria-expanded', 'true');
+    document.body.style.overflow = 'hidden';
   }
+
+  function closeMobileNav() {
+    navMenu.classList.remove('open', 'mobile-open');
+    if (backdrop) backdrop.classList.remove('active');
+    document.body.classList.remove('mobile-nav-open');
+    toggleBtn.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = document.querySelector('.slide-drawer.active') ? 'hidden' : '';
+  }
+
+  toggleBtn.addEventListener('click', (event) => {
+    event.stopPropagation();
+    if (navMenu.classList.contains('mobile-open')) closeMobileNav();
+    else openMobileNav();
+  });
+  if (closeBtn) closeBtn.addEventListener('click', closeMobileNav);
+  if (backdrop) backdrop.addEventListener('click', closeMobileNav);
+  navMenu.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+      closeMobileNav();
+    });
+  });
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') closeMobileNav();
+  });
 
   // Sarees dropdown toggle with smooth hover bridge & delay
   const dropdownItem = document.getElementById('nav-sarees-item') || document.querySelector('.nav-item-dropdown');
@@ -832,13 +869,6 @@ function initMobileNav() {
       megaCard.addEventListener('mouseenter', showDropdown);
       megaCard.addEventListener('mouseleave', hideDropdownWithDelay);
     }
-
-    dropdownLink.addEventListener('click', (e) => {
-      if (window.innerWidth <= 992) {
-        e.preventDefault();
-        dropdownItem.classList.toggle('open');
-      }
-    });
 
     document.addEventListener('click', (e) => {
       if (!dropdownItem.contains(e.target)) {
@@ -1013,47 +1043,3 @@ function showToast(message, type) {
     setTimeout(() => toast.remove(), 260);
   }, 3800);
 }
-
-
-// Setup universal mobile menu drawer & backdrop
-document.addEventListener('DOMContentLoaded', () => {
-  const toggleBtn = document.getElementById('mobile-nav-toggle-btn');
-  const navMenu = document.getElementById('nav-menu-list');
-  const backdrop = document.getElementById('mobile-nav-backdrop');
-  const closeBtn = document.getElementById('mobile-nav-close-btn');
-
-  if (!toggleBtn || !navMenu || toggleBtn.dataset.mobileNavBound === 'true') return;
-  toggleBtn.dataset.mobileNavBound = 'true';
-
-  function openMobileNav() {
-    if (navMenu) {
-      navMenu.classList.add('open');
-      navMenu.classList.add('mobile-open');
-    }
-    if (backdrop) backdrop.classList.add('active');
-    document.body.style.overflow = 'hidden';
-  }
-
-  function closeMobileNav() {
-    if (navMenu) {
-      navMenu.classList.remove('open');
-      navMenu.classList.remove('mobile-open');
-    }
-    if (backdrop) backdrop.classList.remove('active');
-    document.body.style.overflow = '';
-  }
-
-  if (toggleBtn) {
-    toggleBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      if (navMenu && (navMenu.classList.contains('open') || navMenu.classList.contains('mobile-open'))) {
-        closeMobileNav();
-      } else {
-        openMobileNav();
-      }
-    });
-  }
-
-  if (closeBtn) closeBtn.addEventListener('click', closeMobileNav);
-  if (backdrop) backdrop.addEventListener('click', closeMobileNav);
-});
