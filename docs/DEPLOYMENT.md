@@ -1,3 +1,5 @@
+> **Superseded:** see [HANDOVER.md](./HANDOVER.md) for the current setup and go-live steps. This file is kept for reference.
+
 # 6 YARDS SAREES — PRODUCTION DEPLOYMENT GUIDE
 
 This guide details the end-to-end production deployment architecture for the **6 Yards Sarees** luxury e-commerce platform.

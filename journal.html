@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png" />
-  <link rel="shortcut icon" href="assets/favicon.png" />
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png" />
   <title>The Journal | Stories of the Living Loom | 6 Yards Sarees</title>
   <meta name="description" content="Atelier chronicles exploring mulberry silk cultivation, traditional pit loom mechanics, Kadwa zari weaving, and sacred Pichwai temple murals." />
 
@@ -23,8 +23,6 @@
 
   <!-- Main Navigation Header -->
   <header class="header-main">
-  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png" />
-  <link rel="shortcut icon" href="assets/favicon.png" />
     <div class="navbar">
       <!-- Mobile Menu Hamburger Button -->
       <button class="mobile-nav-toggle" id="mobile-nav-toggle-btn" type="button" aria-label="Toggle Navigation Menu" aria-controls="nav-menu-list" aria-expanded="false">
@@ -33,7 +31,7 @@
 
       <!-- Brand Logo (Landing page is index.html) -->
       <a href="index.html" class="brand-logo-link">
-        <img src="assets/brand-logo-peacock-clean.png" alt="6 Yards Sarees" class="brand-logo-img" alt="6 Yards Sarees" />
+        <img src="assets/brand-logo-sm.png" alt="6 Yards Sarees" class="brand-logo-img" />
       </a>
 
       <!-- Navigation Menu: Sarees, Journal, Contact -->
@@ -42,7 +40,7 @@
           <li class="mobile-nav-header-item">
             <div class="mobile-nav-header">
               <a href="index.html" class="brand-logo-link">
-                <img src="assets/brand-logo-peacock-clean.png" alt="6 Yards Sarees" class="brand-logo-img" />
+                <img src="assets/brand-logo-sm.png" alt="6 Yards Sarees" class="brand-logo-img" />
               </a>
               <button class="mobile-nav-close-btn" id="mobile-nav-close-btn" aria-label="Close Navigation">
                 <i class="fa-solid fa-xmark"></i>
@@ -351,7 +349,7 @@
         <!-- Col 1: Brand Info -->
         <div class="footer-brand-col">
           <a href="index.html" class="brand-logo-link" style="margin-bottom: 16px; display: inline-block;">
-            <img src="assets/brand-logo-peacock-clean.png" alt="6 Yards Sarees" class="footer-brand-logo-img" />
+            <img src="assets/brand-logo-sm.png" alt="6 Yards Sarees" class="footer-brand-logo-img" />
           </a>
           <p class="footer-tagline">Six yards. Infinite stories.</p>
           <div class="social-links">
@@ -386,15 +384,15 @@
         <div class="footer-nav-col">
           <h4>Customer Care</h4>
           <ul class="footer-links">
-            <li><a href="javascript:void(0)" onclick="openCarePolicyModal('shipping')">Shipping Policy</a></li>
-            <li><a href="javascript:void(0)" onclick="openCarePolicyModal('returns')">Returns & Exchanges</a></li>
-            <li><a href="javascript:void(0)" onclick="showToast('Standard Saree Length: 5.5m + 0.8m Blouse Piece.')">Size Guide</a></li>
-            <li><a href="javascript:void(0)" onclick="showToast('Need help? Call or WhatsApp us at +91 98457 14481.')">FAQs</a></li>
+            <li><a href="#" data-policy="shipping">Shipping Policy</a></li>
+            <li><a href="#" data-policy="returns">Returns & Exchanges</a></li>
+            <li><a href="#" data-policy="size">Size Guide</a></li>
+            <li><a href="#" data-policy="faq">FAQs</a></li>
             <li><a href="tel:+919845714481">Call +91 98457 14481</a></li>
             <li><a href="mailto:sixyardsilksarees@gmail.com">sixyardsilksarees@gmail.com</a></li>
             <li><a href="https://wa.me/919845714481" target="_blank" rel="noopener noreferrer">WhatsApp Concierge</a></li>
-            <li><a href="javascript:void(0)" onclick="openCarePolicyModal('terms')">Terms & Conditions</a></li>
-            <li><a href="javascript:void(0)" onclick="openCarePolicyModal('privacy')">Privacy Policy</a></li>
+            <li><a href="#" data-policy="terms">Terms & Conditions</a></li>
+            <li><a href="#" data-policy="privacy">Privacy Policy</a></li>
           </ul>
         </div>
 
@@ -422,64 +420,12 @@
   </footer>
 
   <!-- Shopping Cart Slide-out Drawer -->
-  <div class="drawer-backdrop" id="cart-backdrop"></div>
-  <aside class="slide-drawer" id="cart-drawer">
-    <div class="drawer-header">
-      <h3 class="font-serif">Shopping Bag</h3>
-      <button class="drawer-close-btn" id="cart-close-btn" type="button" aria-label="Close cart">
-        <i class="fa-solid fa-xmark"></i>
-      </button>
-    </div>
-
-    <div class="drawer-body">
-      <div id="cart-empty-state" style="display: none; text-align: center; padding: 40px 0;">
-        <i class="fa-solid fa-bag-shopping" style="font-size: 3rem; color: var(--color-blush); margin-bottom: 12px;"></i>
-        <h4 class="font-serif" style="font-size: 1.4rem; color: var(--color-navy);">Your Bag is Empty</h4>
-        <p style="font-size: 0.875rem; color: var(--color-text-muted); margin-top: 6px;">Discover our handwoven silk sarees and bring home a living heirloom.</p>
-        <a href="collections.html" class="checkout-btn" style="margin-top: 20px; display: inline-block; width: auto; padding: 10px 24px; text-decoration: none;">Explore Collections</a>
-      </div>
-
-      <div id="cart-items-container"></div>
-    </div>
-
-    <div class="drawer-footer" id="cart-drawer-footer">
-      <div class="drawer-subtotal-row">
-        <span>Subtotal</span>
-        <span id="cart-subtotal-amount">₹ 0</span>
-      </div>
-      <p class="drawer-shipping-note">Taxes & insured express shipping calculated at checkout.</p>
-      <button class="checkout-btn" id="checkout-btn" onclick="window.location.href='collections.html'">
-        Proceed to Bag & Checkout <i class="fa-solid fa-arrow-right" style="margin-left: 6px;"></i>
-      </button>
-    </div>
-  </aside>
 
   <!-- Wishlist Slide-out Drawer -->
-  <div class="drawer-backdrop" id="wishlist-backdrop"></div>
-  <aside class="slide-drawer" id="wishlist-drawer">
-    <div class="drawer-header">
-      <h3 class="font-serif">Saved Sarees</h3>
-      <button class="drawer-close-btn" id="wishlist-close-btn" type="button" aria-label="Close wishlist">
-        <i class="fa-solid fa-xmark"></i>
-      </button>
-    </div>
 
-    <div class="drawer-body">
-      <div id="wishlist-empty-state" style="display: none; text-align: center; padding: 40px 0;">
-        <i class="fa-regular fa-heart" style="font-size: 3rem; color: var(--color-blush); margin-bottom: 12px;"></i>
-        <h4 class="font-serif" style="font-size: 1.4rem; color: var(--color-navy);">No Saved Items</h4>
-        <p style="font-size: 0.875rem; color: var(--color-text-muted); margin-top: 6px;">Tap the heart icon on any saree to save it for later.</p>
-      </div>
-      <div id="wishlist-items-container"></div>
-    </div>
-  </aside>
-
-  <!-- Scripts -->
-  <script src="js/products.js"></script>
-  <script src="js/medusa-config.js"></script>
-  <script src="js/medusa-client.js"></script>
-  <script src="js/app.js"></script>
-  <!-- Mobile Nav Backdrop -->
-  <div class="mobile-nav-backdrop" id="mobile-nav-backdrop"></div>
+  <script src="js/products.js" defer></script>
+  <script src="js/medusa-config.js" defer></script>
+  <script src="js/medusa-client.js" defer></script>
+  <script src="js/store.js" defer></script>
 </body>
 </html>

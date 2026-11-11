@@ -1,539 +1,377 @@
 /**
- * 6 Yards Sarees - Official Medusa v2 Storefront SDK Client
- * 
- * Provides official Medusa v2 Store API connectivity:
- * - Direct Medusa JS SDK integration (@medusajs/js-sdk)
- * - REST Store API fallback
- * - Full Cart lifecycle (create, retrieve, line-items, shipping, promotions)
- * - Razorpay & COD payment integration
- * - Graceful fallback to authentic catalog when backend is offline
+ * 6 Yards Sarees - Medusa v2 Store API client
+ *
+ * Thin REST client for the Medusa Store API. Every page awaits
+ * `window.MedusaClient.ready` before deciding whether to use the live backend
+ * or the bundled catalog in js/products.js (used when the backend is offline).
  */
+(function () {
+  const isLocalHost = ['localhost', '127.0.0.1'].includes(window.location.hostname);
 
-// Storefront Configuration
-const MEDUSA_CONFIG = {
-  baseUrl: window.MEDUSA_BACKEND_URL || (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' ? 'http://localhost:9000' : window.location.origin),
-  publishableApiKey: window.MEDUSA_PUBLISHABLE_KEY || 'pk_55634989086e01785152d5cd133bc48512f9cad0323bc140bfd40c74fa79b001',
-  cartStorageKey: '6yards_medusa_cart_id',
-  regionId: null,
-  currencyCode: 'inr',
-  razorpayKeyId: window.RAZORPAY_KEY_ID || 'rzp_test_6yards_storefront'
-};
+  const MEDUSA_CONFIG = {
+    baseUrl: window.MEDUSA_BACKEND_URL || (isLocalHost ? 'http://localhost:9000' : window.location.origin),
+    publishableApiKey: window.MEDUSA_PUBLISHABLE_KEY || '',
+    cartStorageKey: '6yards_medusa_cart_id',
+    currencyCode: 'inr',
+    countryCode: 'in',
+    healthTimeoutMs: 4000,
+  };
 
-class MedusaStoreClient {
-  constructor(config = {}) {
-    this.config = { ...MEDUSA_CONFIG, ...config };
-    this.sdk = null;
-    this.isBackendAvailable = false;
-    this.cart = null;
-    this.cartId = localStorage.getItem(this.config.cartStorageKey) || null;
+  const PRODUCT_FIELDS = '*variants,*variants.calculated_price,+variants.inventory_quantity,+variants.manage_inventory,*collection,*categories,*images,+metadata';
+
+  function staticCatalog() {
+    return Array.isArray(window.PRODUCTS_DATA) ? window.PRODUCTS_DATA : [];
   }
 
-  /**
-   * Initialize SDK (supports dynamic ESM import from CDN or local bundle)
-   */
-  async init() {
-    try {
-      if (window.Medusa) {
-        this.sdk = new window.Medusa({
-          baseUrl: this.config.baseUrl,
-          publishableApiKey: this.config.publishableApiKey,
-          debug: false
-        });
-      } else {
-        // Attempt dynamic import from standard ESM CDN
-        const module = await import('https://esm.sh/@medusajs/js-sdk@2.22.2').catch(() => null);
-        if (module && (module.default || module.Medusa)) {
-          const MedusaClass = module.default || module.Medusa;
-          this.sdk = new MedusaClass({
-            baseUrl: this.config.baseUrl,
-            publishableApiKey: this.config.publishableApiKey,
-            debug: false
-          });
-        }
-      }
-    } catch (e) {
-      console.info('Medusa SDK direct import skipped, using resilient Store API HTTP client.');
-    }
-
-    // Ping Medusa backend health / products
-    await this.checkBackendStatus();
-    return this;
-  }
-
-  /**
-   * Low-level authenticated fetch to Medusa v2 Store API
-   */
-  async request(endpoint, options = {}) {
-    const url = `${this.config.baseUrl}${endpoint}`;
-    const headers = {
-      'Content-Type': 'application/json',
-      'x-publishable-api-key': this.config.publishableApiKey,
-      ...(options.headers || {})
-    };
-
-    const response = await fetch(url, {
-      ...options,
-      headers
-    });
-
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
-      const err = new Error(errorData.message || `Medusa Store API error: ${response.status}`);
-      err.status = response.status;
-      err.data = errorData;
-      throw err;
-    }
-
-    return response.json();
-  }
-
-  /**
-   * Check if Medusa backend is reachable
-   */
-  async checkBackendStatus() {
-    try {
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 2000);
-      const res = await fetch(`${this.config.baseUrl}/store/products?limit=1`, {
-        headers: { 'x-publishable-api-key': this.config.publishableApiKey },
-        signal: controller.signal
-      });
-      clearTimeout(timeoutId);
-      this.isBackendAvailable = res.ok;
-    } catch (e) {
+  class MedusaStoreClient {
+    constructor(config = {}) {
+      this.config = { ...MEDUSA_CONFIG, ...config };
       this.isBackendAvailable = false;
+      this.regionId = null;
+      this.cart = null;
+      this.cartId = safeStorageGet(this.config.cartStorageKey);
+      this._productsCache = null;
+      this.ready = this.init();
     }
 
-    console.log(`[Medusa v2] Backend status (${this.config.baseUrl}):`, this.isBackendAvailable ? 'ONLINE' : 'OFFLINE (Fallback Active)');
-    return this.isBackendAvailable;
-  }
-
-  async resolveRegionId() {
-    if (this.config.regionId) {
-      return this.config.regionId;
+    async init() {
+      if (!this.config.publishableApiKey) {
+        console.info('[Medusa] No publishable key configured; using the bundled catalog.');
+        return this;
+      }
+      await this.checkBackendStatus();
+      return this;
     }
 
-    const data = await this.request('/store/regions?limit=100');
-    const region = (data.regions || []).find(
-      region => region.currency_code?.toLowerCase() === this.config.currencyCode
-    );
+    async request(endpoint, options = {}) {
+      const response = await fetch(`${this.config.baseUrl}${endpoint}`, {
+        ...options,
+        headers: {
+          'Content-Type': 'application/json',
+          'x-publishable-api-key': this.config.publishableApiKey,
+          ...(options.headers || {}),
+        },
+      });
 
-    if (!region) {
-      throw new Error(`No Medusa region found for ${this.config.currencyCode.toUpperCase()}`);
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        const err = new Error(errorData.message || `Store API error (${response.status})`);
+        err.status = response.status;
+        err.data = errorData;
+        throw err;
+      }
+      return response.json();
     }
 
-    this.config.regionId = region.id;
-    return region.id;
-  }
-
-  /* ==========================================================================
-     CATALOG & PRODUCTS (PHASE 4)
-     ========================================================================== */
-
-  /**
-   * List products from Medusa Store API with filters
-   */
-  async listProducts(params = {}) {
-    if (!this.isBackendAvailable) {
-      return this.fallbackListProducts(params);
-    }
-
-    try {
-      const regionId = await this.resolveRegionId();
-
-      if (this.sdk?.store?.product?.list) {
-        const res = await this.sdk.store.product.list({
-          fields: '*variants,*variants.calculated_price,*categories,*collection,*images',
-          region_id: regionId,
-          ...params
+    async checkBackendStatus() {
+      try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), this.config.healthTimeoutMs);
+        const res = await fetch(`${this.config.baseUrl}/store/regions?limit=50`, {
+          headers: { 'x-publishable-api-key': this.config.publishableApiKey },
+          signal: controller.signal,
         });
-        return this.normalizeMedusaProducts(res.products || []);
-      }
-
-      // REST fetch
-      const query = new URLSearchParams();
-      if (params.limit) query.set('limit', String(params.limit));
-      if (params.offset) query.set('offset', String(params.offset));
-      if (params.q) query.set('q', params.q);
-      if (params.collection_id) {
-        const cols = Array.isArray(params.collection_id) ? params.collection_id : [params.collection_id];
-        cols.forEach(c => query.append('collection_id[]', c));
-      }
-      query.set('region_id', regionId);
-      query.set('fields', '*variants,*variants.calculated_price,*categories,*collection,*images');
-
-      const data = await this.request(`/store/products?${query.toString()}`);
-      return this.normalizeMedusaProducts(data.products || []);
-    } catch (err) {
-      console.warn('[Medusa v2] Product fetch failed, using authentic fallback:', err);
-      return this.fallbackListProducts(params);
-    }
-  }
-
-  /**
-   * Retrieve single product
-   */
-  async getProduct(idOrHandle) {
-    if (!this.isBackendAvailable) {
-      return (window.PRODUCTS_DATA || []).find(p => p.id === idOrHandle || p.handle === idOrHandle) || null;
-    }
-
-    try {
-      const regionId = await this.resolveRegionId();
-      const query = new URLSearchParams({
-        region_id: regionId,
-        fields: '*variants,*variants.calculated_price,*categories,*collection,*images'
-      });
-      const data = await this.request(`/store/products/${encodeURIComponent(idOrHandle)}?${query.toString()}`);
-      const normalized = this.normalizeMedusaProducts([data.product]);
-      return normalized[0] || null;
-    } catch (err) {
-      return (window.PRODUCTS_DATA || []).find(p => p.id === idOrHandle) || null;
-    }
-  }
-
-  /**
-   * Normalize Medusa Product entity into Storefront representation
-   * Maintains exact shape required by existing UI components (Zero redesign)
-   */
-  normalizeMedusaProducts(medusaProducts) {
-    return medusaProducts.map(mp => {
-      const meta = mp.metadata || {};
-      const primaryVariant = mp.variants?.[0] || {};
-      const price = primaryVariant.calculated_price?.calculated_amount || primaryVariant.prices?.[0]?.amount || meta.price || 2700;
-      const originalPrice = meta.originalPrice || null;
-
-      const primaryImg = mp.thumbnail || mp.images?.[0]?.url || 'assets/catalog/adaa/adaa-01-primary.jpg';
-      const hoverImg = mp.images?.[1]?.url || primaryImg;
-      const gallery = (mp.images && mp.images.length > 0) ? mp.images.map(img => img.url) : [primaryImg];
-
-      return {
-        id: mp.handle || mp.id,
-        medusaId: mp.id,
-        variantId: primaryVariant.id,
-        name: mp.title,
-        category: mp.collection?.handle || meta.category || 'adaa',
-        collection: mp.collection?.handle || meta.collection || 'adaa',
-        collectionName: mp.collection?.title || meta.collectionName || 'Adaa - Curated stories, woven in six yards.',
-        price: price,
-        originalPrice: originalPrice,
-        rating: meta.rating || 4.9,
-        reviewsCount: meta.reviewsCount || 85,
-        isBestSeller: Boolean(meta.isBestSeller),
-        isNew: Boolean(meta.isNew),
-        tag: meta.tag || (mp.categories?.[0]?.name ? `${mp.categories[0].name} Weave` : 'Handloom Art'),
-        color: meta.color || 'Artisanal Heritage Drape',
-        fabric: meta.fabric || 'Pure Handloom Silk Blend',
-        weave: meta.weave || 'Traditional Loomcraft',
-        length: meta.length || '6.3 Meters (includes unstitched blouse piece)',
-        origin: meta.origin || 'Varanasi, Uttar Pradesh',
-        description: mp.description || meta.description || '',
-        image: primaryImg,
-        hoverImage: hoverImg,
-        gallery: gallery,
-        occasion: meta.occasion || (window.PRODUCTS_DATA?.find(p => p.id === mp.handle || p.id === mp.id)?.occasion) || 'Festive',
-        thumbnail: meta.thumbnail || (window.PRODUCTS_DATA?.find(p => p.id === mp.handle || p.id === mp.id)?.thumbnail) || primaryImg,
-        prod_code: meta.prod_code || (window.PRODUCTS_DATA?.find(p => p.id === mp.handle || p.id === mp.id)?.prod_code) || null,
-        details: meta.details || [
-          `Item Code: ${primaryVariant.sku || '6YD-001'}`,
-          'Pure authentic handloom weave with zari embellishment',
-          'Accompanied by running 80cm blouse fabric',
-          'Dry clean only. Store wrapped in soft muslin cloth'
-        ]
-      };
-    });
-  }
-
-  /**
-   * Fallback using window.PRODUCTS_DATA with identical filter semantics
-   */
-  fallbackListProducts(params = {}) {
-    let list = [...(window.PRODUCTS_DATA || [])];
-    if (params.collection_id) {
-      const colId = String(params.collection_id).toLowerCase();
-      list = list.filter(p => p.collection.toLowerCase() === colId);
-    }
-    if (params.category_id) {
-      const catId = String(params.category_id).toLowerCase();
-      list = list.filter(p => p.category.toLowerCase() === catId);
-    }
-    if (params.q) {
-      const q = params.q.toLowerCase().trim();
-      list = list.filter(p =>
-        p.name.toLowerCase().includes(q) ||
-        p.fabric.toLowerCase().includes(q) ||
-        p.color.toLowerCase().includes(q) ||
-        p.category.toLowerCase().includes(q)
-      );
-    }
-    return list;
-  }
-
-  /* ==========================================================================
-     CART MANAGEMENT (PHASE 5)
-     ========================================================================== */
-
-  /**
-   * Get existing cart or create a new Medusa cart
-   */
-  async getOrCreateCart() {
-    if (!this.isBackendAvailable) {
-      return this.getLocalCart();
-    }
-
-    try {
-      if (this.cartId) {
-        try {
-          const res = await this.request(`/store/carts/${this.cartId}?fields=*items,*items.variant,*shipping_methods`);
-          this.cart = res.cart;
-          return this.cart;
-        } catch (e) {
-          // If cart expired or not found, create a new one
-          this.cartId = null;
-          localStorage.removeItem(this.config.cartStorageKey);
-        }
-      }
-
-      // Create new cart in Medusa v2
-      const res = await this.request('/store/carts', {
-        method: 'POST',
-        body: JSON.stringify({
-          region_id: await this.resolveRegionId()
-        })
-      });
-
-      this.cart = res.cart;
-      this.cartId = res.cart.id;
-      localStorage.setItem(this.config.cartStorageKey, this.cartId);
-      return this.cart;
-    } catch (err) {
-      console.warn('[Medusa v2] Server cart creation failed, falling back to local cart session:', err);
-      return this.getLocalCart();
-    }
-  }
-
-  /**
-   * Add Line Item to Medusa Cart
-   */
-  async addLineItem(variantId, quantity = 1, productFallback = null) {
-    if (!this.isBackendAvailable || !variantId) {
-      return this.addToLocalCart(productFallback || { id: variantId }, quantity);
-    }
-
-    try {
-      await this.getOrCreateCart();
-      const res = await this.request(`/store/carts/${this.cartId}/line-items`, {
-        method: 'POST',
-        body: JSON.stringify({
-          variant_id: variantId,
-          quantity: quantity
-        })
-      });
-      this.cart = res.cart;
-      return this.cart;
-    } catch (err) {
-      console.warn('[Medusa v2] Line item add failed on server:', err);
-      return this.addToLocalCart(productFallback || { id: variantId }, quantity);
-    }
-  }
-
-  /**
-   * Update Line Item Quantity
-   */
-  async updateLineItem(lineItemId, quantity) {
-    if (!this.isBackendAvailable || !this.cartId) {
-      return this.updateLocalCartItem(lineItemId, quantity);
-    }
-
-    try {
-      if (quantity <= 0) {
-        return this.removeLineItem(lineItemId);
-      }
-
-      const res = await this.request(`/store/carts/${this.cartId}/line-items/${lineItemId}`, {
-        method: 'POST',
-        body: JSON.stringify({ quantity })
-      });
-      this.cart = res.cart;
-      return this.cart;
-    } catch (err) {
-      return this.updateLocalCartItem(lineItemId, quantity);
-    }
-  }
-
-  /**
-   * Remove Line Item from Medusa Cart
-   */
-  async removeLineItem(lineItemId) {
-    if (!this.isBackendAvailable || !this.cartId) {
-      return this.removeLocalCartItem(lineItemId);
-    }
-
-    try {
-      const res = await this.request(`/store/carts/${this.cartId}/line-items/${lineItemId}`, {
-        method: 'DELETE'
-      });
-      this.cart = res.parent;
-      return this.cart;
-    } catch (err) {
-      return this.removeLocalCartItem(lineItemId);
-    }
-  }
-
-  /**
-   * Apply Promotional Coupon Code
-   */
-  async applyPromoCode(code) {
-    if (!this.isBackendAvailable || !this.cartId) {
-      return this.applyLocalPromoCode(code);
-    }
-
-    try {
-      const res = await this.request(`/store/carts/${this.cartId}/promotions`, {
-        method: 'POST',
-        body: JSON.stringify({
-          promo_codes: [code]
-        })
-      });
-      this.cart = res.cart;
-      return { success: true, cart: this.cart };
-    } catch (err) {
-      return { success: false, message: err.message || 'Invalid or expired coupon code' };
-    }
-  }
-
-  /* ==========================================================================
-     LOCAL STORAGE CART FALLBACK (Always reliable when backend is booting)
-     ========================================================================== */
-
-  getLocalCart() {
-    const items = JSON.parse(localStorage.getItem('6yards_cart')) || [];
-    const subtotal = items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-    const shipping = subtotal >= 5000 || subtotal === 0 ? 0 : 150;
-    const discount = AppState.appliedDiscount ? Math.round(subtotal * (AppState.appliedDiscount / 100)) : 0;
-    const total = subtotal - discount + shipping;
-
-    return {
-      id: 'local_cart',
-      items: items.map(i => ({
-        id: i.id,
-        variant_id: i.variantId || i.id,
-        title: i.name,
-        thumbnail: i.image,
-        unit_price: i.price,
-        quantity: i.quantity,
-        total: i.price * i.quantity
-      })),
-      subtotal,
-      shipping_total: shipping,
-      discount_total: discount,
-      tax_total: 0,
-      total
-    };
-  }
-
-  addToLocalCart(product, quantity = 1) {
-    let items = JSON.parse(localStorage.getItem('6yards_cart')) || [];
-    const existing = items.find(item => item.id === product.id);
-    if (existing) {
-      existing.quantity += quantity;
-    } else {
-      items.push({
-        id: product.id,
-        variantId: product.variantId || product.id,
-        name: product.name,
-        price: product.price,
-        image: product.image,
-        quantity: quantity
-      });
-    }
-    localStorage.setItem('6yards_cart', JSON.stringify(items));
-    return this.getLocalCart();
-  }
-
-  updateLocalCartItem(id, quantity) {
-    let items = JSON.parse(localStorage.getItem('6yards_cart')) || [];
-    if (quantity <= 0) {
-      items = items.filter(item => item.id !== id);
-    } else {
-      const match = items.find(item => item.id === id);
-      if (match) match.quantity = quantity;
-    }
-    localStorage.setItem('6yards_cart', JSON.stringify(items));
-    return this.getLocalCart();
-  }
-
-  removeLocalCartItem(id) {
-    let items = JSON.parse(localStorage.getItem('6yards_cart')) || [];
-    items = items.filter(item => item.id !== id);
-    localStorage.setItem('6yards_cart', JSON.stringify(items));
-    return this.getLocalCart();
-  }
-
-  applyLocalPromoCode(code) {
-    const cleanCode = code.trim().toUpperCase();
-    if (cleanCode === 'FESTIVE10' || cleanCode === 'WELCOME6') {
-      AppState.appliedDiscount = 10;
-      AppState.appliedCoupon = cleanCode;
-      return { success: true, discount: 10, coupon: cleanCode };
-    }
-    return { success: false, message: 'Invalid promo code. Try "FESTIVE10" for 10% off.' };
-  }
-
-  /* ==========================================================================
-     CHECKOUT & RAZORPAY PAYMENT (PHASE 6 & 7)
-     ========================================================================== */
-
-  /**
-   * Launch Razorpay Standard Checkout Modal
-   */
-  async launchRazorpayCheckout(cart, customerDetails, onSuccess, onFailure) {
-    const totalAmount = cart.total;
-    const amountInPaise = Math.round(totalAmount * 100);
-
-    // If window.Razorpay is loaded
-    if (window.Razorpay) {
-      const options = {
-        key: this.config.razorpayKeyId,
-        amount: amountInPaise,
-        currency: 'INR',
-        name: '6 Yards Sarees',
-        description: 'Authentic Handloom Sarees Order',
-        image: 'assets/brand-logo-peacock-clean.png',
-        prefill: {
-          name: `${customerDetails.first_name || ''} ${customerDetails.last_name || ''}`.trim() || 'Valued Patron',
-          email: customerDetails.email || '',
-          contact: customerDetails.phone || ''
-        },
-        theme: {
-          color: '#6B1426' // Brand Maroon
-        },
-        handler: async (response) => {
-          console.log('[Razorpay] Payment Success:', response);
-          if (onSuccess) onSuccess(response);
-        },
-        modal: {
-          ondismiss: () => {
-            console.log('[Razorpay] Modal dismissed');
-            if (onFailure) onFailure(new Error('Payment window closed'));
+        clearTimeout(timeoutId);
+        if (res.ok) {
+          const data = await res.json();
+          const region = (data.regions || []).find(
+            (r) => r.currency_code?.toLowerCase() === this.config.currencyCode
+          );
+          this.regionId = region?.id || null;
+          this.isBackendAvailable = Boolean(this.regionId);
+          if (!this.regionId) {
+            console.warn('[Medusa] Backend reachable but no INR region exists; using the bundled catalog.');
           }
+        } else {
+          this.isBackendAvailable = false;
         }
-      };
+      } catch (e) {
+        this.isBackendAvailable = false;
+      }
+      console.info(`[Medusa] Backend ${this.isBackendAvailable ? 'online' : 'offline - using bundled catalog'} (${this.config.baseUrl})`);
+      return this.isBackendAvailable;
+    }
 
-      const rzp = new window.Razorpay(options);
-      rzp.open();
-    } else {
-      console.warn('Razorpay SDK not loaded in window, simulating checkout completion');
-      if (onSuccess) {
-        onSuccess({
-          razorpay_payment_id: 'pay_simulated_' + Date.now(),
-          razorpay_order_id: 'order_simulated_' + Date.now()
-        });
+    /* ---------------------------------------------------------------------
+       Catalog
+       --------------------------------------------------------------------- */
+
+    /** All published products, normalized to the storefront shape. */
+    async listProducts() {
+      await this.ready;
+      if (!this.isBackendAvailable) return staticCatalog();
+      if (this._productsCache) return this._productsCache;
+
+      try {
+        const products = [];
+        const limit = 100;
+        let offset = 0;
+        // Paginate so catalogs larger than one page are fully listed.
+        for (;;) {
+          const query = new URLSearchParams({
+            region_id: this.regionId,
+            fields: PRODUCT_FIELDS,
+            limit: String(limit),
+            offset: String(offset),
+          });
+          const data = await this.request(`/store/products?${query}`);
+          products.push(...(data.products || []));
+          offset += limit;
+          if (!data.count || offset >= data.count) break;
+        }
+        const normalized = this.normalizeMedusaProducts(products);
+        this._productsCache = normalized.length ? normalized : staticCatalog();
+        return this._productsCache;
+      } catch (err) {
+        console.warn('[Medusa] Product list failed; using the bundled catalog.', err);
+        return staticCatalog();
       }
     }
-  }
-}
 
-// Global instance attached to window
-window.MedusaClient = new MedusaStoreClient();
-window.MedusaClient.init().catch(err => console.error('[Medusa v2] Init error:', err));
+    /** One product by storefront id or Medusa handle. */
+    async getProduct(idOrHandle) {
+      const list = await this.listProducts();
+      return list.find((p) => p.id === idOrHandle || p.handle === idOrHandle || p.medusaId === idOrHandle) || null;
+    }
+
+    /**
+     * Medusa products merged over the bundled catalog entry with the same
+     * handle (or title), so storefront ids, occasions and copy stay stable even
+     * if a product was created in the admin without the custom metadata.
+     */
+    normalizeMedusaProducts(medusaProducts) {
+      const catalog = staticCatalog();
+      return medusaProducts.map((mp) => {
+        const meta = mp.metadata || {};
+        const base =
+          catalog.find((p) => p.id === meta.storefront_id) ||
+          catalog.find((p) => p.id === mp.handle) ||
+          catalog.find((p) => p.name?.toLowerCase() === mp.title?.toLowerCase()) ||
+          {};
+
+        const variant = (mp.variants || []).find((v) => v.calculated_price) || mp.variants?.[0] || {};
+        const calculated = variant.calculated_price?.calculated_amount;
+        const original = variant.calculated_price?.original_amount;
+        const price = typeof calculated === 'number' ? calculated : (base.price ?? meta.price ?? 0);
+        const compareAt = Number(meta.originalPrice) || (original > price ? original : null) || base.originalPrice || null;
+
+        const imageUrls = (mp.images || []).map((img) => img.url).filter(Boolean);
+        const image = mp.thumbnail || imageUrls[0] || base.image;
+        const gallery = imageUrls.length ? imageUrls : (base.gallery || (image ? [image] : []));
+        const collectionHandle = mp.collection?.handle || meta.collection || base.collection || '';
+        const inStock = variant.manage_inventory === false || variant.inventory_quantity == null || variant.inventory_quantity > 0;
+
+        return {
+          ...base,
+          id: base.id || meta.storefront_id || mp.handle || mp.id,
+          handle: mp.handle,
+          medusaId: mp.id,
+          variantId: variant.id,
+          inStock,
+          name: mp.title || base.name,
+          description: mp.description || base.description || '',
+          category: collectionHandle || base.category,
+          collection: collectionHandle,
+          collectionName: mp.collection?.title
+            ? `${mp.collection.title} - Curated stories, woven in six yards.`
+            : (meta.collectionName || base.collectionName || ''),
+          price,
+          originalPrice: compareAt && compareAt > price ? compareAt : null,
+          rating: meta.rating ?? base.rating,
+          reviewsCount: meta.reviewsCount ?? base.reviewsCount,
+          isBestSeller: meta.isBestSeller ?? base.isBestSeller ?? false,
+          isNew: meta.isNew ?? base.isNew ?? false,
+          tag: meta.tag || base.tag || (mp.categories?.[0]?.name || 'Handloom'),
+          color: meta.color || base.color || '',
+          fabric: meta.fabric || base.fabric || '',
+          weave: meta.weave || base.weave || '',
+          length: meta.length || base.length || '6.3 Meters (includes unstitched blouse piece)',
+          origin: meta.origin || base.origin || '',
+          occasion: meta.occasion || base.occasion || '',
+          details: Array.isArray(meta.details) ? meta.details : (base.details || []),
+          image,
+          hoverImage: imageUrls[1] || base.hoverImage || image,
+          gallery,
+          thumbnail: meta.thumbnail || base.thumbnail || image,
+        };
+      });
+    }
+
+    /* ---------------------------------------------------------------------
+       Cart
+       --------------------------------------------------------------------- */
+
+    async retrieveCart() {
+      await this.ready;
+      if (!this.isBackendAvailable || !this.cartId) return null;
+      try {
+        const { cart } = await this.request(`/store/carts/${this.cartId}`);
+        if (cart.completed_at) {
+          this.forgetCart();
+          return null;
+        }
+        this.cart = cart;
+        return cart;
+      } catch (err) {
+        if (err.status === 404) this.forgetCart();
+        throw err;
+      }
+    }
+
+    async getOrCreateCart() {
+      const existing = await this.retrieveCart().catch(() => null);
+      if (existing) return existing;
+
+      const { cart } = await this.request('/store/carts', {
+        method: 'POST',
+        body: JSON.stringify({ region_id: this.regionId }),
+      });
+      this.cart = cart;
+      this.cartId = cart.id;
+      safeStorageSet(this.config.cartStorageKey, cart.id);
+      return cart;
+    }
+
+    forgetCart() {
+      this.cart = null;
+      this.cartId = null;
+      safeStorageRemove(this.config.cartStorageKey);
+    }
+
+    async addLineItem(variantId, quantity = 1) {
+      const cart = await this.getOrCreateCart();
+      const res = await this.request(`/store/carts/${cart.id}/line-items`, {
+        method: 'POST',
+        body: JSON.stringify({ variant_id: variantId, quantity }),
+      });
+      this.cart = res.cart;
+      return this.cart;
+    }
+
+    async updateLineItem(lineItemId, quantity) {
+      if (quantity <= 0) return this.removeLineItem(lineItemId);
+      const res = await this.request(`/store/carts/${this.cartId}/line-items/${lineItemId}`, {
+        method: 'POST',
+        body: JSON.stringify({ quantity }),
+      });
+      this.cart = res.cart;
+      return this.cart;
+    }
+
+    async removeLineItem(lineItemId) {
+      const res = await this.request(`/store/carts/${this.cartId}/line-items/${lineItemId}`, {
+        method: 'DELETE',
+      });
+      this.cart = res.parent || (await this.retrieveCart());
+      return this.cart;
+    }
+
+    async applyPromoCode(code) {
+      const cart = await this.getOrCreateCart();
+      const res = await this.request(`/store/carts/${cart.id}/promotions`, {
+        method: 'POST',
+        body: JSON.stringify({ promo_codes: [code] }),
+      });
+      this.cart = res.cart;
+      const applied = (res.cart.promotions || []).some((p) => p.code?.toUpperCase() === code.toUpperCase());
+      return { applied, cart: res.cart };
+    }
+
+    async removePromoCode(code) {
+      const res = await this.request(`/store/carts/${this.cartId}/promotions`, {
+        method: 'DELETE',
+        body: JSON.stringify({ promo_codes: [code] }),
+      });
+      this.cart = res.cart;
+      return res.cart;
+    }
+
+    /* ---------------------------------------------------------------------
+       Checkout
+       --------------------------------------------------------------------- */
+
+    async updateCartDetails({ email, address }) {
+      const shippingAddress = {
+        first_name: address.first_name,
+        last_name: address.last_name,
+        address_1: address.address_1,
+        address_2: address.address_2 || '',
+        city: address.city,
+        province: address.province,
+        postal_code: address.postal_code,
+        country_code: this.config.countryCode,
+        phone: address.phone,
+      };
+      const { cart } = await this.request(`/store/carts/${this.cartId}`, {
+        method: 'POST',
+        body: JSON.stringify({
+          email,
+          shipping_address: shippingAddress,
+          billing_address: shippingAddress,
+        }),
+      });
+      this.cart = cart;
+      return cart;
+    }
+
+    async listShippingOptions() {
+      const { shipping_options } = await this.request(`/store/shipping-options?cart_id=${this.cartId}`);
+      return shipping_options || [];
+    }
+
+    async setShippingMethod(optionId) {
+      const { cart } = await this.request(`/store/carts/${this.cartId}/shipping-methods`, {
+        method: 'POST',
+        body: JSON.stringify({ option_id: optionId }),
+      });
+      this.cart = cart;
+      return cart;
+    }
+
+    async listPaymentProviders() {
+      const { payment_providers } = await this.request(`/store/payment-providers?region_id=${this.regionId}`);
+      return payment_providers || [];
+    }
+
+    async initPaymentSession(providerId) {
+      const cart = this.cart || (await this.retrieveCart());
+      let collectionId = cart.payment_collection?.id;
+      if (!collectionId) {
+        const { payment_collection } = await this.request('/store/payment-collections', {
+          method: 'POST',
+          body: JSON.stringify({ cart_id: cart.id }),
+        });
+        collectionId = payment_collection.id;
+      }
+      const { payment_collection } = await this.request(`/store/payment-collections/${collectionId}/payment-sessions`, {
+        method: 'POST',
+        body: JSON.stringify({ provider_id: providerId }),
+      });
+      return payment_collection;
+    }
+
+    /** Completes the cart. Resolves to the created order or throws. */
+    async completeCart() {
+      const res = await this.request(`/store/carts/${this.cartId}/complete`, { method: 'POST' });
+      if (res.type !== 'order' || !res.order) {
+        const err = new Error(res.error?.message || 'The order could not be completed. Please try again.');
+        err.data = res;
+        throw err;
+      }
+      this.forgetCart();
+      return res.order;
+    }
+  }
+
+  function safeStorageGet(key) {
+    try { return localStorage.getItem(key); } catch (e) { return null; }
+  }
+  function safeStorageSet(key, value) {
+    try { localStorage.setItem(key, value); } catch (e) { /* storage unavailable */ }
+  }
+  function safeStorageRemove(key) {
+    try { localStorage.removeItem(key); } catch (e) { /* storage unavailable */ }
+  }
+
+  window.MedusaClient = new MedusaStoreClient();
+})();

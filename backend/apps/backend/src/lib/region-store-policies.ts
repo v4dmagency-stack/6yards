@@ -14,11 +14,11 @@ export type RegionStorePolicies = {
 };
 
 export const DEFAULT_REGION_STORE_POLICIES: RegionStorePolicies = {
-  return_window_days: 30,
+  return_window_days: 7,
   free_returns: false,
-  shipping_rate: 10,
-  handling_days_min: 0,
-  handling_days_max: 1,
+  shipping_rate: 150,
+  handling_days_min: 1,
+  handling_days_max: 2,
   transit_days_min: 2,
-  transit_days_max: 3,
+  transit_days_max: 5,
 };

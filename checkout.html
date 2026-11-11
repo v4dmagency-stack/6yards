@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Checkout | 6 Yards Sarees</title>
+  <meta name="robots" content="noindex" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Jost:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body class="checkout-body">
+
+  <!-- Main Navigation Header -->
+  <header class="header-main">
+    <div class="navbar">
+      <!-- Mobile Menu Hamburger -->
+      <button class="mobile-nav-toggle" id="mobile-nav-toggle-btn" type="button" aria-label="Toggle Navigation Menu" aria-controls="nav-menu-list" aria-expanded="false">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+
+      <!-- Brand Logo -->
+      <a href="index.html" class="brand-logo-link">
+        <img src="assets/brand-logo-sm.png" alt="6 Yards Sarees" class="brand-logo-img" />
+      </a>
+
+      <!-- Navigation Menu: Sarees (Mega Card), Journal, Contact -->
+      <nav>
+        <ul class="nav-menu" id="nav-menu-list">
+          <li class="mobile-nav-header-item">
+            <div class="mobile-nav-header">
+              <a href="index.html" class="brand-logo-link">
+                <img src="assets/brand-logo-sm.png" alt="6 Yards Sarees" class="brand-logo-img" />
+              </a>
+              <button class="mobile-nav-close-btn" id="mobile-nav-close-btn" aria-label="Close Navigation">
+                <i class="fa-solid fa-xmark"></i>
+              </button>
+            </div>
+          </li>
+
+          <li class="nav-item">
+            <a href="index.html" class="nav-link">Home</a>
+          </li>
+          <li class="nav-item nav-item-dropdown" id="nav-sarees-item">
+            <a href="collections.html" class="nav-link active" id="nav-sarees-link">
+              Sarees <i class="fa-solid fa-chevron-down dropdown-caret"></i>
+            </a>
+            <!-- Luxury Mega Card Dropdown -->
+            <div class="sarees-mega-card">
+              <!-- Left Side: Curated Collections with small circular thumbnails -->
+              <div class="sarees-collections-col">
+                <div class="sarees-col-header">
+                  <span class="sarees-col-eyebrow">EXPLORE BY COLLECTION</span>
+                  <h4 class="sarees-col-title font-serif">Curated Collections</h4>
+                </div>
+                <div class="sarees-circle-list">
+                  <a href="collections.html?collection=adaa" class="sarees-circle-item">
+                    <div class="sarees-circle-thumb">
+                      <img src="assets/collection-adaa.jpg" alt="Adaa Collection" />
+                    </div>
+                    <div class="sarees-circle-info">
+                      <span class="sarees-circle-name">Adaa</span>
+                      <span class="sarees-circle-desc">Pichwai Art & Botanical Florals</span>
+                    </div>
+                    <i class="fa-solid fa-chevron-right sarees-circle-arrow"></i>
+                  </a>
+
+                  <a href="collections.html?collection=roop" class="sarees-circle-item">
+                    <div class="sarees-circle-thumb">
+                      <img src="assets/collection-roop.jpg" alt="Roop Collection" />
+                    </div>
+                    <div class="sarees-circle-info">
+                      <span class="sarees-circle-name">Roop</span>
+                      <span class="sarees-circle-desc">Regal Jewel Tones & Korvai Borders</span>
+                    </div>
+                    <i class="fa-solid fa-chevron-right sarees-circle-arrow"></i>
+                  </a>
+
+                  <a href="collections.html?collection=vastra" class="sarees-circle-item">
+                    <div class="sarees-circle-thumb">
+                      <img src="assets/collection-vastra.jpg" alt="Vastra Collection" />
+                    </div>
+                    <div class="sarees-circle-info">
+                      <span class="sarees-circle-name">Vastra</span>
+                      <span class="sarees-circle-desc">Artisan Comfort & Slub Handlooms</span>
+                    </div>
+                    <i class="fa-solid fa-chevron-right sarees-circle-arrow"></i>
+                  </a>
+
+                  <a href="collections.html?collection=leher" class="sarees-circle-item">
+                    <div class="sarees-circle-thumb">
+                      <img src="assets/collection-leher.jpg" alt="Leher Collection" />
+                    </div>
+                    <div class="sarees-circle-info">
+                      <span class="sarees-circle-name">Leher</span>
+                      <span class="sarees-circle-desc">Whispering Silks & Flowing Drapes</span>
+                    </div>
+                    <i class="fa-solid fa-chevron-right sarees-circle-arrow"></i>
+                  </a>
+
+                  <a href="collections.html?collection=riwayat" class="sarees-circle-item">
+                    <div class="sarees-circle-thumb">
+                      <img src="assets/collection-riwayat.jpg" alt="Riwayat Collection" />
+                    </div>
+                    <div class="sarees-circle-info">
+                      <span class="sarees-circle-name">Riwayat</span>
+                      <span class="sarees-circle-desc">Royal Kanjivaram & Kadwa Heirlooms</span>
+                    </div>
+                    <i class="fa-solid fa-chevron-right sarees-circle-arrow"></i>
+                  </a>
+                </div>
+
+                <div class="sarees-all-link-wrap">
+                  <a href="collections.html" class="sarees-view-all-cta">
+                    View All 38 Handloom Sarees <i class="fa-solid fa-arrow-right"></i>
+                  </a>
+                </div>
+              </div>
+
+              <!-- Right Side: Shop by Occasion -->
+              <div class="sarees-occasions-col">
+                <div class="sarees-col-header">
+                  <span class="sarees-col-eyebrow">CURATED OCCASIONS</span>
+                  <h4 class="sarees-col-title font-serif">Shop by Occasion</h4>
+                </div>
+                <div class="sarees-occasions-grid">
+                  <a href="collections.html?occasion=Wedding" class="sarees-occasion-card">
+                    <div class="sarees-occasion-img-box">
+                      <img src="assets/occasion-wedding-cover.jpg" alt="Wedding Silks" loading="lazy" />
+                      <div class="sarees-occasion-badge">Wedding</div>
+                    </div>
+                    <div class="sarees-occasion-footer">
+                      <span class="sarees-occasion-name">Wedding</span>
+                      <span class="sarees-occasion-desc">Bridal & Muhurtham</span>
+                    </div>
+                  </a>
+
+                  <a href="collections.html?occasion=Casual" class="sarees-occasion-card">
+                    <div class="sarees-occasion-img-box">
+                      <img src="assets/occasion-casual-cover.jpg" alt="Casual Handlooms" loading="lazy" />
+                      <div class="sarees-occasion-badge">Casual</div>
+                    </div>
+                    <div class="sarees-occasion-footer">
+                      <span class="sarees-occasion-name">Casual</span>
+                      <span class="sarees-occasion-desc">Everyday Grace</span>
+                    </div>
+                  </a>
+
+                  <a href="collections.html?occasion=Comfort" class="sarees-occasion-card">
+                    <div class="sarees-occasion-img-box">
+                      <img src="assets/occasion-comfort-cover.jpg" alt="Comfort Handloom Weaves" loading="lazy" />
+                      <div class="sarees-occasion-badge">Comfort</div>
+                    </div>
+                    <div class="sarees-occasion-footer">
+                      <span class="sarees-occasion-name">Comfort</span>
+                      <span class="sarees-occasion-desc">Breathable Silks</span>
+                    </div>
+                  </a>
+
+                  <a href="collections.html?occasion=Festive" class="sarees-occasion-card">
+                    <div class="sarees-occasion-img-box">
+                      <img src="assets/occasion-festive-cover.jpg" alt="Festive Pichwai Sarees" loading="lazy" />
+                      <div class="sarees-occasion-badge">Festive</div>
+                    </div>
+                    <div class="sarees-occasion-footer">
+                      <span class="sarees-occasion-name">Festive</span>
+                      <span class="sarees-occasion-desc">Pichwai & Celebrations</span>
+                    </div>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </li>
+          <li class="nav-item">
+            <a href="about.html" class="nav-link">About Us</a>
+          </li>
+          <li class="nav-item">
+            <a href="journal.html" class="nav-link">Journal</a>
+          </li>
+          <li class="nav-item">
+            <a href="contact.html" class="nav-link">Contact</a>
+          </li>
+        </ul>
+      </nav>
+
+      <!-- Right Header Actions -->
+      <div class="header-actions">
+        <button class="action-icon-btn" id="wishlist-toggle-btn" type="button" title="Wishlist" aria-label="Open wishlist">
+          <i class="fa-regular fa-heart"></i>
+          <span class="badge-count" id="wishlist-badge-count">0</span>
+        </button>
+
+        <button class="action-icon-btn" id="cart-toggle-btn" type="button" title="Shopping Bag" aria-label="Open shopping bag">
+          <i class="fa-solid fa-bag-shopping"></i>
+          <span class="badge-count" id="cart-badge-count">0</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="checkout-page">
+    <div class="checkout-container">
+      <nav class="catalog-breadcrumbs" aria-label="Breadcrumb">
+        <a href="index.html">Home</a>
+        <i class="fa-solid fa-angle-right"></i>
+        <a href="collections.html">Sarees</a>
+        <i class="fa-solid fa-angle-right"></i>
+        <span>Checkout</span>
+      </nav>
+
+      <!-- Empty bag -->
+      <section class="checkout-empty" id="checkout-empty" hidden>
+        <i class="fa-solid fa-bag-shopping"></i>
+        <h1 class="font-serif">Your bag is empty</h1>
+        <p>Add a saree to your bag to check out.</p>
+        <a href="collections.html" class="checkout-btn">Shop Sarees</a>
+      </section>
+
+      <!-- Confirmation -->
+      <section class="checkout-confirmation" id="checkout-confirmation" hidden aria-live="polite">
+        <i class="fa-solid fa-circle-check"></i>
+        <span class="checkout-eyebrow">Order reference <strong id="checkout-confirm-ref"></strong></span>
+        <h1 class="font-serif" id="checkout-confirm-title">Thank you!</h1>
+        <p id="checkout-confirm-text"></p>
+        <dl class="checkout-confirm-meta">
+          <div><dt>Order total</dt><dd id="checkout-confirm-total"></dd></div>
+          <div><dt>Email</dt><dd id="checkout-confirm-email"></dd></div>
+        </dl>
+        <div class="checkout-confirm-actions">
+          <a href="collections.html" class="checkout-btn">Continue Shopping</a>
+          <button type="button" class="checkout-secondary-btn" id="checkout-clear-bag" hidden>Clear my bag</button>
+        </div>
+        <p class="checkout-help">Questions? WhatsApp <a href="https://wa.me/919845714481" target="_blank" rel="noopener">+91 98457 14481</a> or email <a href="mailto:sixyardsilksarees@gmail.com">sixyardsilksarees@gmail.com</a>.</p>
+      </section>
+
+      <div class="checkout-layout" id="checkout-main">
+        <div class="checkout-forms">
+          <h1 class="checkout-title font-serif">Checkout</h1>
+          <ol class="checkout-progress">
+            <li class="checkout-progress-step active" data-step="details"><span>1</span> Contact &amp; Address</li>
+            <li class="checkout-progress-step" data-step="payment"><span>2</span> Delivery &amp; Payment</li>
+          </ol>
+
+          <p class="checkout-offline-note" id="checkout-offline-note" hidden>
+            <i class="fa-brands fa-whatsapp"></i>
+            Online ordering is temporarily unavailable. You can still place your order: we will send the details to our team on WhatsApp to confirm.
+          </p>
+
+          <!-- Step 1 -->
+          <section id="checkout-step-details">
+            <form class="checkout-form" id="checkout-details-form" novalidate>
+              <fieldset>
+                <legend>Contact</legend>
+                <div class="checkout-row">
+                  <div class="checkout-field">
+                    <label for="co-email">Email *</label>
+                    <input type="email" id="co-email" autocomplete="email" required />
+                  </div>
+                  <div class="checkout-field">
+                    <label for="co-phone">Mobile number *</label>
+                    <input type="tel" id="co-phone" autocomplete="tel" inputmode="tel" placeholder="10-digit mobile number" required />
+                  </div>
+                </div>
+              </fieldset>
+
+              <fieldset>
+                <legend>Delivery address</legend>
+                <div class="checkout-row">
+                  <div class="checkout-field">
+                    <label for="co-first-name">First name *</label>
+                    <input type="text" id="co-first-name" autocomplete="given-name" required />
+                  </div>
+                  <div class="checkout-field">
+                    <label for="co-last-name">Last name *</label>
+                    <input type="text" id="co-last-name" autocomplete="family-name" required />
+                  </div>
+                </div>
+                <div class="checkout-field">
+                  <label for="co-address1">House / flat, street *</label>
+                  <input type="text" id="co-address1" autocomplete="address-line1" required />
+                </div>
+                <div class="checkout-field">
+                  <label for="co-address2">Area, landmark (optional)</label>
+                  <input type="text" id="co-address2" autocomplete="address-line2" />
+                </div>
+                <div class="checkout-row checkout-row-3">
+                  <div class="checkout-field">
+                    <label for="co-city">City *</label>
+                    <input type="text" id="co-city" autocomplete="address-level2" required />
+                  </div>
+                  <div class="checkout-field">
+                    <label for="co-state">State *</label>
+                    <select id="co-state" autocomplete="address-level1" required>
+                      <option value="">Select state</option>
+                    </select>
+                  </div>
+                  <div class="checkout-field">
+                    <label for="co-pincode">PIN code *</label>
+                    <input type="text" id="co-pincode" autocomplete="postal-code" inputmode="numeric" maxlength="6" required />
+                  </div>
+                </div>
+                <div class="checkout-field">
+                  <label for="co-notes">Order notes (optional)</label>
+                  <textarea id="co-notes" rows="2" placeholder="Delivery instructions, gift message, etc."></textarea>
+                </div>
+              </fieldset>
+
+              <button type="submit" class="checkout-btn" id="checkout-continue">Continue to Delivery &amp; Payment <i class="fa-solid fa-arrow-right"></i></button>
+            </form>
+          </section>
+
+          <!-- Step 2 -->
+          <section id="checkout-step-payment" hidden>
+            <div class="checkout-review">
+              <div>
+                <h2 class="checkout-section-title">Deliver to</h2>
+                <p id="checkout-review-address" class="checkout-review-address"></p>
+              </div>
+              <button type="button" class="checkout-link-btn" id="checkout-edit-details">Edit</button>
+            </div>
+
+            <h2 class="checkout-section-title">Delivery</h2>
+            <div class="checkout-options" id="checkout-shipping-options"></div>
+
+            <h2 class="checkout-section-title">Payment</h2>
+            <div class="checkout-options" id="checkout-payment-options"></div>
+
+            <button type="button" class="checkout-btn" id="checkout-place-order"><span id="checkout-place-order-label">Place Order</span> <i class="fa-solid fa-lock"></i></button>
+            <p class="checkout-terms">By placing your order you agree to our <a href="#" data-policy="terms">terms</a>, <a href="#" data-policy="returns">returns policy</a> and <a href="#" data-policy="privacy">privacy policy</a>.</p>
+          </section>
+        </div>
+
+        <!-- Order summary -->
+        <aside class="checkout-summary" aria-label="Order summary">
+          <h2 class="checkout-section-title">Order Summary</h2>
+          <ul class="checkout-summary-items" id="checkout-summary-items"></ul>
+          <div class="cart-summary-line"><span>Subtotal</span><span id="checkout-subtotal"></span></div>
+          <div class="cart-summary-line cart-summary-discount" id="checkout-discount-row" hidden><span id="checkout-discount-label">Discount</span><span id="checkout-discount"></span></div>
+          <div class="cart-summary-line"><span>Shipping</span><span id="checkout-shipping"></span></div>
+          <div class="cart-summary-line cart-summary-total"><span>Total</span><span id="checkout-total"></span></div>
+          <p class="checkout-summary-note">Prices include all applicable taxes. Free shipping on orders of ₹5,000 and above.</p>
+          <button type="button" class="checkout-link-btn" onclick="openCartDrawer()">Edit bag or apply a promo code</button>
+        </aside>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer" id="footer-section">
+    <div class="container">
+      <div class="footer-top-grid">
+        <!-- Col 1: Brand Info -->
+        <div class="footer-brand-col">
+          <a href="index.html" class="brand-logo-link" style="margin-bottom: 16px; display: inline-block;">
+            <img src="assets/brand-logo-sm.png" alt="6 Yards Sarees" class="footer-brand-logo-img" />
+          </a>
+          <p class="footer-tagline">Six yards. Infinite stories.</p>
+          <div class="social-links">
+            <a href="https://instagram.com" target="_blank" rel="noreferrer" class="social-icon-btn" title="Instagram">
+              <i class="fa-brands fa-instagram"></i>
+            </a>
+            <a href="https://pinterest.com" target="_blank" rel="noreferrer" class="social-icon-btn" title="Pinterest">
+              <i class="fa-brands fa-pinterest-p"></i>
+            </a>
+            <a href="https://facebook.com" target="_blank" rel="noreferrer" class="social-icon-btn" title="Facebook">
+              <i class="fa-brands fa-facebook-f"></i>
+            </a>
+            <a href="https://youtube.com" target="_blank" rel="noreferrer" class="social-icon-btn" title="YouTube">
+              <i class="fa-brands fa-youtube"></i>
+            </a>
+          </div>
+        </div>
+
+        <!-- Col 2: Quick Links -->
+        <div class="footer-nav-col">
+          <h4>Quick Links</h4>
+          <ul class="footer-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="collections.html">Collections</a></li>
+            <li><a href="about.html">About Us</a></li>
+            <li><a href="journal.html">Journal</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
+        </div>
+
+        <!-- Col 3: Customer Care -->
+        <div class="footer-nav-col">
+          <h4>Customer Care</h4>
+          <ul class="footer-links">
+            <li><a href="#" data-policy="shipping">Shipping Policy</a></li>
+            <li><a href="#" data-policy="returns">Returns & Exchanges</a></li>
+            <li><a href="#" data-policy="size">Size Guide</a></li>
+            <li><a href="#" data-policy="faq">FAQs</a></li>
+            <li><a href="tel:+919845714481">Call +91 98457 14481</a></li>
+            <li><a href="mailto:sixyardsilksarees@gmail.com">sixyardsilksarees@gmail.com</a></li>
+            <li><a href="https://wa.me/919845714481" target="_blank" rel="noopener noreferrer">WhatsApp Concierge</a></li>
+            <li><a href="#" data-policy="terms">Terms & Conditions</a></li>
+            <li><a href="#" data-policy="privacy">Privacy Policy</a></li>
+          </ul>
+        </div>
+
+        <!-- Col 4: Newsletter -->
+        <div class="footer-nav-col newsletter-box">
+          <h4>Join Our Newsletter</h4>
+          <p>Be the first to know about new arrivals, exclusive offers and more.</p>
+          <form class="newsletter-form" id="newsletter-form">
+            <input type="email" id="newsletter-email-input" class="newsletter-input" placeholder="Your email address" required />
+            <button type="submit" class="newsletter-submit-btn" title="Subscribe" aria-label="Subscribe">
+              <i class="fa-solid fa-arrow-right"></i>
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Footer Bottom -->
+      <div class="footer-bottom-row">
+        <span>&copy; 2026 6 Yards Sarees. All rights reserved.</span>
+        <button class="scroll-top-btn" id="scroll-top-btn" title="Back to top" aria-label="Back to Top">
+          <i class="fa-solid fa-arrow-up"></i>
+        </button>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/products.js" defer></script>
+  <script src="js/medusa-config.js" defer></script>
+  <script src="js/medusa-client.js" defer></script>
+  <script src="js/store.js" defer></script>
+  <script src="js/checkout.js" defer></script>
+</body>
+</html>

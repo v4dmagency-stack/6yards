@@ -3,12 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <base href="/" />
+  <meta name="robots" content="noindex" />
   <title>404 — Page Not Found | 6 Yards Sarees</title>
   <meta name="description" content="The page you are looking for does not exist. Explore our authentic handloom pure silk saree collections at 6 Yards." />
-  <link rel="icon" type="image/png" href="assets/brand-logo-peacock-clean.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;800&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Jost:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
   <link rel="stylesheet" href="css/styles.css" />
   <style>
@@ -119,7 +121,7 @@
       </button>
 
       <a href="index.html" class="brand-logo-link" title="6 Yards Sarees Homepage">
-        <img src="assets/brand-logo-peacock-clean.png" alt="6 Yards Sarees" class="brand-logo-img" />
+        <img src="assets/brand-logo-sm.png" alt="6 Yards Sarees" class="brand-logo-img" />
       </a>
 
       <nav>
@@ -127,7 +129,7 @@
           <li class="mobile-nav-header-item">
             <div class="mobile-nav-header">
               <a href="index.html" class="brand-logo-link">
-                <img src="assets/brand-logo-peacock-clean.png" alt="6 Yards Sarees" class="brand-logo-img" />
+                <img src="assets/brand-logo-sm.png" alt="6 Yards Sarees" class="brand-logo-img" />
               </a>
               <button class="mobile-nav-close-btn" id="mobile-nav-close-btn" aria-label="Close Navigation">
                 <i class="fa-solid fa-xmark"></i>
@@ -156,9 +158,14 @@
       </nav>
 
       <div class="header-actions">
-        <a href="collections.html" class="action-icon-btn" title="View Sarees">
+        <button class="action-icon-btn" id="wishlist-toggle-btn" type="button" title="Wishlist" aria-label="Open wishlist">
+          <i class="fa-regular fa-heart"></i>
+          <span class="badge-count" id="wishlist-badge-count" hidden>0</span>
+        </button>
+        <button class="action-icon-btn" id="cart-toggle-btn" type="button" title="Shopping Bag" aria-label="Open shopping bag">
           <i class="fa-solid fa-bag-shopping"></i>
-        </a>
+          <span class="badge-count" id="cart-badge-count" hidden>0</span>
+        </button>
       </div>
     </div>
   </header>
@@ -189,7 +196,7 @@
       <div class="footer-top-grid">
         <div class="footer-brand-col">
           <a href="index.html" class="brand-logo-link" style="margin-bottom: 16px; display: inline-block;">
-            <img src="assets/brand-logo-peacock-clean.png" alt="6 Yards Sarees" class="footer-brand-logo-img" />
+            <img src="assets/brand-logo-sm.png" alt="6 Yards Sarees" class="footer-brand-logo-img" />
           </a>
           <p class="footer-tagline">Six yards. Infinite stories.</p>
           <div class="footer-contact-info" style="margin-top: 14px; font-size: 0.88rem; color: rgba(255, 255, 255, 0.8);">
@@ -234,14 +241,16 @@
 
       <div class="footer-bottom-row">
         <span>&copy; 2026 6 Yards Sarees. All rights reserved.</span>
-        <button class="scroll-top-btn" id="scroll-top-btn" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" title="Back to top" aria-label="Back to Top">
+        <button class="scroll-top-btn" id="scroll-top-btn" title="Back to top" aria-label="Back to Top">
           <i class="fa-solid fa-arrow-up"></i>
         </button>
       </div>
     </div>
   </footer>
 
-  <script src="js/products.js"></script>
-  <script src="js/app.js"></script>
+  <script src="js/products.js" defer></script>
+  <script src="js/medusa-config.js" defer></script>
+  <script src="js/medusa-client.js" defer></script>
+  <script src="js/store.js" defer></script>
 </body>
 </html>

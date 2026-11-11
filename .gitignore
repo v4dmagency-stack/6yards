@@ -121,3 +121,19 @@ Thumbs.db
 
 # Large local saree archive
 /Saree-20261102T131527-1-001.zip
+# Raw photoshoot originals and working images (not used by the site, ~650 MB).
+# Kept on disk; store them in Drive or similar instead of Git.
+/assets/raw_sarees/
+/assets/raw_sarees_new/
+/assets/photoshoot/
+/assets/thumbs/
+/assets/thumbs_new/
+/Categorized_Sarees/
+/Saree/
+
+# Local env files and tooling
+.env
+.env.local
+backend/apps/backend/.env
+/dist/
+.claude/

@@ -1,3 +1,5 @@
+> **Superseded:** see [HANDOVER.md](./HANDOVER.md) for the current setup and go-live steps. This file is kept for reference.
+
 # MEDUSA v2 STORE API REFERENCE & NOTES: 6 YARDS SAREES
 
 This document records the exact Store API endpoints, query structures, headers, payloads, and response shapes used by the 6 Yards Sarees storefront.

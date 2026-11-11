@@ -15,7 +15,9 @@
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Jost:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
 
   <!-- Preload Critical Above-The-Fold Assets -->
-  <link rel="preload" href="assets/brand-logo-peacock-clean.png" as="image" type="image/png" />
+  <link rel="preload" href="assets/brand-logo-sm.png" as="image" type="image/png" />
+  <link rel="preload" href="assets/hero-poster.jpg" as="image" media="(min-width: 769px)" />
+  <link rel="preload" href="assets/hero-mobile-poster.jpg" as="image" media="(max-width: 768px)" />
 
   <!-- FontAwesome Icons for UI -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
@@ -41,7 +43,7 @@
 
       <!-- Brand Logo -->
       <a href="index.html" class="brand-logo-link">
-        <img src="assets/brand-logo-peacock-clean.png" alt="6 Yards Sarees" class="brand-logo-img" alt="6 Yards Sarees" />
+        <img src="assets/brand-logo-sm.png" alt="6 Yards Sarees" class="brand-logo-img" />
       </a>
 
       <!-- Navigation Menu: Sarees (with Curated Collections & Occasions Mega Card), Journal, Contact -->
@@ -50,7 +52,7 @@
           <li class="mobile-nav-header-item">
             <div class="mobile-nav-header">
               <a href="index.html" class="brand-logo-link">
-                <img src="assets/brand-logo-peacock-clean.png" alt="6 Yards Sarees" class="brand-logo-img" />
+                <img src="assets/brand-logo-sm.png" alt="6 Yards Sarees" class="brand-logo-img" />
               </a>
               <button class="mobile-nav-close-btn" id="mobile-nav-close-btn" aria-label="Close Navigation">
                 <i class="fa-solid fa-xmark"></i>
@@ -219,9 +221,10 @@
   </header>
 
   <!-- Hero Section: Pure High-Quality Video (Click to Explore Matching Riwayat Sarees) -->
-  <a href="collections.html?collection=riwayat" class="hero-video-anchor" id="hero-banner" title="Click to Explore Royal Sarees Featured in Video" aria-label="Explore Royal Silk Sarees Featured in Video">
+  <section class="hero-video-anchor" id="hero-banner" aria-label="Featured: Riwayat royal silk sarees">
+    <h1 class="visually-hidden">6 Yards — Authentic Handloom Sarees</h1>
     <div class="hero-video-container">
-      <video class="hero-background-video" autoplay loop muted playsinline preload="none" id="hero-bg-video"
+      <video class="hero-background-video" autoplay loop muted playsinline preload="metadata" id="hero-bg-video" poster="assets/hero-poster.jpg" aria-hidden="true"
         data-desktop-src="gemini_generated_video_9da2f281_gwr_video_mvp.mp4"
         data-mobile-src="assets/hero-mobile.mp4"
         data-desktop-poster="assets/hero-poster.jpg"
@@ -229,7 +232,11 @@
       </video>
       <div class="hero-video-overlay"></div>
     </div>
-  </a>
+    <a href="collections.html?collection=riwayat" class="hero-overlay-link" aria-label="Explore the Riwayat collection featured in the video"></a>
+    <button type="button" class="hero-sound-toggle" id="hero-sound-toggle" aria-pressed="false" aria-label="Play video with sound">
+      <i class="fa-solid fa-volume-xmark"></i>
+    </button>
+  </section>
 
   <!-- Collections Category Section ("Sutra") -->
   <section class="sutra-section section-padding" id="collections-section">
@@ -393,8 +400,8 @@
             </h3>
             <span class="saree-frame-weave-tag">Korvai Triple-Shuttle Border • Kanchipuram</span>
             <div class="saree-frame-price-row">
-              <span class="saree-frame-price">₹ 18,500</span>
-              <span class="saree-frame-original-price">₹ 22,000</span>
+              <span class="saree-frame-price">₹ 16,500</span>
+              <span class="saree-frame-original-price">₹ 19,800</span>
             </div>
             <a href="product.html?id=saree-10" class="saree-frame-cta">View Saree Details</a>
           </div>
@@ -445,8 +452,8 @@
             </h3>
             <span class="saree-frame-weave-tag">Traditional Kadwa Jaal Brocade • Kanchipuram</span>
             <div class="saree-frame-price-row">
-              <span class="saree-frame-price">₹ 19,200</span>
-              <span class="saree-frame-original-price">₹ 23,000</span>
+              <span class="saree-frame-price">₹ 17,200</span>
+              <span class="saree-frame-original-price">₹ 20,500</span>
             </div>
             <a href="product.html?id=saree-riwayat-teal-purple" class="saree-frame-cta">View Saree Details</a>
           </div>
@@ -478,7 +485,7 @@
             <span class="feature-banner-eyebrow">Crafted in Tradition</span>
             <h3 class="feature-banner-title font-serif">The Weave<br />Behind the Beauty</h3>
             <p class="feature-banner-desc">Artisanal techniques, Generations of expertise. Every saree tells a story.</p>
-            <a href="javascript:void(0)" class="feature-banner-cta" onclick="openStoryModal()">
+            <a href="about.html" class="feature-banner-cta" onclick="event.preventDefault(); openStoryModal();">
               Explore Our Craft <i class="fa-solid fa-arrow-right"></i>
             </a>
           </div>
@@ -494,7 +501,7 @@
         <!-- Col 1: Brand Info -->
         <div class="footer-brand-col">
           <a href="index.html" class="brand-logo-link" style="margin-bottom: 16px; display: inline-block;">
-            <img src="assets/brand-logo-peacock-clean.png" alt="6 Yards Sarees" class="footer-brand-logo-img" />
+            <img src="assets/brand-logo-sm.png" alt="6 Yards Sarees" class="footer-brand-logo-img" />
           </a>
           <p class="footer-tagline">Six yards. Infinite stories.</p>
           <div class="social-links">
@@ -529,15 +536,15 @@
         <div class="footer-nav-col">
           <h4>Customer Care</h4>
           <ul class="footer-links">
-            <li><a href="javascript:void(0)" onclick="openCarePolicyModal('shipping')">Shipping Policy</a></li>
-            <li><a href="javascript:void(0)" onclick="openCarePolicyModal('returns')">Returns & Exchanges</a></li>
-            <li><a href="javascript:void(0)" onclick="showToast('Standard Saree Length: 5.5m + 0.8m Blouse Piece.')">Size Guide</a></li>
-            <li><a href="javascript:void(0)" onclick="showToast('Need help? Call or WhatsApp us at +91 98457 14481.')">FAQs</a></li>
+            <li><a href="#" data-policy="shipping">Shipping Policy</a></li>
+            <li><a href="#" data-policy="returns">Returns & Exchanges</a></li>
+            <li><a href="#" data-policy="size">Size Guide</a></li>
+            <li><a href="#" data-policy="faq">FAQs</a></li>
             <li><a href="tel:+919845714481">Call +91 98457 14481</a></li>
             <li><a href="mailto:sixyardsilksarees@gmail.com">sixyardsilksarees@gmail.com</a></li>
             <li><a href="https://wa.me/919845714481" target="_blank" rel="noopener noreferrer">WhatsApp Concierge</a></li>
-            <li><a href="javascript:void(0)" onclick="openCarePolicyModal('terms')">Terms & Conditions</a></li>
-            <li><a href="javascript:void(0)" onclick="openCarePolicyModal('privacy')">Privacy Policy</a></li>
+            <li><a href="#" data-policy="terms">Terms & Conditions</a></li>
+            <li><a href="#" data-policy="privacy">Privacy Policy</a></li>
           </ul>
         </div>
 
@@ -564,101 +571,19 @@
     </div>
   </footer>
 
-  <!-- ==========================================================================
-       SLIDE-OVER CART DRAWER
-       ========================================================================== -->
-  <div class="drawer-backdrop" id="cart-backdrop"></div>
-  <aside class="slide-drawer" id="cart-drawer">
-    <div class="drawer-header">
-      <h3 class="font-serif">Shopping Bag</h3>
-      <button class="drawer-close-btn" id="cart-close-btn" type="button" aria-label="Close cart">
-        <i class="fa-solid fa-xmark"></i>
-      </button>
-    </div>
 
-    <div class="drawer-body">
-      <!-- Empty Cart View -->
-      <div id="cart-empty-state" style="display: none; text-align: center; padding: 40px 0;">
-        <i class="fa-solid fa-bag-shopping" style="font-size: 3rem; color: var(--color-blush); margin-bottom: 12px;"></i>
-        <h4 class="font-serif" style="font-size: 1.4rem; color: var(--color-navy);">Your Bag is Empty</h4>
-        <p style="font-size: 0.875rem; color: var(--color-text-muted); margin-top: 6px;">Discover six yards of grace waiting for you.</p>
-        <button onclick="closeCartDrawer();" style="margin-top: 18px; padding: 10px 24px; background: var(--color-navy); color: var(--color-cream); border-radius: 4px; font-weight: 500;">Start Shopping</button>
-      </div>
 
-      <!-- Cart Item Rows -->
-      <div id="cart-items-container"></div>
-    </div>
-
-    <!-- Cart Footer Summary -->
-    <div class="drawer-footer" id="cart-footer-content">
-      <!-- Promo Code Input -->
-      <div style="display: flex; gap: 8px; margin-bottom: 14px;">
-        <input type="text" id="promo-input-field" placeholder="Promo code (e.g. WELCOME10)" style="flex: 1; padding: 8px 12px; border: 1px solid var(--color-border); border-radius: 4px; font-size: 0.85rem;" />
-        <button id="apply-promo-btn" style="padding: 8px 14px; background-color: var(--color-navy); color: var(--color-cream); border-radius: 4px; font-size: 0.8rem; font-weight: 600;">Apply</button>
-      </div>
-
-      <div class="cart-summary-subtotal">
-        <span>Subtotal:</span>
-        <span id="cart-subtotal-price">₹ 0</span>
-      </div>
-
-      <div id="cart-discount-row" style="display: none; justify-content: space-between; font-size: 0.9rem; color: #2E7D32; margin-bottom: 10px;">
-        <span>Promo Discount:</span>
-        <span id="cart-discount-value">- ₹ 0</span>
-      </div>
-
-      <div style="display: flex; justify-content: space-between; font-size: 1.15rem; font-weight: 700; color: var(--color-navy); margin-bottom: 16px;">
-        <span>Total:</span>
-        <span id="cart-final-total">₹ 0</span>
-      </div>
-
-      <button class="checkout-btn" id="checkout-btn">
-        Proceed to Checkout <i class="fa-solid fa-arrow-right" style="margin-left: 6px;"></i>
-      </button>
-    </div>
-  </aside>
-
-  <!-- ==========================================================================
-       WISHLIST DRAWER
-       ========================================================================== -->
-  <div class="drawer-backdrop" id="wishlist-backdrop"></div>
-  <aside class="slide-drawer" id="wishlist-drawer">
-    <div class="drawer-header">
-      <h3 class="font-serif">Saved Sarees</h3>
-      <button class="drawer-close-btn" id="wishlist-close-btn" type="button" aria-label="Close wishlist">
-        <i class="fa-solid fa-xmark"></i>
-      </button>
-    </div>
-
-    <div class="drawer-body">
-      <div id="wishlist-empty-state" style="display: none; text-align: center; padding: 40px 0;">
-        <i class="fa-regular fa-heart" style="font-size: 3rem; color: var(--color-blush); margin-bottom: 12px;"></i>
-        <h4 class="font-serif" style="font-size: 1.4rem; color: var(--color-navy);">No Saved Items</h4>
-        <p style="font-size: 0.875rem; color: var(--color-text-muted); margin-top: 6px;">Tap the heart icon on any saree to save it for later.</p>
-      </div>
-      <div id="wishlist-items-container"></div>
-    </div>
-  </aside>
-
-  <!-- ==========================================================================
-       PRODUCT QUICK VIEW MODAL
-       ========================================================================== -->
-  <div class="modal-backdrop" id="quickview-backdrop">
-    <div class="quick-view-modal" id="quickview-modal">
-      <!-- Dynamic modal content loaded via JavaScript -->
-    </div>
-  </div>
 
   <!-- ==========================================================================
        OUR STORY & CRAFT HERITAGE MODAL
        ========================================================================== -->
-  <div class="modal-backdrop" id="story-backdrop">
+  <div class="modal-backdrop" id="story-backdrop" role="dialog" aria-modal="true" aria-labelledby="story-modal-title">
     <div class="story-modal-content">
-      <button class="modal-close-icon" onclick="closeStoryModal()" aria-label="Close Story">
+      <button type="button" class="modal-close-icon" onclick="closeStoryModal()" aria-label="Close">
         <i class="fa-solid fa-xmark"></i>
       </button>
       <span class="hero-eyebrow" style="color: var(--color-gold);">The 6 Yards Philosophy</span>
-      <h2 class="font-serif">Six Yards of Grace, Generations of Heritage</h2>
+      <h2 class="font-serif" id="story-modal-title">Six Yards of Grace, Generations of Heritage</h2>
       <p style="margin-bottom: 16px; color: var(--color-text-muted); line-height: 1.7;">
         In an unstitched piece of fabric spanning six yards lies the entire soul of Indian craft. For millennia, the saree has celebrated the poetry of human hands—hand-spun silk, gold and silver zari drawn across wooden pit looms, and natural indigo baths that mirror twilight skies.
       </p>
@@ -672,51 +597,17 @@
       <p style="color: var(--color-text-muted); line-height: 1.7; font-size: 0.95rem;">
         Every 6 Yards saree is sourced directly from certified artisan clusters across Varanasi, Kanchipuram, Chanderi, Bhagalpur, and Yeola. When you drape 6 Yards, you preserve living loomcraft.
       </p>
-      <button onclick="closeStoryModal()" class="checkout-btn" style="margin-top: 28px; width: auto; padding: 12px 30px;">
+      <a href="collections.html" class="checkout-btn" style="margin-top: 28px; width: auto; padding: 12px 30px; display: inline-flex;">
         Explore Collections
-      </button>
+      </a>
     </div>
   </div>
 
-  <!-- ==========================================================================
-       ORDER CONFIRMATION MODAL
-       ========================================================================== -->
-  <div class="modal-backdrop" id="order-success-backdrop">
-    <div class="story-modal-content" style="text-align: center; max-width: 500px;">
-      <button class="modal-close-icon" onclick="closeOrderSuccessModal()" aria-label="Close">
-        <i class="fa-solid fa-xmark"></i>
-      </button>
-      <div style="font-size: 3rem; color: #2E7D32; margin-bottom: 12px;">
-        <i class="fa-solid fa-circle-check"></i>
-      </div>
-      <span class="hero-eyebrow" style="color: var(--color-gold);">Order Confirmed</span>
-      <h2 class="font-serif" style="margin-bottom: 8px;">Dhanyavaad!</h2>
-      <p style="color: var(--color-text-muted); line-height: 1.6; margin-bottom: 16px;">
-        Your order <strong id="confirmed-order-id">#6YD-1001</strong> has been successfully placed. A confirmation with tracking details will be dispatched to your email.
-      </p>
-      <div style="background: var(--color-cream-soft); padding: 16px; border-radius: 8px; margin-bottom: 20px; text-align: left; font-size: 0.9rem;">
-        <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
-          <span style="color: var(--color-text-muted);">Payment Status:</span>
-          <span style="font-weight: 600; color: #2E7D32;">PAID (Razorpay / Verified)</span>
-        </div>
-        <div style="display: flex; justify-content: space-between;">
-          <span style="color: var(--color-text-muted);">Packaging:</span>
-          <span style="font-weight: 600;">Handloom Muslin Protection</span>
-        </div>
-      </div>
-      <button onclick="closeOrderSuccessModal()" class="checkout-btn" style="width: 100%;">
-        Continue Exploring Sarees
-      </button>
-    </div>
-  </div>
 
-  <!-- JavaScript Modules with defer for non-blocking page render -->
-  <script src="https://checkout.razorpay.com/v1/checkout.js" defer></script>
   <script src="js/products.js" defer></script>
   <script src="js/medusa-config.js" defer></script>
   <script src="js/medusa-client.js" defer></script>
+  <script src="js/store.js" defer></script>
   <script src="js/app.js" defer></script>
-  <!-- Mobile Nav Backdrop -->
-  <div class="mobile-nav-backdrop" id="mobile-nav-backdrop"></div>
 </body>
 </html>

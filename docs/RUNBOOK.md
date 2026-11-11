@@ -1,3 +1,5 @@
+> **Superseded:** see [HANDOVER.md](./HANDOVER.md) for the current setup and go-live steps. This file is kept for reference.
+
 # 6 YARDS SAREES — OPERATIONAL RUNBOOK
 
 This operational runbook provides quick commands and diagnostic procedures for store managers, administrators, and developers maintaining the **6 Yards Sarees** platform.

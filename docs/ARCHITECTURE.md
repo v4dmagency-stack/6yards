@@ -1,3 +1,5 @@
+> **Superseded:** see [HANDOVER.md](./HANDOVER.md) for the current setup and go-live steps. This file is kept for reference.
+
 # ARCHITECTURE & AUDIT PLAN: Medusa v2 Integration for 6 Yards Sarees
 
 ## 1. Project Inputs & Safest Assumptions

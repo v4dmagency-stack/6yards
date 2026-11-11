@@ -32,7 +32,7 @@
 
       <!-- Brand Logo -->
       <a href="index.html" class="brand-logo-link">
-        <img src="assets/brand-logo-peacock-clean.png" alt="6 Yards Sarees" class="brand-logo-img" alt="6 Yards Sarees" />
+        <img src="assets/brand-logo-sm.png" alt="6 Yards Sarees" class="brand-logo-img" />
       </a>
 
       <!-- Navigation Menu: Sarees (Mega Card), Journal, Contact -->
@@ -41,7 +41,7 @@
           <li class="mobile-nav-header-item">
             <div class="mobile-nav-header">
               <a href="index.html" class="brand-logo-link">
-                <img src="assets/brand-logo-peacock-clean.png" alt="6 Yards Sarees" class="brand-logo-img" />
+                <img src="assets/brand-logo-sm.png" alt="6 Yards Sarees" class="brand-logo-img" />
               </a>
               <button class="mobile-nav-close-btn" id="mobile-nav-close-btn" aria-label="Close Navigation">
                 <i class="fa-solid fa-xmark"></i>
@@ -220,7 +220,7 @@
       </div>
 
       <div class="catalog-meta-controls">
-        <span class="catalog-product-count" id="catalog-products-counter">35 products</span>
+        <span class="catalog-product-count" id="catalog-products-counter" aria-live="polite"></span>
 
         <div class="catalog-sort-group">
           <label for="catalog-sort-select">Sort by:</label>
@@ -245,7 +245,7 @@
             </div>
           </div>
           <span class="col-circle-name">All Sarees</span>
-          <span class="col-circle-count">38 Sarees</span>
+          <span class="col-circle-count"></span>
         </button>
 
         <button type="button" class="collection-circle-filter" data-col="adaa" onclick="selectCollectionFilter('adaa')">
@@ -253,7 +253,7 @@
             <img src="assets/collection-adaa.jpg" alt="Adaa Collection" />
           </div>
           <span class="col-circle-name">Adaa</span>
-          <span class="col-circle-count">6 Sarees</span>
+          <span class="col-circle-count"></span>
         </button>
 
         <button type="button" class="collection-circle-filter" data-col="roop" onclick="selectCollectionFilter('roop')">
@@ -261,7 +261,7 @@
             <img src="assets/collection-roop.jpg" alt="Roop Collection" />
           </div>
           <span class="col-circle-name">Roop</span>
-          <span class="col-circle-count">7 Sarees</span>
+          <span class="col-circle-count"></span>
         </button>
 
         <button type="button" class="collection-circle-filter" data-col="vastra" onclick="selectCollectionFilter('vastra')">
@@ -269,7 +269,7 @@
             <img src="assets/collection-vastra.jpg" alt="Vastra Collection" />
           </div>
           <span class="col-circle-name">Vastra</span>
-          <span class="col-circle-count">8 Sarees</span>
+          <span class="col-circle-count"></span>
         </button>
 
         <button type="button" class="collection-circle-filter" data-col="leher" onclick="selectCollectionFilter('leher')">
@@ -277,7 +277,7 @@
             <img src="assets/collection-leher.jpg" alt="Leher Collection" />
           </div>
           <span class="col-circle-name">Leher</span>
-          <span class="col-circle-count">6 Sarees</span>
+          <span class="col-circle-count"></span>
         </button>
 
         <button type="button" class="collection-circle-filter" data-col="riwayat" onclick="selectCollectionFilter('riwayat')">
@@ -285,13 +285,13 @@
             <img src="assets/collection-riwayat.jpg" alt="Riwayat Collection" />
           </div>
           <span class="col-circle-name">Riwayat</span>
-          <span class="col-circle-count">11 Sarees</span>
+          <span class="col-circle-count"></span>
         </button>
       </div>
     </div>
 
     <!-- Mobile Filter Trigger Button -->
-    <button class="mobile-filter-trigger-btn" onclick="toggleMobileFilters()">
+    <button type="button" class="mobile-filter-trigger-btn" onclick="toggleMobileFilters(true)" aria-controls="filters-sidebar" aria-expanded="false">
       <i class="fa-solid fa-filter"></i> Filters & Sort
     </button>
 
@@ -299,15 +299,16 @@
     <div class="catalog-layout">
 
       <!-- Left Column: Filters Sidebar (Image 2 Style) -->
-      <aside class="filters-sidebar" id="filters-sidebar">
+      <aside class="filters-sidebar" id="filters-sidebar" aria-label="Filters">
         <div class="filters-header">
           <h2 class="filters-heading">FILTERS</h2>
-          <button class="filters-clear-btn" onclick="clearAllFilters()">Clear all</button>
+          <button type="button" class="filters-clear-btn" onclick="clearAllFilters()">Clear all</button>
+          <button type="button" class="filters-mobile-close" onclick="toggleMobileFilters(false)" aria-label="Close filters"><i class="fa-solid fa-xmark"></i></button>
         </div>
 
         <!-- Filter 0: Collection (Sutra) -->
         <div class="filter-accordion-item open">
-          <button class="filter-accordion-toggle" onclick="toggleFilterAccordion(this)">
+          <button type="button" class="filter-accordion-toggle" onclick="toggleFilterAccordion(this)">
             <span>Collection (Sutra)</span>
             <i class="fa-solid fa-chevron-down"></i>
           </button>
@@ -318,35 +319,35 @@
                   <input type="checkbox" name="filter-collection" value="adaa" onchange="handleCollectionCheckbox(this)" />
                   <span>Adaa</span>
                 </div>
-                <span class="filter-item-count">(6)</span>
+                <span class="filter-item-count"></span>
               </label>
               <label class="filter-checkbox-label">
                 <div class="filter-checkbox-left">
                   <input type="checkbox" name="filter-collection" value="roop" onchange="handleCollectionCheckbox(this)" />
                   <span>Roop</span>
                 </div>
-                <span class="filter-item-count">(7)</span>
+                <span class="filter-item-count"></span>
               </label>
               <label class="filter-checkbox-label">
                 <div class="filter-checkbox-left">
                   <input type="checkbox" name="filter-collection" value="vastra" onchange="handleCollectionCheckbox(this)" />
                   <span>Vastra</span>
                 </div>
-                <span class="filter-item-count">(8)</span>
+                <span class="filter-item-count"></span>
               </label>
               <label class="filter-checkbox-label">
                 <div class="filter-checkbox-left">
                   <input type="checkbox" name="filter-collection" value="leher" onchange="handleCollectionCheckbox(this)" />
                   <span>Leher</span>
                 </div>
-                <span class="filter-item-count">(6)</span>
+                <span class="filter-item-count"></span>
               </label>
               <label class="filter-checkbox-label">
                 <div class="filter-checkbox-left">
                   <input type="checkbox" name="filter-collection" value="riwayat" onchange="handleCollectionCheckbox(this)" />
                   <span>Riwayat</span>
                 </div>
-                <span class="filter-item-count">(11)</span>
+                <span class="filter-item-count"></span>
               </label>
             </div>
           </div>
@@ -354,7 +355,7 @@
 
         <!-- Filter 1: Price Slider & Number Inputs -->
         <div class="filter-accordion-item open">
-          <button class="filter-accordion-toggle" onclick="toggleFilterAccordion(this)">
+          <button type="button" class="filter-accordion-toggle" onclick="toggleFilterAccordion(this)">
             <span>Price</span>
             <i class="fa-solid fa-chevron-down"></i>
           </button>
@@ -362,20 +363,20 @@
             <div class="price-inputs-row">
               <div class="price-input-box">
                 <span>From ₹</span>
-                <input type="number" id="filter-price-min" value="1000" min="1000" max="30000" step="500" oninput="applyFilters()" />
+                <input type="number" id="filter-price-min" value="0" min="0" max="30000" step="500" oninput="applyFilters()" aria-label="Minimum price" />
               </div>
               <div class="price-input-box">
                 <span>To ₹</span>
-                <input type="number" id="filter-price-max" value="26155" min="1000" max="30000" step="500" oninput="applyFilters()" />
+                <input type="number" id="filter-price-max" value="30000" min="0" max="30000" step="500" oninput="applyFilters()" aria-label="Maximum price" />
               </div>
             </div>
-            <input type="range" class="price-range-slider" id="filter-price-slider" min="1000" max="30000" step="500" value="26155" oninput="handlePriceSlider(this.value)" />
+            <input type="range" class="price-range-slider" id="filter-price-slider" min="0" max="30000" step="500" value="30000" oninput="handlePriceSlider(this.value)" aria-label="Maximum price" />
           </div>
         </div>
 
         <!-- Filter 2: Color -->
         <div class="filter-accordion-item open">
-          <button class="filter-accordion-toggle" onclick="toggleFilterAccordion(this)">
+          <button type="button" class="filter-accordion-toggle" onclick="toggleFilterAccordion(this)">
             <span>Color</span>
             <i class="fa-solid fa-chevron-down"></i>
           </button>
@@ -386,42 +387,42 @@
                   <input type="checkbox" name="filter-color" value="Maroon" onchange="applyFilters()" />
                   <span>Maroon & Wine</span>
                 </div>
-                <span class="filter-item-count">(8)</span>
+                <span class="filter-item-count"></span>
               </label>
               <label class="filter-checkbox-label">
                 <div class="filter-checkbox-left">
                   <input type="checkbox" name="filter-color" value="Gold" onchange="applyFilters()" />
                   <span>Chandan Gold</span>
                 </div>
-                <span class="filter-item-count">(6)</span>
+                <span class="filter-item-count"></span>
               </label>
               <label class="filter-checkbox-label">
                 <div class="filter-checkbox-left">
                   <input type="checkbox" name="filter-color" value="Rose" onchange="applyFilters()" />
                   <span>Mauve Rose & Pink</span>
                 </div>
-                <span class="filter-item-count">(7)</span>
+                <span class="filter-item-count"></span>
               </label>
               <label class="filter-checkbox-label">
                 <div class="filter-checkbox-left">
                   <input type="checkbox" name="filter-color" value="Teal" onchange="applyFilters()" />
                   <span>Peacock Teal & Blue</span>
                 </div>
-                <span class="filter-item-count">(6)</span>
+                <span class="filter-item-count"></span>
               </label>
               <label class="filter-checkbox-label">
                 <div class="filter-checkbox-left">
                   <input type="checkbox" name="filter-color" value="Green" onchange="applyFilters()" />
                   <span>Emerald Green</span>
                 </div>
-                <span class="filter-item-count">(5)</span>
+                <span class="filter-item-count"></span>
               </label>
               <label class="filter-checkbox-label">
                 <div class="filter-checkbox-left">
                   <input type="checkbox" name="filter-color" value="Purple" onchange="applyFilters()" />
                   <span>Royal Purple & Violet</span>
                 </div>
-                <span class="filter-item-count">(3)</span>
+                <span class="filter-item-count"></span>
               </label>
             </div>
           </div>
@@ -429,7 +430,7 @@
 
         <!-- Filter 3: Fabric -->
         <div class="filter-accordion-item open">
-          <button class="filter-accordion-toggle" onclick="toggleFilterAccordion(this)">
+          <button type="button" class="filter-accordion-toggle" onclick="toggleFilterAccordion(this)">
             <span>Fabric</span>
             <i class="fa-solid fa-chevron-down"></i>
           </button>
@@ -440,54 +441,35 @@
                   <input type="checkbox" name="filter-fabric" value="Banarasi" onchange="applyFilters()" />
                   <span>Banarasi Silk</span>
                 </div>
-                <span class="filter-item-count">(8)</span>
+                <span class="filter-item-count"></span>
               </label>
               <label class="filter-checkbox-label">
                 <div class="filter-checkbox-left">
                   <input type="checkbox" name="filter-fabric" value="Kanjivaram" onchange="applyFilters()" />
                   <span>Kanjivaram Silk</span>
                 </div>
-                <span class="filter-item-count">(7)</span>
+                <span class="filter-item-count"></span>
               </label>
               <label class="filter-checkbox-label">
                 <div class="filter-checkbox-left">
                   <input type="checkbox" name="filter-fabric" value="Tussar" onchange="applyFilters()" />
                   <span>Pure Tussar Silk</span>
                 </div>
-                <span class="filter-item-count">(6)</span>
+                <span class="filter-item-count"></span>
               </label>
               <label class="filter-checkbox-label">
                 <div class="filter-checkbox-left">
                   <input type="checkbox" name="filter-fabric" value="Silk Cotton" onchange="applyFilters()" />
                   <span>Silk Cotton Blend</span>
                 </div>
-                <span class="filter-item-count">(8)</span>
+                <span class="filter-item-count"></span>
               </label>
               <label class="filter-checkbox-label">
                 <div class="filter-checkbox-left">
                   <input type="checkbox" name="filter-fabric" value="Katan" onchange="applyFilters()" />
                   <span>Katan Silk</span>
                 </div>
-                <span class="filter-item-count">(6)</span>
-              </label>
-            </div>
-          </div>
-        </div>
-
-        <!-- Filter 4: With Blouse -->
-        <div class="filter-accordion-item open">
-          <button class="filter-accordion-toggle" onclick="toggleFilterAccordion(this)">
-            <span>With Blouse</span>
-            <i class="fa-solid fa-chevron-down"></i>
-          </button>
-          <div class="filter-accordion-body">
-            <div class="filter-checkbox-group">
-              <label class="filter-checkbox-label">
-                <div class="filter-checkbox-left">
-                  <input type="checkbox" name="filter-blouse" value="yes" checked onchange="applyFilters()" />
-                  <span>Yes (Includes Blouse Piece)</span>
-                </div>
-                <span class="filter-item-count">(35)</span>
+                <span class="filter-item-count"></span>
               </label>
             </div>
           </div>
@@ -495,7 +477,7 @@
 
         <!-- Filter 5: Pattern -->
         <div class="filter-accordion-item">
-          <button class="filter-accordion-toggle" onclick="toggleFilterAccordion(this)">
+          <button type="button" class="filter-accordion-toggle" onclick="toggleFilterAccordion(this)">
             <span>Pattern</span>
             <i class="fa-solid fa-chevron-down"></i>
           </button>
@@ -506,35 +488,35 @@
                   <input type="checkbox" name="filter-pattern" value="Pichwai" onchange="applyFilters()" />
                   <span>Pichwai Temple Art</span>
                 </div>
-                <span class="filter-item-count">(4)</span>
+                <span class="filter-item-count"></span>
               </label>
               <label class="filter-checkbox-label">
                 <div class="filter-checkbox-left">
                   <input type="checkbox" name="filter-pattern" value="Floral" onchange="applyFilters()" />
                   <span>Floral Jaal & Vines</span>
                 </div>
-                <span class="filter-item-count">(9)</span>
+                <span class="filter-item-count"></span>
               </label>
               <label class="filter-checkbox-label">
                 <div class="filter-checkbox-left">
                   <input type="checkbox" name="filter-pattern" value="Paisley" onchange="applyFilters()" />
                   <span>Traditional Paisley (Kalka)</span>
                 </div>
-                <span class="filter-item-count">(7)</span>
+                <span class="filter-item-count"></span>
               </label>
               <label class="filter-checkbox-label">
                 <div class="filter-checkbox-left">
                   <input type="checkbox" name="filter-pattern" value="Temple" onchange="applyFilters()" />
                   <span>Temple Korvai Border</span>
                 </div>
-                <span class="filter-item-count">(8)</span>
+                <span class="filter-item-count"></span>
               </label>
               <label class="filter-checkbox-label">
                 <div class="filter-checkbox-left">
                   <input type="checkbox" name="filter-pattern" value="Geometric" onchange="applyFilters()" />
                   <span>Geometric Slubs</span>
                 </div>
-                <span class="filter-item-count">(7)</span>
+                <span class="filter-item-count"></span>
               </label>
             </div>
           </div>
@@ -542,7 +524,7 @@
 
         <!-- Filter 6: Technique -->
         <div class="filter-accordion-item">
-          <button class="filter-accordion-toggle" onclick="toggleFilterAccordion(this)">
+          <button type="button" class="filter-accordion-toggle" onclick="toggleFilterAccordion(this)">
             <span>Technique</span>
             <i class="fa-solid fa-chevron-down"></i>
           </button>
@@ -553,28 +535,28 @@
                   <input type="checkbox" name="filter-technique" value="Kadwa" onchange="applyFilters()" />
                   <span>Kadwa Zari Weave</span>
                 </div>
-                <span class="filter-item-count">(10)</span>
+                <span class="filter-item-count"></span>
               </label>
               <label class="filter-checkbox-label">
                 <div class="filter-checkbox-left">
                   <input type="checkbox" name="filter-technique" value="Brocade" onchange="applyFilters()" />
                   <span>Zari Brocade</span>
                 </div>
-                <span class="filter-item-count">(12)</span>
+                <span class="filter-item-count"></span>
               </label>
               <label class="filter-checkbox-label">
                 <div class="filter-checkbox-left">
                   <input type="checkbox" name="filter-technique" value="Jacquard" onchange="applyFilters()" />
                   <span>Handloom Jacquard</span>
                 </div>
-                <span class="filter-item-count">(8)</span>
+                <span class="filter-item-count"></span>
               </label>
               <label class="filter-checkbox-label">
                 <div class="filter-checkbox-left">
                   <input type="checkbox" name="filter-technique" value="Tapestry" onchange="applyFilters()" />
                   <span>Kamdhenu Lotus Tapestry</span>
                 </div>
-                <span class="filter-item-count">(5)</span>
+                <span class="filter-item-count"></span>
               </label>
             </div>
           </div>
@@ -582,7 +564,7 @@
 
         <!-- Filter 7: Occasion (Wedding, Casual, Comfort, Festive) -->
         <div class="filter-accordion-item open">
-          <button class="filter-accordion-toggle" onclick="toggleFilterAccordion(this)">
+          <button type="button" class="filter-accordion-toggle" onclick="toggleFilterAccordion(this)">
             <span>Occasion</span>
             <i class="fa-solid fa-chevron-down"></i>
           </button>
@@ -593,33 +575,36 @@
                   <input type="checkbox" name="filter-occasion" value="Wedding" onchange="applyFilters()" />
                   <span>Wedding</span>
                 </div>
-                <span class="filter-item-count">(11)</span>
+                <span class="filter-item-count"></span>
               </label>
               <label class="filter-checkbox-label">
                 <div class="filter-checkbox-left">
                   <input type="checkbox" name="filter-occasion" value="Casual" onchange="applyFilters()" />
                   <span>Casual</span>
                 </div>
-                <span class="filter-item-count">(8)</span>
+                <span class="filter-item-count"></span>
               </label>
               <label class="filter-checkbox-label">
                 <div class="filter-checkbox-left">
                   <input type="checkbox" name="filter-occasion" value="Comfort" onchange="applyFilters()" />
                   <span>Comfort</span>
                 </div>
-                <span class="filter-item-count">(6)</span>
+                <span class="filter-item-count"></span>
               </label>
               <label class="filter-checkbox-label">
                 <div class="filter-checkbox-left">
                   <input type="checkbox" name="filter-occasion" value="Festive" onchange="applyFilters()" />
                   <span>Festive</span>
                 </div>
-                <span class="filter-item-count">(13)</span>
+                <span class="filter-item-count"></span>
               </label>
             </div>
           </div>
         </div>
 
+        <div class="filters-mobile-bar">
+          <button type="button" class="checkout-btn" onclick="toggleMobileFilters(false)">Show results</button>
+        </div>
       </aside>
 
       <!-- Right Column: 3-Column Saree Grid (Image 2) -->
@@ -633,120 +618,15 @@
           <i class="fa-solid fa-gem" style="font-size: 2.5rem; color: var(--color-gold); margin-bottom: 16px;"></i>
           <h3 class="font-serif" style="font-size: 1.8rem; color: var(--color-navy); margin-bottom: 8px;">No matching sarees found</h3>
           <p style="color: var(--color-text-muted); margin-bottom: 20px;">Try adjusting your price range or filter choices to view our artisanal collection.</p>
-          <button onclick="clearAllFilters()" style="padding: 10px 24px; background: var(--color-navy); color: #FFF; border-radius: 4px; font-weight: 600;">Reset Filters</button>
+          <button type="button" onclick="clearAllFilters()" style="padding: 10px 24px; background: var(--color-navy); color: #FFF; border-radius: 4px; font-weight: 600;">Reset Filters</button>
         </div>
       </section>
 
     </div>
   </main>
 
-  <!-- ==========================================================================
-       CART SLIDE-OUT DRAWER
-       ========================================================================== -->
-  <div class="drawer-backdrop" id="cart-backdrop"></div>
-  <aside class="slide-drawer" id="cart-drawer">
-    <div class="drawer-header">
-      <h3 class="font-serif">Shopping Bag</h3>
-      <button class="drawer-close-btn" id="cart-close-btn" type="button" aria-label="Close cart">
-        <i class="fa-solid fa-xmark"></i>
-      </button>
-    </div>
 
-    <div class="drawer-body">
-      <!-- Empty Cart View -->
-      <div id="cart-empty-state" style="display: none; text-align: center; padding: 40px 0;">
-        <i class="fa-solid fa-bag-shopping" style="font-size: 3rem; color: var(--color-blush); margin-bottom: 12px;"></i>
-        <h4 class="font-serif" style="font-size: 1.4rem; color: var(--color-navy);">Your Bag is Empty</h4>
-        <p style="font-size: 0.875rem; color: var(--color-text-muted); margin-top: 6px;">Discover six yards of grace waiting for you.</p>
-        <button onclick="closeCartDrawer();" style="margin-top: 18px; padding: 10px 24px; background: var(--color-navy); color: var(--color-cream); border-radius: 4px; font-weight: 500;">Start Shopping</button>
-      </div>
 
-      <!-- Cart Item Rows -->
-      <div id="cart-items-container"></div>
-    </div>
-
-    <!-- Cart Footer Summary -->
-    <div class="drawer-footer" id="cart-footer-content">
-      <!-- Promo Code Input -->
-      <div style="display: flex; gap: 8px; margin-bottom: 14px;">
-        <input type="text" id="promo-input-field" placeholder="Promo code (e.g. WELCOME10)" style="flex: 1; padding: 8px 12px; border: 1px solid var(--color-border); border-radius: 4px; font-size: 0.85rem;" />
-        <button id="apply-promo-btn" style="padding: 8px 14px; background-color: var(--color-navy); color: var(--color-cream); border-radius: 4px; font-size: 0.8rem; font-weight: 600;">Apply</button>
-      </div>
-
-      <div class="cart-summary-subtotal">
-        <span>Subtotal:</span>
-        <span id="cart-subtotal-price">₹ 0</span>
-      </div>
-
-      <div id="cart-discount-row" style="display: none; justify-content: space-between; font-size: 0.9rem; color: #2E7D32; margin-bottom: 10px;">
-        <span>Promo Discount:</span>
-        <span id="cart-discount-value">- ₹ 0</span>
-      </div>
-
-      <div style="display: flex; justify-content: space-between; font-size: 1.15rem; font-weight: 700; color: var(--color-navy); margin-bottom: 16px;">
-        <span>Total:</span>
-        <span id="cart-final-total">₹ 0</span>
-      </div>
-
-      <button class="checkout-btn" id="checkout-btn">
-        Proceed to Checkout <i class="fa-solid fa-arrow-right" style="margin-left: 6px;"></i>
-      </button>
-    </div>
-  </aside>
-
-  <!-- ==========================================================================
-       WISHLIST DRAWER
-       ========================================================================== -->
-  <div class="drawer-backdrop" id="wishlist-backdrop"></div>
-  <aside class="slide-drawer" id="wishlist-drawer">
-    <div class="drawer-header">
-      <h3 class="font-serif">Saved Sarees</h3>
-      <button class="drawer-close-btn" id="wishlist-close-btn" type="button" aria-label="Close wishlist">
-        <i class="fa-solid fa-xmark"></i>
-      </button>
-    </div>
-
-    <div class="drawer-body">
-      <div id="wishlist-empty-state" style="display: none; text-align: center; padding: 40px 0;">
-        <i class="fa-regular fa-heart" style="font-size: 3rem; color: var(--color-blush); margin-bottom: 12px;"></i>
-        <h4 class="font-serif" style="font-size: 1.4rem; color: var(--color-navy);">No Saved Items</h4>
-        <p style="font-size: 0.875rem; color: var(--color-text-muted); margin-top: 6px;">Tap the heart icon on any saree to save it for later.</p>
-      </div>
-      <div id="wishlist-items-container"></div>
-    </div>
-  </aside>
-
-  <!-- ==========================================================================
-       ORDER CONFIRMATION MODAL
-       ========================================================================== -->
-  <div class="modal-backdrop" id="order-success-backdrop">
-    <div class="story-modal-content" style="text-align: center; max-width: 500px;">
-      <button class="modal-close-icon" onclick="closeOrderSuccessModal()" aria-label="Close">
-        <i class="fa-solid fa-xmark"></i>
-      </button>
-      <div style="font-size: 3rem; color: #2E7D32; margin-bottom: 12px;">
-        <i class="fa-solid fa-circle-check"></i>
-      </div>
-      <span class="hero-eyebrow" style="color: var(--color-gold);">Order Confirmed</span>
-      <h2 class="font-serif" style="margin-bottom: 8px;">Dhanyavaad!</h2>
-      <p style="color: var(--color-text-muted); line-height: 1.6; margin-bottom: 16px;">
-        Your order <strong id="confirmed-order-id">#6YD-1001</strong> has been successfully placed. A confirmation with tracking details will be dispatched to your email.
-      </p>
-      <div style="background: var(--color-cream-soft); padding: 16px; border-radius: 8px; margin-bottom: 20px; text-align: left; font-size: 0.9rem;">
-        <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
-          <span style="color: var(--color-text-muted);">Payment Status:</span>
-          <span style="font-weight: 600; color: #2E7D32;">PAID (Razorpay / Verified)</span>
-        </div>
-        <div style="display: flex; justify-content: space-between;">
-          <span style="color: var(--color-text-muted);">Packaging:</span>
-          <span style="font-weight: 600;">Handloom Muslin Protection</span>
-        </div>
-      </div>
-      <button onclick="closeOrderSuccessModal()" class="checkout-btn" style="width: 100%;">
-        Continue Exploring Sarees
-      </button>
-    </div>
-  </div>
 
     <!-- Site Footer -->
   <footer class="site-footer" id="footer-section">
@@ -755,7 +635,7 @@
         <!-- Col 1: Brand Info -->
         <div class="footer-brand-col">
           <a href="index.html" class="brand-logo-link" style="margin-bottom: 16px; display: inline-block;">
-            <img src="assets/brand-logo-peacock-clean.png" alt="6 Yards Sarees" class="footer-brand-logo-img" />
+            <img src="assets/brand-logo-sm.png" alt="6 Yards Sarees" class="footer-brand-logo-img" />
           </a>
           <p class="footer-tagline">Six yards. Infinite stories.</p>
           <div class="social-links">
@@ -790,15 +670,15 @@
         <div class="footer-nav-col">
           <h4>Customer Care</h4>
           <ul class="footer-links">
-            <li><a href="javascript:void(0)" onclick="openCarePolicyModal('shipping')">Shipping Policy</a></li>
-            <li><a href="javascript:void(0)" onclick="openCarePolicyModal('returns')">Returns & Exchanges</a></li>
-            <li><a href="javascript:void(0)" onclick="showToast('Standard Saree Length: 5.5m + 0.8m Blouse Piece.')">Size Guide</a></li>
-            <li><a href="javascript:void(0)" onclick="showToast('Need help? Call or WhatsApp us at +91 98457 14481.')">FAQs</a></li>
+            <li><a href="#" data-policy="shipping">Shipping Policy</a></li>
+            <li><a href="#" data-policy="returns">Returns & Exchanges</a></li>
+            <li><a href="#" data-policy="size">Size Guide</a></li>
+            <li><a href="#" data-policy="faq">FAQs</a></li>
             <li><a href="tel:+919845714481">Call +91 98457 14481</a></li>
             <li><a href="mailto:sixyardsilksarees@gmail.com">sixyardsilksarees@gmail.com</a></li>
             <li><a href="https://wa.me/919845714481" target="_blank" rel="noopener noreferrer">WhatsApp Concierge</a></li>
-            <li><a href="javascript:void(0)" onclick="openCarePolicyModal('terms')">Terms & Conditions</a></li>
-            <li><a href="javascript:void(0)" onclick="openCarePolicyModal('privacy')">Privacy Policy</a></li>
+            <li><a href="#" data-policy="terms">Terms & Conditions</a></li>
+            <li><a href="#" data-policy="privacy">Privacy Policy</a></li>
           </ul>
         </div>
 
@@ -825,13 +705,10 @@
     </div>
   </footer>
 
-  <!-- Scripts -->
-  <script src="https://checkout.razorpay.com/v1/checkout.js" defer></script>
   <script src="js/products.js" defer></script>
   <script src="js/medusa-config.js" defer></script>
   <script src="js/medusa-client.js" defer></script>
+  <script src="js/store.js" defer></script>
   <script src="js/collections.js" defer></script>
-  <!-- Mobile Nav Backdrop -->
-  <div class="mobile-nav-backdrop" id="mobile-nav-backdrop"></div>
 </body>
 </html>

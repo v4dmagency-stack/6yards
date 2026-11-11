@@ -4,7 +4,11 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Handloom Pure Silk Saree | 6 Yards Sarees</title>
-  <meta name="description" content="Discover complete photoshoot angles, intricate zari motifs, and loomcraft details of our pure silk handloom sarees." />
+  <meta name="description" id="page-meta-desc" content="Discover photoshoot angles, zari motifs and loomcraft details of our handloom sarees." />
+  <meta property="og:type" content="product" />
+  <meta property="og:title" content="Handloom Saree | 6 Yards Sarees" />
+  <meta property="og:description" content="Handcrafted sarees from Indian handloom clusters." />
+  <meta property="og:image" content="" />
 
   <!-- Fonts & CDN -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -32,7 +36,7 @@
 
       <!-- Brand Logo -->
       <a href="index.html" class="brand-logo-link">
-        <img src="assets/brand-logo-peacock-clean.png" alt="6 Yards Sarees" class="brand-logo-img" alt="6 Yards Sarees" />
+        <img src="assets/brand-logo-sm.png" alt="6 Yards Sarees" class="brand-logo-img" />
       </a>
 
       <!-- Navigation Menu: Sarees (Mega Card), Journal, Contact -->
@@ -41,7 +45,7 @@
           <li class="mobile-nav-header-item">
             <div class="mobile-nav-header">
               <a href="index.html" class="brand-logo-link">
-                <img src="assets/brand-logo-peacock-clean.png" alt="6 Yards Sarees" class="brand-logo-img" />
+                <img src="assets/brand-logo-sm.png" alt="6 Yards Sarees" class="brand-logo-img" />
               </a>
               <button class="mobile-nav-close-btn" id="mobile-nav-close-btn" aria-label="Close Navigation">
                 <i class="fa-solid fa-xmark"></i>
@@ -229,8 +233,8 @@
       <!-- Left Column: Photoshoot Gallery -->
       <div class="pdp-gallery-wrap">
         <div class="pdp-main-image-frame" id="pdp-main-image-container">
-          <img src="" alt="6 Yards Saree Main Drape" id="pdp-main-image" class="pdp-main-image" />
-          <span class="pdp-photo-badge" id="pdp-photo-badge"><i class="fa-solid fa-certificate"></i> Silk Mark Guaranteed</span>
+          <img alt="" id="pdp-main-image" class="pdp-main-image" />
+          <span class="pdp-photo-badge" id="pdp-photo-badge"></span>
         </div>
 
         <!-- Thumbnail Strip below main photo -->
@@ -244,46 +248,37 @@
         <span class="pdp-brand-subtitle" id="pdp-brand-collection">6 YARDS • HEIRLOOM SILK</span>
         <h1 class="pdp-title" id="pdp-saree-title">Handloom Silk Saree</h1>
 
-        <!-- Rating Row -->
-        <div class="pdp-rating-row">
-          <div class="pdp-stars">
-            <i class="fa-solid fa-star"></i>
-            <i class="fa-solid fa-star"></i>
-            <i class="fa-solid fa-star"></i>
-            <i class="fa-solid fa-star"></i>
-            <i class="fa-solid fa-star-half-stroke"></i>
-          </div>
-          <span style="font-weight: 600; color: var(--color-text-main);" id="pdp-rating-val">4.9</span>
-          <span class="pdp-review-count" id="pdp-review-count">(94 Verified Patron Reviews)</span>
-        </div>
-
         <!-- Price Row -->
         <div class="pdp-price-row">
-          <span class="pdp-current-price" id="pdp-current-price">Rs. 0.00</span>
-          <span class="pdp-original-price" id="pdp-original-price"></span>
-          <span class="pdp-discount-tag" id="pdp-discount-tag">Save 16%</span>
+          <span class="pdp-current-price" id="pdp-current-price"></span>
+          <span class="pdp-original-price" id="pdp-original-price" hidden></span>
+          <span class="pdp-discount-tag" id="pdp-discount-tag" hidden></span>
         </div>
-        <p class="pdp-tax-caption">Inclusive of all taxes</p>
+        <p class="pdp-tax-caption">Inclusive of all taxes · <span id="pdp-item-code"></span></p>
 
         <!-- Quantity & Action Buttons (Image 3) -->
         <div class="pdp-action-block">
           <div class="pdp-qty-row">
             <span class="pdp-qty-label">Quantity:</span>
             <div class="pdp-qty-counter">
-              <button class="pdp-qty-btn" id="pdp-qty-decrease-btn" onclick="changePdpQty(-1)">-</button>
-              <span class="pdp-qty-num" id="pdp-qty-val">1</span>
-              <button class="pdp-qty-btn" id="pdp-qty-increase-btn" onclick="changePdpQty(1)">+</button>
+              <button type="button" class="pdp-qty-btn" id="pdp-qty-decrease-btn" onclick="changePdpQty(-1)" aria-label="Decrease quantity">−</button>
+              <span class="pdp-qty-num" id="pdp-qty-val" aria-live="polite">1</span>
+              <button type="button" class="pdp-qty-btn" id="pdp-qty-increase-btn" onclick="changePdpQty(1)" aria-label="Increase quantity">+</button>
             </div>
           </div>
 
           <div class="pdp-buttons-row">
-            <button class="pdp-add-to-cart-btn" id="pdp-add-to-cart-btn" onclick="handlePdpAddToCart()">
+            <button type="button" class="pdp-add-to-cart-btn" id="pdp-add-to-cart-btn" onclick="handlePdpAddToCart()">
               <i class="fa-solid fa-bag-shopping"></i> Add to Cart
             </button>
-            <button class="pdp-buy-now-btn" id="pdp-buy-now-btn" onclick="handlePdpBuyNow()">
+            <button type="button" class="pdp-buy-now-btn" id="pdp-buy-now-btn" onclick="handlePdpBuyNow()">
               <i class="fa-solid fa-bolt"></i> Buy It Now
             </button>
+            <button type="button" class="pdp-wishlist-btn" id="pdp-wishlist-btn" aria-pressed="false">
+              <i class="fa-regular fa-heart"></i> Save to Wishlist
+            </button>
           </div>
+          <p class="pdp-stock-note" id="pdp-stock-note" hidden></p>
         </div>
 
 
@@ -295,15 +290,15 @@
           </div>
           <div class="pdp-trust-item">
             <i class="fa-solid fa-ribbon"></i>
-            <span>100% Certified Authentic Handloom Silk</span>
+            <span>Authentic Handloom Weaves</span>
           </div>
           <div class="pdp-trust-item">
             <i class="fa-solid fa-arrow-rotate-left"></i>
-            <span>7-Day Hassle-Free Exchange Policy</span>
+            <span>7-Day Returns & Exchanges</span>
           </div>
           <div class="pdp-trust-item">
             <i class="fa-solid fa-box-open"></i>
-            <span>Protected in Pure Handloom Muslin Storage</span>
+            <span>Wrapped in Protective Muslin</span>
           </div>
         </div>
 
@@ -312,7 +307,7 @@
 
           <!-- Accordion 1: Product Details -->
           <div class="pdp-accordion-item open">
-            <button class="pdp-accordion-toggle" onclick="togglePdpAccordion(this)">
+            <button type="button" class="pdp-accordion-toggle" onclick="togglePdpAccordion(this)">
               <span>Product Details & Specifications</span>
               <i class="fa-solid fa-chevron-down"></i>
             </button>
@@ -336,15 +331,11 @@
                 </tr>
                 <tr>
                   <td>Blouse Piece:</td>
-                  <td>Included (Contrast 80 cm)</td>
+                  <td>Included, unstitched (approx. 80 cm)</td>
                 </tr>
                 <tr>
                   <td>Origin Cluster:</td>
                   <td id="spec-origin">Varanasi, Uttar Pradesh</td>
-                </tr>
-                <tr>
-                  <td>Weight:</td>
-                  <td>Approx. 650 grams</td>
                 </tr>
               </table>
             </div>
@@ -352,7 +343,7 @@
 
           <!-- Accordion 2: Design & Craft Story -->
           <div class="pdp-accordion-item">
-            <button class="pdp-accordion-toggle" onclick="togglePdpAccordion(this)">
+            <button type="button" class="pdp-accordion-toggle" onclick="togglePdpAccordion(this)">
               <span>Design & Artisan Craftsmanship</span>
               <i class="fa-solid fa-chevron-down"></i>
             </button>
@@ -365,15 +356,15 @@
 
           <!-- Accordion 3: Material & Care Instructions -->
           <div class="pdp-accordion-item">
-            <button class="pdp-accordion-toggle" onclick="togglePdpAccordion(this)">
+            <button type="button" class="pdp-accordion-toggle" onclick="togglePdpAccordion(this)">
               <span>Material & Care Instructions</span>
               <i class="fa-solid fa-chevron-down"></i>
             </button>
             <div class="pdp-accordion-body">
               <ul style="padding-left: 20px; display: flex; flex-direction: column; gap: 8px;">
-                <li>Dry clean only by specialists experienced with pure silk & real zari.</li>
+                <li>Dry clean only, preferably by a specialist experienced with silk and zari.</li>
                 <li>Never spray alcohol-based perfumes or deodorants directly onto gold zari threads.</li>
-                <li>Store flat, wrapped in the complimentary pure unbleached cotton muslin cloth.</li>
+                <li>Store folded in the muslin cloth it arrives in, away from direct sunlight.</li>
                 <li>Change folds every 3 months to prevent creasing of heavy zari brocade.</li>
                 <li>Iron on the reverse side only using low to medium silk temperature settings.</li>
               </ul>
@@ -382,19 +373,16 @@
 
           <!-- Accordion 4: Shipping & Returns -->
           <div class="pdp-accordion-item">
-            <button class="pdp-accordion-toggle" onclick="togglePdpAccordion(this)">
+            <button type="button" class="pdp-accordion-toggle" onclick="togglePdpAccordion(this)">
               <span>Shipping, Delivery & Returns</span>
               <i class="fa-solid fa-chevron-down"></i>
             </button>
             <div class="pdp-accordion-body">
               <p style="margin-bottom: 8px;">
-                <strong>Domestic Delivery:</strong> Dispatched within 24-48 business hours via insured courier partners (BlueDart, DTDC). Estimated transit is 3-5 business days across all Indian pin codes.
-              </p>
-              <p style="margin-bottom: 8px;">
-                <strong>International Shipping:</strong> Worldwide express delivery available via DHL Express (5-8 business days).
+                <strong>Delivery across India:</strong> dispatched within 1–2 business days. Metro cities in 2–3 business days, rest of India in 3–5 business days. Free shipping on orders of ₹5,000 and above; ₹150 otherwise.
               </p>
               <p>
-                <strong>7-Day Easy Exchange:</strong> We offer a seamless 7-day exchange window if the drape does not exceed your expectations.
+                <strong>7-day returns & exchanges:</strong> contact us within 7 days of delivery if your saree isn't right. <a href="#" data-policy="returns">Read the full policy</a>.
               </p>
             </div>
           </div>
@@ -432,8 +420,8 @@
     <section class="pdp-artisan-assurance-strip">
       <div class="assurance-card">
         <div class="assurance-icon-wrap"><i class="fa-solid fa-certificate"></i></div>
-        <h6>Silk Mark Guaranteed</h6>
-        <p>100% Certified pure natural Mulberry & Tussar silk tested for purity</p>
+        <h6>Authentic Handloom</h6>
+        <p>Fabric, weave and weaving cluster listed honestly for every saree</p>
       </div>
       <div class="assurance-card">
         <div class="assurance-icon-wrap"><i class="fa-solid fa-gem"></i></div>
@@ -447,120 +435,15 @@
       </div>
       <div class="assurance-card">
         <div class="assurance-icon-wrap"><i class="fa-solid fa-rotate-left"></i></div>
-        <h6>7-Day Seamless Exchange</h6>
-        <p>Easy doorstep pickup and dedicated concierge assistance</p>
+        <h6>7-Day Returns & Exchanges</h6>
+        <p>Contact our concierge within 7 days of delivery</p>
       </div>
     </section>
 
   </main>
 
-  <!-- ==========================================================================
-       CART SLIDE-OUT DRAWER
-       ========================================================================== -->
-  <div class="drawer-backdrop" id="cart-backdrop"></div>
-  <aside class="slide-drawer" id="cart-drawer">
-    <div class="drawer-header">
-      <h3 class="font-serif">Shopping Bag</h3>
-      <button class="drawer-close-btn" id="cart-close-btn" type="button" aria-label="Close cart">
-        <i class="fa-solid fa-xmark"></i>
-      </button>
-    </div>
 
-    <div class="drawer-body">
-      <!-- Empty Cart View -->
-      <div id="cart-empty-state" style="display: none; text-align: center; padding: 40px 0;">
-        <i class="fa-solid fa-bag-shopping" style="font-size: 3rem; color: var(--color-blush); margin-bottom: 12px;"></i>
-        <h4 class="font-serif" style="font-size: 1.4rem; color: var(--color-navy);">Your Bag is Empty</h4>
-        <p style="font-size: 0.875rem; color: var(--color-text-muted); margin-top: 6px;">Discover six yards of grace waiting for you.</p>
-        <button onclick="closeCartDrawer();" style="margin-top: 18px; padding: 10px 24px; background: var(--color-navy); color: var(--color-cream); border-radius: 4px; font-weight: 500;">Start Shopping</button>
-      </div>
 
-      <!-- Cart Item Rows -->
-      <div id="cart-items-container"></div>
-    </div>
-
-    <!-- Cart Footer Summary -->
-    <div class="drawer-footer" id="cart-footer-content">
-      <!-- Promo Code Input -->
-      <div style="display: flex; gap: 8px; margin-bottom: 14px;">
-        <input type="text" id="promo-input-field" placeholder="Promo code (e.g. WELCOME10)" style="flex: 1; padding: 8px 12px; border: 1px solid var(--color-border); border-radius: 4px; font-size: 0.85rem;" />
-        <button id="apply-promo-btn" style="padding: 8px 14px; background-color: var(--color-navy); color: var(--color-cream); border-radius: 4px; font-size: 0.8rem; font-weight: 600;">Apply</button>
-      </div>
-
-      <div class="cart-summary-subtotal">
-        <span>Subtotal:</span>
-        <span id="cart-subtotal-price">₹ 0</span>
-      </div>
-
-      <div id="cart-discount-row" style="display: none; justify-content: space-between; font-size: 0.9rem; color: #2E7D32; margin-bottom: 10px;">
-        <span>Promo Discount:</span>
-        <span id="cart-discount-value">- ₹ 0</span>
-      </div>
-
-      <div style="display: flex; justify-content: space-between; font-size: 1.15rem; font-weight: 700; color: var(--color-navy); margin-bottom: 16px;">
-        <span>Total:</span>
-        <span id="cart-final-total">₹ 0</span>
-      </div>
-
-      <button class="checkout-btn" id="checkout-btn">
-        Proceed to Checkout <i class="fa-solid fa-arrow-right" style="margin-left: 6px;"></i>
-      </button>
-    </div>
-  </aside>
-
-  <!-- ==========================================================================
-       WISHLIST DRAWER
-       ========================================================================== -->
-  <div class="drawer-backdrop" id="wishlist-backdrop"></div>
-  <aside class="slide-drawer" id="wishlist-drawer">
-    <div class="drawer-header">
-      <h3 class="font-serif">Saved Sarees</h3>
-      <button class="drawer-close-btn" id="wishlist-close-btn" type="button" aria-label="Close wishlist">
-        <i class="fa-solid fa-xmark"></i>
-      </button>
-    </div>
-
-    <div class="drawer-body">
-      <div id="wishlist-empty-state" style="display: none; text-align: center; padding: 40px 0;">
-        <i class="fa-regular fa-heart" style="font-size: 3rem; color: var(--color-blush); margin-bottom: 12px;"></i>
-        <h4 class="font-serif" style="font-size: 1.4rem; color: var(--color-navy);">No Saved Items</h4>
-        <p style="font-size: 0.875rem; color: var(--color-text-muted); margin-top: 6px;">Tap the heart icon on any saree to save it for later.</p>
-      </div>
-      <div id="wishlist-items-container"></div>
-    </div>
-  </aside>
-
-  <!-- ==========================================================================
-       ORDER CONFIRMATION MODAL
-       ========================================================================== -->
-  <div class="modal-backdrop" id="order-success-backdrop">
-    <div class="story-modal-content" style="text-align: center; max-width: 500px;">
-      <button class="modal-close-icon" onclick="closeOrderSuccessModal()" aria-label="Close">
-        <i class="fa-solid fa-xmark"></i>
-      </button>
-      <div style="font-size: 3rem; color: #2E7D32; margin-bottom: 12px;">
-        <i class="fa-solid fa-circle-check"></i>
-      </div>
-      <span class="hero-eyebrow" style="color: var(--color-gold);">Order Confirmed</span>
-      <h2 class="font-serif" style="margin-bottom: 8px;">Dhanyavaad!</h2>
-      <p style="color: var(--color-text-muted); line-height: 1.6; margin-bottom: 16px;">
-        Your order <strong id="confirmed-order-id">#6YD-1001</strong> has been successfully placed. A confirmation with tracking details will be dispatched to your email.
-      </p>
-      <div style="background: var(--color-cream-soft); padding: 16px; border-radius: 8px; margin-bottom: 20px; text-align: left; font-size: 0.9rem;">
-        <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
-          <span style="color: var(--color-text-muted);">Payment Status:</span>
-          <span style="font-weight: 600; color: #2E7D32;">PAID (Razorpay / Verified)</span>
-        </div>
-        <div style="display: flex; justify-content: space-between;">
-          <span style="color: var(--color-text-muted);">Packaging:</span>
-          <span style="font-weight: 600;">Handloom Muslin Protection</span>
-        </div>
-      </div>
-      <button onclick="closeOrderSuccessModal()" class="checkout-btn" style="width: 100%;">
-        Continue Exploring Sarees
-      </button>
-    </div>
-  </div>
 
     <!-- Site Footer -->
   <footer class="site-footer" id="footer-section">
@@ -569,7 +452,7 @@
         <!-- Col 1: Brand Info -->
         <div class="footer-brand-col">
           <a href="index.html" class="brand-logo-link" style="margin-bottom: 16px; display: inline-block;">
-            <img src="assets/brand-logo-peacock-clean.png" alt="6 Yards Sarees" class="footer-brand-logo-img" />
+            <img src="assets/brand-logo-sm.png" alt="6 Yards Sarees" class="footer-brand-logo-img" />
           </a>
           <p class="footer-tagline">Six yards. Infinite stories.</p>
           <div class="social-links">
@@ -604,15 +487,15 @@
         <div class="footer-nav-col">
           <h4>Customer Care</h4>
           <ul class="footer-links">
-            <li><a href="javascript:void(0)" onclick="openCarePolicyModal('shipping')">Shipping Policy</a></li>
-            <li><a href="javascript:void(0)" onclick="openCarePolicyModal('returns')">Returns & Exchanges</a></li>
-            <li><a href="javascript:void(0)" onclick="showToast('Standard Saree Length: 5.5m + 0.8m Blouse Piece.')">Size Guide</a></li>
-            <li><a href="javascript:void(0)" onclick="showToast('Need help? Call or WhatsApp us at +91 98457 14481.')">FAQs</a></li>
+            <li><a href="#" data-policy="shipping">Shipping Policy</a></li>
+            <li><a href="#" data-policy="returns">Returns & Exchanges</a></li>
+            <li><a href="#" data-policy="size">Size Guide</a></li>
+            <li><a href="#" data-policy="faq">FAQs</a></li>
             <li><a href="tel:+919845714481">Call +91 98457 14481</a></li>
             <li><a href="mailto:sixyardsilksarees@gmail.com">sixyardsilksarees@gmail.com</a></li>
             <li><a href="https://wa.me/919845714481" target="_blank" rel="noopener noreferrer">WhatsApp Concierge</a></li>
-            <li><a href="javascript:void(0)" onclick="openCarePolicyModal('terms')">Terms & Conditions</a></li>
-            <li><a href="javascript:void(0)" onclick="openCarePolicyModal('privacy')">Privacy Policy</a></li>
+            <li><a href="#" data-policy="terms">Terms & Conditions</a></li>
+            <li><a href="#" data-policy="privacy">Privacy Policy</a></li>
           </ul>
         </div>
 
@@ -639,13 +522,10 @@
     </div>
   </footer>
 
-  <!-- Scripts -->
-  <script src="https://checkout.razorpay.com/v1/checkout.js" defer></script>
   <script src="js/products.js" defer></script>
   <script src="js/medusa-config.js" defer></script>
   <script src="js/medusa-client.js" defer></script>
+  <script src="js/store.js" defer></script>
   <script src="js/product-page.js" defer></script>
-  <!-- Mobile Nav Backdrop -->
-  <div class="mobile-nav-backdrop" id="mobile-nav-backdrop"></div>
 </body>
 </html>

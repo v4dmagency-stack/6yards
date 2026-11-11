@@ -1,3 +1,5 @@
+> **Superseded:** see [HANDOVER.md](./HANDOVER.md) for the current setup and go-live steps. This file is kept for reference.
+
 # 6 YARDS SAREES — MEDUSA v2 BACKEND SETUP GUIDE
 
 This guide provides the complete setup, configuration, and execution instructions for running the Medusa v2 commerce engine for **6 Yards Sarees**.
