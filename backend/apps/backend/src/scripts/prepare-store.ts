@@ -126,6 +126,31 @@ export default async function prepareStore({ container }: ExecArgs) {
     logger.info(`Added storefront metadata to ${metadataUpdates.length} products.`)
   }
 
+  // 3b. Root-relative image paths, so images also load inside Medusa Admin (/app)
+  const toSitePath = (url: string) => (/^(https?:)?\/\//.test(url) || url.startsWith("/") ? url : `/${url}`)
+  const { data: imageRows } = await query.graph({
+    entity: "product",
+    fields: ["id", "thumbnail", "images.url"],
+  })
+  const imageUpdates = imageRows.flatMap((p) => {
+    const urls = (p.images ?? []).map((img) => img?.url).filter((u): u is string => Boolean(u))
+    const needsFix = urls.some((u) => toSitePath(u) !== u) || (p.thumbnail && toSitePath(p.thumbnail) !== p.thumbnail)
+    if (!needsFix) {
+      return []
+    }
+    return [{
+      id: p.id,
+      thumbnail: p.thumbnail ? toSitePath(p.thumbnail) : p.thumbnail,
+      images: urls.map((url) => ({ url: toSitePath(url) })),
+    }]
+  })
+  if (imageUpdates.length) {
+    await updateProductsWorkflow(container).run({
+      input: { products: imageUpdates },
+    })
+    logger.info(`Made image paths root-relative on ${imageUpdates.length} products.`)
+  }
+
   // 4. Inventory levels
   const { data: locations } = await query.graph({
     entity: "stock_location",

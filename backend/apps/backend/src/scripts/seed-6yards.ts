@@ -26,6 +26,10 @@ import {
 // (the storefront's offline fallback) - both currently hold the same 38 sarees.
 import SEED_DATA from "./products-data.json";
 
+// Storefront image paths are relative ("assets/..."). Store them root-relative
+// ("/assets/...") so they also load inside Medusa Admin, which lives under /app.
+const toSitePath = (url: string) => (/^(https?:)?\/\//.test(url) || url.startsWith("/") ? url : `/${url}`);
+
 export default async function seed6Yards({
   container,
 }: {
@@ -380,8 +384,8 @@ export default async function seed6Yards({
     }
 
     const images = (p.gallery && p.gallery.length > 0)
-      ? p.gallery.map((url: string) => ({ url }))
-      : [{ url: p.image }];
+      ? p.gallery.map((url: string) => ({ url: toSitePath(url) }))
+      : [{ url: toSitePath(p.image) }];
 
     await createProductsWorkflow(container).run({
       input: {
@@ -396,7 +400,7 @@ export default async function seed6Yards({
             shipping_profile_id: defaultProfile.id,
             sales_channels: [{ id: salesChannel.id }],
             images: images,
-            thumbnail: p.image,
+            thumbnail: toSitePath(p.image),
             options: [
               {
                 title: "Drape Specification",
