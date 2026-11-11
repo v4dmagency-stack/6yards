@@ -137,3 +137,6 @@ Thumbs.db
 backend/apps/backend/.env
 /dist/
 .claude/
+
+.vercel
+.env*
