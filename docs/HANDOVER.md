@@ -126,6 +126,19 @@ Remove the starter T-shirts if present: `npx medusa exec ./src/scripts/clean-sta
 
 Note: the database must use UTF-8 encoding (hosted Postgres providers do by default); product copy contains "₹".
 
+### Live setup (v4dm Vercel account, 11 Nov 2026)
+
+- Site and admin: https://6yards-chi.vercel.app (admin at `/app`).
+- Database: Neon Postgres "6yards-db" in Singapore, added through Vercel → Storage. Medusa uses
+  `DATABASE_URL_UNPOOLED` automatically (see `medusa-config.ts`).
+- `vercel.json` pins compute to `sin1` (Singapore) next to the database. Running in the default US region
+  made store API calls 1–8 s; in Singapore they take ~0.2–0.7 s. Keep the two in the same region.
+- `JWT_SECRET` / `COOKIE_SECRET` are Vercel Secrets (not downloadable). Because of that, admin **invite links
+  must be created from the live Admin (Settings → Users → Invite)**, not with `medusa user --invite` on a local
+  PC — a locally signed invite is rejected. Creating a user with `medusa user -e ... -p ...` locally works.
+- Storefront publishable key is in `js/medusa-config.js` (public by design).
+- The first request after a quiet period can take ~15 s (cold start on the Hobby plan); later requests are fast.
+
 ## 5. Still open (needs client input or accounts)
 
 1. **Online payments (Razorpay):** needs the client's Razorpay account/keys and a Medusa Razorpay payment
