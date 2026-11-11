@@ -33,7 +33,10 @@ const fileModule = process.env.S3_BUCKET
 
 module.exports = defineConfig({
   projectConfig: {
-    databaseUrl: process.env.DATABASE_URL,
+    // Neon (Vercel Storage) provides a pooled DATABASE_URL and a direct
+    // DATABASE_URL_UNPOOLED. Medusa is a long-running server and its migrations
+    // need a direct connection, so prefer the unpooled one when present.
+    databaseUrl: process.env.DATABASE_URL_UNPOOLED || process.env.DATABASE_URL,
     redisUrl: process.env.REDIS_URL,
     http: {
       storeCors: process.env.STORE_CORS || DEV_STORE_CORS,
