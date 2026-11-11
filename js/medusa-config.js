@@ -5,4 +5,4 @@ window.MEDUSA_BACKEND_URL =
     : window.location.origin;
 
 window.MEDUSA_PUBLISHABLE_KEY =
-  "pk_55634989086e01785152d5cd133bc48512f9cad0323bc140bfd40c74fa79b001";
+  "pk_64b3b54a854040ab9e9defda6518ce9b9dbaeb0b91bc57fd5c7f35b39d946917";
