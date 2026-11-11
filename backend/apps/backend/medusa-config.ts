@@ -37,7 +37,10 @@ module.exports = defineConfig({
     // DATABASE_URL_UNPOOLED. Medusa is a long-running server and its migrations
     // need a direct connection, so prefer the unpooled one when present.
     databaseUrl: process.env.DATABASE_URL_UNPOOLED || process.env.DATABASE_URL,
-    redisUrl: process.env.REDIS_URL,
+    // Required in production: without Redis, admin login sessions live in one
+    // server instance's memory and are lost whenever Vercel restarts or scales
+    // the container (admins get logged out). Upstash on Vercel sets KV_URL.
+    redisUrl: process.env.REDIS_URL || process.env.KV_URL,
     http: {
       storeCors: process.env.STORE_CORS || DEV_STORE_CORS,
       adminCors: process.env.ADMIN_CORS || DEV_ADMIN_CORS,
