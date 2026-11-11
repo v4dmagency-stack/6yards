@@ -1,5 +1,8 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
+  "regions": [
+    "sin1"
+  ],
   "services": {
     "storefront": {
       "root": ".",
@@ -13,17 +16,77 @@
     }
   },
   "rewrites": [
-    { "source": "/app", "destination": { "service": "medusa" } },
-    { "source": "/app/(.*)", "destination": { "service": "medusa" } },
-    { "source": "/admin", "destination": { "service": "medusa" } },
-    { "source": "/admin/(.*)", "destination": { "service": "medusa" } },
-    { "source": "/auth", "destination": { "service": "medusa" } },
-    { "source": "/auth/(.*)", "destination": { "service": "medusa" } },
-    { "source": "/store", "destination": { "service": "medusa" } },
-    { "source": "/store/(.*)", "destination": { "service": "medusa" } },
-    { "source": "/health", "destination": { "service": "medusa" } },
-    { "source": "/files", "destination": { "service": "medusa" } },
-    { "source": "/files/(.*)", "destination": { "service": "medusa" } },
-    { "source": "/(.*)", "destination": { "service": "storefront" } }
+    {
+      "source": "/app",
+      "destination": {
+        "service": "medusa"
+      }
+    },
+    {
+      "source": "/app/(.*)",
+      "destination": {
+        "service": "medusa"
+      }
+    },
+    {
+      "source": "/admin",
+      "destination": {
+        "service": "medusa"
+      }
+    },
+    {
+      "source": "/admin/(.*)",
+      "destination": {
+        "service": "medusa"
+      }
+    },
+    {
+      "source": "/auth",
+      "destination": {
+        "service": "medusa"
+      }
+    },
+    {
+      "source": "/auth/(.*)",
+      "destination": {
+        "service": "medusa"
+      }
+    },
+    {
+      "source": "/store",
+      "destination": {
+        "service": "medusa"
+      }
+    },
+    {
+      "source": "/store/(.*)",
+      "destination": {
+        "service": "medusa"
+      }
+    },
+    {
+      "source": "/health",
+      "destination": {
+        "service": "medusa"
+      }
+    },
+    {
+      "source": "/files",
+      "destination": {
+        "service": "medusa"
+      }
+    },
+    {
+      "source": "/files/(.*)",
+      "destination": {
+        "service": "medusa"
+      }
+    },
+    {
+      "source": "/(.*)",
+      "destination": {
+        "service": "storefront"
+      }
+    }
   ]
 }
