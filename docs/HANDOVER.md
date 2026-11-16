@@ -142,6 +142,28 @@ Note: the database must use UTF-8 encoding (hosted Postgres providers do by defa
   `http://localhost:9000/static/...` and files lived on the temporary container disk. Files now go to
   Postgres and download from `/files/...` on the site's own domain.
 
+### New sarees added 16 Nov 2026 (37 products, 75 in total)
+
+Photographed sarees from the "9 saree", "13 saree" and "14 saree" shoots were added to the five collections
+(Adaa 2, Roop 6, Vastra 6, Leher 13, Riwayat 10). Photos are in `assets/catalog/<collection>/`; photos that
+showed a handwritten price tag were left out. Prices and item codes come from the shop tags where one was visible.
+
+**Sample prices to replace** (no tag in the photos). In Medusa Admin these products have metadata
+`sample_price = true`: Bottle Green & Gold Border Butta, Olive Green & Lilac Dual-Tone, Bottle Green & Orange
+Striped Pallu, Cream & Mango Yellow, Violet & Black Dual-Tone Leaf Motif, Black Checks, Maroon Checks,
+Purple Temple Border, Navy Floral Jaal & Blush Pink, Grey & Teal Dual-Tone, Silver Grey & Lime Gold Border,
+Navy & Gold Border Butta, Sky Blue & Black Zari Pallu, Powder Blue & Purple Brocade, Bottle Green & Magenta
+Border, Wine & Olive Gold Pallu, Royal & Sky Blue.
+
+**Tags that were hard to read** (metadata `price_to_confirm = true`): Mango Yellow & Green Zari Border
+(₹12,250), Coffee Brown & Wide Gold Border (₹10,500), Ivory Gold Tissue (₹4,500).
+
+Fabric is described cautiously (e.g. "Kanjivaram-Style Silk", "Soft Silk", "Zari Tissue", "Cotton") because it
+could only be judged from photos; correct it in Admin → Products → Metadata `fabric` where needed.
+
+To load these into a database: `npx medusa exec ./src/scripts/seed-6yards.ts` then `prepare-store.ts`
+(both only add what is missing).
+
 ## 5. Still open (needs client input or accounts)
 
 1. **Online payments (Razorpay):** needs the client's Razorpay account/keys and a Medusa Razorpay payment
