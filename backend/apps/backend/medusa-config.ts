@@ -9,27 +9,38 @@ const isProduction = process.env.NODE_ENV === "production"
 const DEV_STORE_CORS = "http://localhost:3000,http://localhost:8000,http://127.0.0.1:8000"
 const DEV_ADMIN_CORS = "http://localhost:5173,http://localhost:9000"
 
-// Product images uploaded in Medusa Admin. Without S3-compatible storage they
-// are written to the container's disk and are lost on every redeploy.
-const fileModule = process.env.S3_BUCKET
-  ? [{
-      resolve: "@medusajs/medusa/file",
-      options: {
-        providers: [{
-          resolve: "@medusajs/medusa/file-s3",
-          id: "s3",
-          options: {
-            file_url: process.env.S3_FILE_URL,
-            access_key_id: process.env.S3_ACCESS_KEY_ID,
-            secret_access_key: process.env.S3_SECRET_ACCESS_KEY,
-            region: process.env.S3_REGION,
-            bucket: process.env.S3_BUCKET,
-            endpoint: process.env.S3_ENDPOINT,
+// Files: product import/export CSVs and images uploaded in Medusa Admin.
+// Default: stored in Postgres and served from /files/<key> (works on Vercel,
+// where the container disk is temporary). Set S3_* to use S3/R2 instead.
+const fileModule = [{
+  resolve: "@medusajs/medusa/file",
+  options: {
+    providers: [
+      process.env.S3_BUCKET
+        ? {
+            resolve: "@medusajs/medusa/file-s3",
+            id: "s3",
+            options: {
+              file_url: process.env.S3_FILE_URL,
+              access_key_id: process.env.S3_ACCESS_KEY_ID,
+              secret_access_key: process.env.S3_SECRET_ACCESS_KEY,
+              region: process.env.S3_REGION,
+              bucket: process.env.S3_BUCKET,
+              endpoint: process.env.S3_ENDPOINT,
+            },
+          }
+        : {
+            resolve: "./src/modules/database-file",
+            id: "database",
+            // Production: root-relative /files/<key> URLs that work on any domain.
+            // Locally the storefront runs on another port, so use the backend URL.
+            options: {
+              base_url: process.env.FILE_BASE_URL || (isProduction ? "" : "http://localhost:9000"),
+            },
           },
-        }],
-      },
-    }]
-  : []
+    ],
+  },
+}]
 
 module.exports = defineConfig({
   projectConfig: {

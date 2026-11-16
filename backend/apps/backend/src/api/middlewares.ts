@@ -4,6 +4,7 @@ import {
   validateAndTransformBody,
 } from "@medusajs/framework/http"
 import { NewsletterSchema } from "./store/newsletter/validators"
+import { stripUnsupportedImportColumns } from "./admin/products/imports/strip-unsupported-columns"
 
 // The product index declares filterable `status` and `sales_channel_ids`, so
 // the route narrows it to published products in the key's sales channels.
@@ -24,6 +25,11 @@ export default defineMiddlewares({
       method: ["POST"],
       matcher: "/store/newsletter",
       middlewares: [validateAndTransformBody(NewsletterSchema)],
+    },
+    {
+      method: ["POST"],
+      matcher: "/admin/products/imports",
+      middlewares: [stripUnsupportedImportColumns],
     },
   ],
 })

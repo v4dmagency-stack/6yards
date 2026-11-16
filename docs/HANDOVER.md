@@ -138,6 +138,9 @@ Note: the database must use UTF-8 encoding (hosted Postgres providers do by defa
   PC — a locally signed invite is rejected. Creating a user with `medusa user -e ... -p ...` locally works.
 - Storefront publishable key is in `js/medusa-config.js` (public by design).
 - The first request after a quiet period can take ~15 s (cold start on the Hobby plan); later requests are fast.
+- Product **Export / Import** (Admin → Products): before 16 Nov 2026 export links pointed at
+  `http://localhost:9000/static/...` and files lived on the temporary container disk. Files now go to
+  Postgres and download from `/files/...` on the site's own domain.
 
 ## 5. Still open (needs client input or accounts)
 
@@ -148,4 +151,7 @@ Note: the database must use UTF-8 encoding (hosted Postgres providers do by defa
 3. **Social links** in the footer point to generic instagram.com / facebook.com etc. — replace with the real profiles.
 4. **Brand claims** in `about.html` / `journal.html` ("100% Silk Mark certified", "zero blends") conflict with
    silk-cotton sarees in the catalog. The client should confirm or soften this copy.
-5. **Product images uploaded in Admin** are lost on redeploy unless `S3_*` variables are set.
+5. **File storage:** product import/export CSVs and images uploaded in Admin are stored in Postgres
+   (table `stored_file`, served from `/files/<key>`) by `src/modules/database-file`. This works on
+   Vercel, whose container disk is temporary. For many large images, set the `S3_*` variables to use
+   S3/R2 instead; files already uploaded stay in the database.
