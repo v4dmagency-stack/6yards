@@ -2628,164 +2628,6 @@ a.feature-banner-card {
 /* ==========================================================================
    CURATED BEST SAREES: ARTISAN FRAMED SHOWCASE
    ========================================================================== */
-.framed-sarees-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 24px;
-  margin-top: 28px;
-}
-
-.saree-frame-card {
-  background: #FFFFFF;
-  border: 1.5px solid rgba(197, 154, 63, 0.45);
-  border-radius: 4px;
-  padding: 12px;
-  box-shadow: 0 10px 28px rgba(5, 22, 44, 0.08), 0 2px 8px rgba(197, 154, 63, 0.12);
-  transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
-  position: relative;
-  display: flex;
-  flex-direction: column;
-}
-
-.saree-frame-card:hover {
-  transform: translateY(-8px);
-  border-color: var(--color-gold);
-  box-shadow: 0 20px 44px rgba(5, 22, 44, 0.14), 0 4px 16px rgba(197, 154, 63, 0.28);
-}
-
-.saree-frame-inner {
-  position: relative;
-  background: #FAF7F2;
-  border: 1px solid rgba(197, 154, 63, 0.25);
-  padding: 8px;
-  border-radius: 2px;
-  overflow: hidden;
-}
-
-.saree-frame-img-box {
-  position: relative;
-  width: 100%;
-  aspect-ratio: 1 / 1.35;
-  overflow: hidden;
-  background: #F5EFEB;
-  border-radius: 2px;
-}
-
-.saree-frame-img-box img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.65s cubic-bezier(0.25, 1, 0.5, 1);
-}
-
-.saree-frame-card:hover .saree-frame-img-box img {
-  transform: scale(1.06);
-}
-
-.saree-frame-badge {
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  background: rgba(5, 22, 44, 0.92);
-  color: var(--color-gold-bright);
-  font-size: 0.68rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  padding: 5px 10px;
-  border-radius: 2px;
-  font-weight: 600;
-  border: 1px solid rgba(197, 154, 63, 0.4);
-  z-index: 2;
-}
-
-.saree-frame-caption {
-  padding: 16px 8px 8px 8px;
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-}
-
-.saree-frame-collection {
-  font-size: 0.72rem;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--color-gold);
-  font-weight: 600;
-  margin-bottom: 4px;
-}
-
-.saree-frame-title {
-  font-family: var(--font-serif);
-  font-size: 1.25rem;
-  color: var(--color-maroon);
-  font-weight: 600;
-  line-height: 1.25;
-  margin-bottom: 6px;
-  min-height: 2.5em;
-}
-
-.saree-frame-weave-tag {
-  font-size: 0.78rem;
-  color: var(--color-text-muted);
-  margin-bottom: 12px;
-}
-
-.saree-frame-price-row {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  margin-bottom: 16px;
-}
-
-.saree-frame-price {
-  font-size: 1.2rem;
-  font-weight: 700;
-  color: var(--color-navy);
-}
-
-.saree-frame-original-price {
-  font-size: 0.9rem;
-  text-decoration: line-through;
-  color: var(--color-text-muted);
-}
-
-.saree-frame-cta {
-  display: inline-block;
-  width: 100%;
-  padding: 11px 0;
-  background: var(--color-maroon);
-  color: #FFFFFF;
-  text-transform: uppercase;
-  font-size: 0.78rem;
-  letter-spacing: 0.12em;
-  font-weight: 600;
-  border-radius: 3px;
-  text-decoration: none;
-  transition: all var(--transition-fast);
-  border: 1px solid var(--color-maroon);
-}
-
-.saree-frame-cta:hover {
-  background: var(--color-gold);
-  border-color: var(--color-gold);
-  color: var(--color-navy-dark);
-}
-
-@media (max-width: 1100px) {
-  .framed-sarees-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 20px;
-  }
-}
-
-@media (max-width: 576px) {
-  .framed-sarees-grid {
-    grid-template-columns: 1fr;
-    gap: 18px;
-  }
-}
 .filter-accordion-item:last-child {
   border-bottom: none;
 }
@@ -4088,94 +3930,6 @@ a.feature-banner-card {
 /* ==========================================================================
    NEW ARRIVALS SECTION (Homepage)
    ========================================================================== */
-.new-arrivals-section {
-  padding: 100px 0 95px;
-  background: radial-gradient(circle at 50% 20%, #0A2346 0%, #05162C 60%, #020E1F 100%);
-  position: relative;
-  border-top: 1px solid rgba(197, 154, 63, 0.35);
-  border-bottom: 1px solid rgba(197, 154, 63, 0.35);
-}
-
-.new-arrivals-section .section-header-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  margin-bottom: 40px;
-  border-bottom: 1px solid rgba(197, 154, 63, 0.35);
-  padding-bottom: 20px;
-}
-
-.new-arrivals-section .new-arrivals-tag {
-  display: inline-block;
-  font-size: 0.75rem;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--color-gold-bright);
-  font-weight: 700;
-  margin-bottom: 8px;
-  border-bottom: 1px solid var(--color-gold);
-  padding-bottom: 3px;
-}
-
-.new-arrivals-section .section-heading-lg {
-  color: #FFFFFF;
-  margin-bottom: 8px;
-  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.4);
-}
-
-.new-arrivals-section .section-subheading {
-  color: rgba(251, 248, 243, 0.88);
-}
-
-.new-arrivals-section .view-all-link {
-  color: var(--color-gold-bright);
-  border-color: rgba(197, 154, 63, 0.6);
-}
-.new-arrivals-section .view-all-link:hover {
-  color: #FFFFFF;
-  border-color: #FFFFFF;
-}
-
-.new-arrivals-section .saree-frame-card {
-  background: #FFFFFF;
-  border: 1.5px solid rgba(197, 154, 63, 0.45);
-  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.35), 0 0 16px rgba(197, 154, 63, 0.12);
-}
-.new-arrivals-section .saree-frame-card:hover {
-  transform: translateY(-8px);
-  border-color: var(--color-gold-bright);
-  box-shadow: 0 24px 50px rgba(0, 0, 0, 0.5), 0 0 24px rgba(197, 154, 63, 0.28);
-}
-.new-arrivals-section .saree-frame-title {
-  color: var(--color-navy);
-}
-.new-arrivals-section .saree-frame-cta {
-  background: var(--color-navy);
-  border-color: rgba(197, 154, 63, 0.5);
-  color: var(--color-gold-bright);
-}
-.new-arrivals-section .saree-frame-cta:hover {
-  background: linear-gradient(135deg, var(--color-gold-bright), var(--color-gold));
-  color: var(--color-navy-dark);
-  border-color: var(--color-gold);
-}
-
-.new-arrivals-badge-tag {
-  position: absolute;
-  top: 12px;
-  left: 12px;
-  background: linear-gradient(135deg, var(--color-teal), var(--color-navy-dark));
-  color: var(--color-gold-bright);
-  font-size: 0.7rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  padding: 4px 10px;
-  border-radius: 3px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
-  border: 1px solid rgba(228, 192, 104, 0.4);
-  z-index: 4;
-}
 
 /* ==========================================================================
    EDITORIAL JOURNAL PAGE (The Tradition of Being Weaved)
@@ -5839,4 +5593,27 @@ a.checkout-btn, .checkout-btn {
   .nav-item-dropdown.open .sarees-view-all-cta { color: var(--color-gold-light); font-size: 0.85rem; }
   .nav-item-dropdown.open .sarees-occasions-col { margin-top: 6px; border-top: 1px solid rgba(255, 255, 255, 0.08); padding-top: 6px; }
   .nav-item-dropdown.open .dropdown-caret { transform: rotate(180deg); }
+}
+
+/* Sold out (stock is 0 in Medusa) */
+.product-badge-tag.is-sold-out {
+  background: #B3261E;
+  color: #FFFFFF;
+  border-color: transparent;
+}
+.catalog-saree-card.is-sold-out .catalog-card-image-box img {
+  opacity: 0.6;
+  filter: grayscale(35%);
+}
+.catalog-saree-card.is-sold-out .catalog-card-price {
+  color: var(--color-text-muted, #6b6b6b);
+}
+.wishlist-sold-out {
+  display: inline-block;
+  margin-top: 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #B3261E;
 }

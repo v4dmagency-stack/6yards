@@ -333,13 +333,13 @@ function renderCatalogGrid(products) {
     const soldOut = product.inStock === false;
 
     return `
-      <div class="catalog-saree-card" data-product-id="${escapeHtml(product.id)}">
+      <div class="catalog-saree-card${soldOut ? ' is-sold-out' : ''}" data-product-id="${escapeHtml(product.id)}">
         <div class="catalog-card-image-box">
-          <a href="${url}" class="catalog-card-image-link" aria-label="View ${name}">
+          <a href="${url}" class="catalog-card-image-link" aria-label="View ${name}${soldOut ? ' (sold out)' : ''}">
             <img src="${escapeHtml(product.image)}" alt="${name}" class="img-main" loading="lazy" />
             ${hoverImg && hoverImg !== product.image ? `<img src="${escapeHtml(hoverImg)}" alt="" class="img-hover" loading="lazy" aria-hidden="true" />` : ''}
           </a>
-          <span class="product-badge-tag">${escapeHtml(soldOut ? 'Sold Out' : (product.tag || 'Handloom'))}</span>
+          <span class="product-badge-tag${soldOut ? ' is-sold-out' : ''}">${escapeHtml(soldOut ? 'Sold Out' : (product.tag || 'Handloom'))}</span>
           <button class="wishlist-heart-btn ${wished ? 'active' : ''}" type="button"
                   data-wishlist-toggle="${escapeHtml(product.id)}"
                   aria-pressed="${wished}" aria-label="Save ${name} to wishlist">

@@ -19,7 +19,7 @@ BACKEND_SETUP, RUNBOOK, API_NOTES) describe earlier plans (Railway, Next.js) and
 | `js/medusa-config.js` | Backend URL + publishable key (key is injected at build time from `MEDUSA_PUBLISHABLE_KEY`) |
 | `js/medusa-client.js` | Medusa Store API client: products, cart, promotions, shipping, payment, order completion |
 | `js/store.js` | Shared on every page: cart, wishlist, drawers, header/mobile nav, toasts, newsletter, policy modal |
-| `js/app.js` | Home page only (hero video, collections, New Arrivals) |
+| `js/app.js` | Home page only (hero video, collections, story modal) |
 | `js/collections.js` | Catalog filters/sort/grid |
 | `js/product-page.js` | Product page |
 | `js/checkout.js` | Checkout page (`checkout.html`) |
@@ -81,7 +81,18 @@ Remove the starter T-shirts if present: `npx medusa exec ./src/scripts/clean-sta
 - **Products:** Products → edit title, price, images, stock. New products should be added to the
   "6 Yards Storefront" sales channel and a collection. Optional metadata keys the site understands:
   `occasion` (Wedding/Casual/Comfort/Festive), `originalPrice`, `tag`, `fabric`, `weave`, `color`, `origin`, `length`, `details` (list).
-- **Stock:** Inventory → set the real quantity of each saree (seeded as 5).
+- **Stock:** Inventory → set the real quantity of each saree (seeded as 5, so nothing shows as sold out until
+  real stock is entered).
+- **Sold out:** open the saree in Products. The **Availability** box on the right has **Mark as sold out**; to
+  sell it again enter the number of pieces and click **Back in stock**. This only changes the saree's stock in
+  Medusa (sold out = 0 available), which is what the website reads:
+  - The website shows a red "Sold Out" badge on the card, disables Add to bag / Buy now on the product page,
+    and shows "Sold out" in shoppers' wishlists, on the next page load.
+  - Medusa also refuses to add it to a cart, so it cannot be ordered.
+  - When an order uses the last piece, the saree becomes sold out automatically (reserved pieces don't count as
+    available).
+  - A product created in Admin without any stock shows as sold out until stock is added (Back in stock does that).
+    If "Manage inventory" is off for its variant, it can always be bought and the box explains how to turn it on.
 - **Orders:** Orders → confirm, mark paid when payment arrives, create fulfillment and add tracking.
 - **Promotions:** Promotions → create codes. `WELCOME10` is advertised on the newsletter signup.
 - **Newsletter subscribers:** Customers with metadata `newsletter_opt_in = true`.

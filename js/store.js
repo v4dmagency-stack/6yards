@@ -421,10 +421,16 @@
      ------------------------------------------------------------------------ */
   const Wishlist = {
     items: [],
+    // Ids that are sold out right now (from the live catalog, not the saved snapshot).
+    soldOut: new Set(),
 
     init() {
       this.items = readJSON(STORAGE.wishlist, []).filter((i) => i && i.id);
       this.render();
+      getCatalog().then((catalog) => {
+        this.soldOut = new Set(catalog.filter((p) => p.inStock === false).map((p) => p.id));
+        if (this.soldOut.size) this.render();
+      }).catch(() => {});
     },
 
     has(id) {
@@ -471,7 +477,9 @@
           <div class="cart-item-info">
             <h5><a href="${escapeHtml(productUrl(item))}">${escapeHtml(item.name)}</a></h5>
             <div class="cart-item-price">${formatINR(item.price)}</div>
-            <button type="button" class="wishlist-move-btn" data-wishlist-move="${escapeHtml(item.id)}">Move to Bag</button>
+            ${this.soldOut.has(item.id)
+              ? '<span class="wishlist-sold-out">Sold out</span>'
+              : `<button type="button" class="wishlist-move-btn" data-wishlist-move="${escapeHtml(item.id)}">Move to Bag</button>`}
           </div>
           <button type="button" class="remove-cart-item" data-wishlist-remove="${escapeHtml(item.id)}" aria-label="Remove ${escapeHtml(item.name)} from wishlist">
             <i class="fa-regular fa-trash-can"></i>

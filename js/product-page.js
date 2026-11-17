@@ -212,21 +212,24 @@ function renderRecommendations(allProducts, current) {
 
   const others = allProducts.filter((p) => p.id !== current.id);
   const related = others.filter((p) => p.collection === current.collection || p.occasion === current.occasion);
-  const picks = [...related, ...others.filter((p) => !related.includes(p))].slice(0, 4);
+  // In-stock sarees first, so recommendations don't lead with sold-out pieces.
+  const inStockFirst = (list) => [...list.filter((p) => p.inStock !== false), ...list.filter((p) => p.inStock === false)];
+  const picks = inStockFirst([...related, ...others.filter((p) => !related.includes(p))]).slice(0, 4);
 
   container.innerHTML = picks.map((item) => {
     const url = escapeHtml(productUrl(item));
     const name = escapeHtml(item.name);
     const hoverImg = item.hoverImage || item.gallery?.[1] || item.image;
     const wished = Wishlist.has(item.id);
+    const soldOut = item.inStock === false;
     return `
-      <div class="catalog-saree-card" data-product-id="${escapeHtml(item.id)}">
+      <div class="catalog-saree-card${soldOut ? ' is-sold-out' : ''}" data-product-id="${escapeHtml(item.id)}">
         <div class="catalog-card-image-box">
-          <a href="${url}" class="catalog-card-image-link" aria-label="View ${name}">
+          <a href="${url}" class="catalog-card-image-link" aria-label="View ${name}${soldOut ? ' (sold out)' : ''}">
             <img src="${escapeHtml(item.image)}" alt="${name}" class="img-main" loading="lazy" />
             ${hoverImg && hoverImg !== item.image ? `<img src="${escapeHtml(hoverImg)}" alt="" class="img-hover" loading="lazy" aria-hidden="true" />` : ''}
           </a>
-          <span class="product-badge-tag">${escapeHtml(item.tag || 'Handloom')}</span>
+          <span class="product-badge-tag${soldOut ? ' is-sold-out' : ''}">${escapeHtml(soldOut ? 'Sold Out' : (item.tag || 'Handloom'))}</span>
           <button class="wishlist-heart-btn ${wished ? 'active' : ''}" type="button"
                   data-wishlist-toggle="${escapeHtml(item.id)}" aria-pressed="${wished}" aria-label="Save ${name} to wishlist">
             <i class="${wished ? 'fa-solid' : 'fa-regular'} fa-heart"></i>

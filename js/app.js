@@ -3,14 +3,12 @@
  *
  * Cart, wishlist, navigation and modals live in js/store.js. This file only
  * renders home page content: the hero video, collection circles and the
- * featured "New Arrivals" frames.
+ * "Our craft" story modal.
  */
 
 document.addEventListener('DOMContentLoaded', () => {
   initHeroVideo();
   renderCollections();
-  renderNewArrivals(window.PRODUCTS_DATA || []);
-  window.Store.getCatalog().then(renderNewArrivals);
   initStoryModal();
 });
 
@@ -91,54 +89,6 @@ function renderCollections() {
       <h3 class="collection-name">${escapeHtml(col.name)}</h3>
     </a>
   `).join('');
-}
-
-/* --------------------------------------------------------------------------
-   New Arrivals: 4 featured sarees in artisan frames
-   -------------------------------------------------------------------------- */
-const FEATURED_IDS = ['saree-01', 'saree-10', 'saree-04', 'saree-riwayat-teal-purple'];
-
-function renderNewArrivals(catalog) {
-  const container = document.getElementById('new-arrivals-grid');
-  if (!container || !catalog?.length) return;
-  const { escapeHtml, formatINR, productUrl } = window.Store;
-
-  let selected = FEATURED_IDS.map((id) => catalog.find((p) => p.id === id)).filter(Boolean);
-  if (selected.length < 4) {
-    const newest = catalog.filter((p) => p.isNew && !selected.includes(p));
-    const rest = catalog.filter((p) => !selected.includes(p) && !newest.includes(p));
-    selected = selected.concat(newest, rest).slice(0, 4);
-  }
-
-  container.innerHTML = selected.map((product) => {
-    const url = escapeHtml(productUrl(product));
-    const collectionLabel = product.collectionName
-      ? `${product.collectionName.split(' - ')[0]} Sutra`
-      : 'Sutra Collection';
-    const meta = [product.weave, product.origin].filter(Boolean).map(escapeHtml).join(' • ');
-
-    return `
-      <article class="saree-frame-card" data-product-id="${escapeHtml(product.id)}">
-        <div class="saree-frame-inner">
-          <span class="saree-frame-badge">${escapeHtml(product.tag || 'Handloom')}</span>
-          <div class="saree-frame-img-box">
-            <a href="${url}" aria-label="${escapeHtml(product.name)}">
-              <img src="${escapeHtml(product.image)}" alt="${escapeHtml(product.name)}" loading="lazy" />
-            </a>
-          </div>
-        </div>
-        <div class="saree-frame-caption">
-          <span class="saree-frame-collection">${escapeHtml(collectionLabel)}</span>
-          <h3 class="saree-frame-title"><a href="${url}">${escapeHtml(product.name)}</a></h3>
-          ${meta ? `<span class="saree-frame-weave-tag">${meta}</span>` : ''}
-          <div class="saree-frame-price-row">
-            <span class="saree-frame-price">${formatINR(product.price)}</span>
-            ${product.originalPrice > product.price ? `<span class="saree-frame-original-price">${formatINR(product.originalPrice)}</span>` : ''}
-          </div>
-          <a href="${url}" class="saree-frame-cta">View Saree Details</a>
-        </div>
-      </article>`;
-  }).join('');
 }
 
 /* --------------------------------------------------------------------------
