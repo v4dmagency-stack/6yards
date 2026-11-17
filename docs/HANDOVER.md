@@ -81,6 +81,9 @@ Remove the starter T-shirts if present: `npx medusa exec ./src/scripts/clean-sta
 - **Products:** Products → edit title, price, images, stock. New products should be added to the
   "6 Yards Storefront" sales channel and a collection. Optional metadata keys the site understands:
   `occasion` (Wedding/Casual/Comfort/Festive), `originalPrice`, `tag`, `fabric`, `weave`, `color`, `origin`, `length`, `details` (list).
+- **Fancy Sarees filter:** a saree appears under Fabric → "Fancy Sarees" on the website when its metadata has
+  `fancy` = `true` (Products → saree → Metadata → Edit). Set it to `false` or delete the key to remove it.
+  15 sarees are tagged so far: the soft-silk dual-tones, zari tissues and brocades priced ₹3,200–4,500.
 - **Stock:** Inventory → set the real quantity of each saree (seeded as 5, so nothing shows as sold out until
   real stock is entered).
 - **Sold out:** open the saree in Products. The **Availability** box on the right has **Mark as sold out**; to

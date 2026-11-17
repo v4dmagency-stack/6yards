@@ -126,6 +126,23 @@ export default async function prepareStore({ container }: ExecArgs) {
     logger.info(`Added storefront metadata to ${metadataUpdates.length} products.`)
   }
 
+  // 3a. "Fancy Sarees" filter flag. Only set where it was never set, so a change
+  // made later in Admin (metadata `fancy`) is kept.
+  const fancyIds = new Set(catalog.filter((c) => (c as { fancy?: boolean }).fancy).map((c) => c.id))
+  const { data: fancyRows } = await query.graph({ entity: "product", fields: ["id", "handle", "metadata"] })
+  const fancyUpdates = fancyRows.flatMap((p) => {
+    const metadata = (p.metadata ?? {}) as Record<string, unknown>
+    const storefrontId = (metadata.storefront_id as string) || p.handle
+    if (!fancyIds.has(storefrontId) || metadata.fancy !== undefined) {
+      return []
+    }
+    return [{ id: p.id, metadata: { ...metadata, fancy: true } }]
+  })
+  if (fancyUpdates.length) {
+    await updateProductsWorkflow(container).run({ input: { products: fancyUpdates } })
+    logger.info(`Marked ${fancyUpdates.length} products as Fancy Sarees.`)
+  }
+
   // 3b. Root-relative image paths, so images also load inside Medusa Admin (/app)
   const toSitePath = (url: string) => (/^(https?:)?\/\//.test(url) || url.startsWith("/") ? url : `/${url}`)
   const { data: imageRows } = await query.graph({

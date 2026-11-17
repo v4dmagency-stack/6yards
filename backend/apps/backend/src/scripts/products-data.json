@@ -830,7 +830,8 @@
       "occasion": "Comfort",
       "prod_code": "PROD-506183",
       "thumbnail": "assets/thumbnails/PROD-506183_thumb.jpg",
-      "occasion_reason": "Light-as-air fabric that floats effortlessly around the silhouette with a delicate, gentle tactile sheen."
+      "occasion_reason": "Light-as-air fabric that floats effortlessly around the silhouette with a delicate, gentle tactile sheen.",
+      "fancy": true
     },
     {
       "id": "saree-adaa-teal-elephant",
@@ -908,7 +909,8 @@
       "occasion": "Festive",
       "prod_code": "PROD-927461",
       "thumbnail": "assets/thumbnails/PROD-927461_thumb.jpg",
-      "occasion_reason": "Official Six Yards Festive Top Pick — whimsical modern festive aesthetic blending floral illustration with gold zari."
+      "occasion_reason": "Official Six Yards Festive Top Pick — whimsical modern festive aesthetic blending floral illustration with gold zari.",
+      "fancy": true
     },
     {
       "id": "saree-roop-teal-peacock",
@@ -1612,7 +1614,8 @@
       "prod_code": "M/AS-010",
       "thumbnail": "assets/catalog/leher/sage-parrot-green-1.jpg",
       "samplePrice": false,
-      "priceToConfirm": false
+      "priceToConfirm": false,
+      "fancy": true
     },
     {
       "id": "saree-leher-steel-blue-lavender",
@@ -1646,7 +1649,8 @@
       "prod_code": "M/AS-012",
       "thumbnail": "assets/catalog/leher/steel-blue-lavender-1.jpg",
       "samplePrice": false,
-      "priceToConfirm": false
+      "priceToConfirm": false,
+      "fancy": true
     },
     {
       "id": "saree-leher-olive-lilac-dualtone",
@@ -1680,7 +1684,8 @@
       "prod_code": null,
       "thumbnail": "assets/catalog/leher/olive-lilac-dualtone-1.jpg",
       "samplePrice": true,
-      "priceToConfirm": false
+      "priceToConfirm": false,
+      "fancy": true
     },
     {
       "id": "saree-riwayat-green-orange-pallu",
@@ -1746,7 +1751,8 @@
       "prod_code": null,
       "thumbnail": "assets/catalog/leher/cream-mango-yellow-1.jpg",
       "samplePrice": true,
-      "priceToConfirm": false
+      "priceToConfirm": false,
+      "fancy": true
     },
     {
       "id": "saree-leher-rose-pink-tissue",
@@ -1779,7 +1785,8 @@
       "prod_code": "M/ATS-017",
       "thumbnail": "assets/catalog/leher/rose-pink-tissue-1.jpg",
       "samplePrice": false,
-      "priceToConfirm": false
+      "priceToConfirm": false,
+      "fancy": true
     },
     {
       "id": "saree-roop-violet-black-leaf",
@@ -1813,7 +1820,8 @@
       "prod_code": null,
       "thumbnail": "assets/catalog/roop/violet-black-leaf-1.jpg",
       "samplePrice": true,
-      "priceToConfirm": false
+      "priceToConfirm": false,
+      "fancy": true
     },
     {
       "id": "saree-vastra-black-checks",
@@ -1971,7 +1979,8 @@
       "prod_code": null,
       "thumbnail": "assets/catalog/adaa/navy-floral-blush-1.jpg",
       "samplePrice": true,
-      "priceToConfirm": false
+      "priceToConfirm": false,
+      "fancy": true
     },
     {
       "id": "saree-leher-mint-green-tissue",
@@ -2003,7 +2012,8 @@
       "prod_code": "M/ATS-016",
       "thumbnail": "assets/catalog/leher/mint-green-tissue-1.jpg",
       "samplePrice": false,
-      "priceToConfirm": false
+      "priceToConfirm": false,
+      "fancy": true
     },
     {
       "id": "saree-leher-grey-teal-dualtone",
@@ -2035,7 +2045,8 @@
       "prod_code": null,
       "thumbnail": "assets/catalog/leher/grey-teal-dualtone-1.jpg",
       "samplePrice": true,
-      "priceToConfirm": false
+      "priceToConfirm": false,
+      "fancy": true
     },
     {
       "id": "saree-leher-mauve-zari-border",
@@ -2066,7 +2077,8 @@
       "prod_code": "M/AS-005",
       "thumbnail": "assets/catalog/leher/mauve-zari-border-1.jpg",
       "samplePrice": false,
-      "priceToConfirm": false
+      "priceToConfirm": false,
+      "fancy": true
     },
     {
       "id": "saree-riwayat-onion-pink-red",
@@ -2164,7 +2176,8 @@
       "prod_code": "M/AS-002",
       "thumbnail": "assets/catalog/roop/orange-coffee-paisley-1.jpg",
       "samplePrice": false,
-      "priceToConfirm": false
+      "priceToConfirm": false,
+      "fancy": true
     },
     {
       "id": "saree-leher-silver-grey-lime",
@@ -2392,7 +2405,8 @@
       "prod_code": null,
       "thumbnail": "assets/catalog/leher/powder-blue-purple-1.jpg",
       "samplePrice": true,
-      "priceToConfirm": false
+      "priceToConfirm": false,
+      "fancy": true
     },
     {
       "id": "saree-roop-lilac-plum-border",
@@ -2487,7 +2501,8 @@
       "prod_code": null,
       "thumbnail": "assets/catalog/leher/ivory-gold-tissue-1.jpg",
       "samplePrice": false,
-      "priceToConfirm": true
+      "priceToConfirm": true,
+      "fancy": true
     },
     {
       "id": "saree-riwayat-wine-olive-gold",

@@ -181,6 +181,8 @@
           reviewsCount: meta.reviewsCount ?? base.reviewsCount,
           isBestSeller: meta.isBestSeller ?? base.isBestSeller ?? false,
           isNew: meta.isNew ?? base.isNew ?? false,
+          // Admin metadata values may be strings, so accept "true" as well as true.
+          fancy: meta.fancy == null ? base.fancy === true : String(meta.fancy).toLowerCase() === 'true',
           tag: meta.tag || base.tag || (mp.categories?.[0]?.name || 'Handloom'),
           color: meta.color || base.color || '',
           fabric: meta.fabric || base.fabric || '',

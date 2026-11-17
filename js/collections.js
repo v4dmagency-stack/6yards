@@ -111,7 +111,10 @@ function includesAny(haystack, needle) {
 
 const MATCHERS = {
   collection: (item, value) => (item.collection || item.category || '').toLowerCase() === value.toLowerCase(),
-  fabric: (item, value) => includesAny(item.fabric, value) || includesAny(item.name, value),
+  // "Fancy" is a flag on the product (Medusa metadata `fancy` = true), not a word in the fabric.
+  fabric: (item, value) => (value.toLowerCase() === 'fancy'
+    ? item.fancy === true
+    : includesAny(item.fabric, value) || includesAny(item.name, value)),
   color: (item, value) => includesAny(item.color, value) || includesAny(item.name, value),
   pattern: (item, value) => includesAny(item.weave, value) || includesAny(item.tag, value) || includesAny(item.description, value),
   technique: (item, value) => includesAny(item.weave, value) || includesAny(item.fabric, value) || includesAny(item.description, value),
