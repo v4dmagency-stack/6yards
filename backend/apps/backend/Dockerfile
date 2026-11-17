@@ -17,6 +17,11 @@ COPY . .
 WORKDIR /app/apps/backend
 RUN NODE_OPTIONS=--max-old-space-size=4096 npx medusa build
 
+# `medusa start` runs from this folder and serves the Admin from ./public/admin,
+# but `medusa build` writes the fresh Admin (with src/admin widgets) to
+# .medusa/server/public/admin. Copy it into place so Admin customisations ship.
+RUN rm -rf public/admin && mkdir -p public && cp -r .medusa/server/public/admin public/admin
+
 ENV NODE_ENV=production
 EXPOSE 80
 
