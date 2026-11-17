@@ -149,6 +149,10 @@ Note: the database must use UTF-8 encoding (hosted Postgres providers do by defa
   PC — a locally signed invite is rejected. Creating a user with `medusa user -e ... -p ...` locally works.
 - Storefront publishable key is in `js/medusa-config.js` (public by design).
 - The first request after a quiet period can take ~15 s (cold start on the Hobby plan); later requests are fast.
+- Admin customisations (`src/admin`, e.g. the Availability / Sold out widget) are built by `medusa build` into
+  `.medusa/server/public/admin`; the Dockerfile copies that into `public/admin`, which is what `medusa start`
+  serves. Until 17 Nov 2026 an old committed copy of `public/admin` was served instead, so no Admin
+  customisation reached the live site. `public/admin` is now git-ignored.
 - Product **Export / Import** (Admin → Products): before 16 Nov 2026 export links pointed at
   `http://localhost:9000/static/...` and files lived on the temporary container disk. Files now go to
   Postgres and download from `/files/...` on the site's own domain.
