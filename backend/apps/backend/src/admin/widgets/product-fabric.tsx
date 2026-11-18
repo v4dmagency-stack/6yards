@@ -1,54 +1,57 @@
 import { defineWidgetConfig } from "@medusajs/admin-sdk"
 import { AdminProduct, DetailWidgetProps } from "@medusajs/framework/types"
-import { Button, Checkbox, Container, Heading, Label, Text, toast } from "@medusajs/ui"
-import { useCallback, useEffect, useMemo, useState } from "react"
+import { Button, Checkbox, Container, Heading, Input, Label, Text, toast } from "@medusajs/ui"
+import { useCallback, useEffect, useState } from "react"
 
-type Category = { id: string; name: string; handle: string; rank?: number }
+type Fabric = { id: string; name: string }
 
 /**
  * "Fabric" box on the product page in Medusa Admin.
  *
- * Lists the sub-categories of the "Fabric" category (the options of the
- * website's Fabric filter). Ticking/unticking and saving moves the saree
- * between fabrics; its other categories are kept. Optionally the "Fabric"
- * line shown on the product page (metadata `fabric`) is updated too.
+ * - Fabric filter: ticks = the saree's sub-categories of the "Fabric" category,
+ *   which is what the website's Fabric filter uses. New fabrics added under
+ *   Products -> Categories -> Fabric appear here automatically.
+ * - Fabric shown on the product page: the `fabric` metadata text.
+ * Other categories and metadata of the product are kept as they are.
  */
 const ProductFabricWidget = ({ data: product }: DetailWidgetProps<AdminProduct>) => {
-  const [fabrics, setFabrics] = useState<Category[] | null>(null)
+  const [fabrics, setFabrics] = useState<Fabric[] | null>(null)
+  const [selected, setSelected] = useState<Set<string>>(new Set())
   const [otherCategoryIds, setOtherCategoryIds] = useState<string[]>([])
-  const [initial, setInitial] = useState<string[]>([])
-  const [selected, setSelected] = useState<string[]>([])
-  const [currentText, setCurrentText] = useState("")
-  const [updateText, setUpdateText] = useState(false)
+  const [metadata, setMetadata] = useState<Record<string, unknown>>({})
+  const [fabricText, setFabricText] = useState("")
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
   const load = useCallback(async () => {
     try {
-      const parentRes = await fetch("/admin/product-categories?handle=fabric&fields=id", { credentials: "include" })
-      const parentId = (await parentRes.json()).product_categories?.[0]?.id
-      if (!parentId) {
-        setError('No "Fabric" category exists yet. Create it in Products -> Categories.')
-        return
-      }
-      const [childrenRes, productRes] = await Promise.all([
-        fetch(`/admin/product-categories?parent_category_id=${parentId}&fields=id,name,handle,rank&limit=100`, { credentials: "include" }),
-        fetch(`/admin/products/${product.id}?fields=categories.id,metadata`, { credentials: "include" }),
+      const [catRes, prodRes] = await Promise.all([
+        fetch(
+          "/admin/product-categories?handle=fabric&fields=id,category_children.id,category_children.name,category_children.rank",
+          { credentials: "include" }
+        ),
+        fetch(`/admin/products/${product.id}?fields=id,metadata,categories.id`, { credentials: "include" }),
       ])
-      const children: Category[] = ((await childrenRes.json()).product_categories ?? [])
-        .sort((a: Category, b: Category) => (a.rank ?? 0) - (b.rank ?? 0))
-      const p = (await productRes.json()).product
-      const productCategoryIds: string[] = (p?.categories ?? []).map((c: { id: string }) => c.id)
+      if (!catRes.ok || !prodRes.ok) {
+        throw new Error("Could not load fabrics")
+      }
+      const parent = (await catRes.json()).product_categories?.[0]
+      const children: Fabric[] = (parent?.category_children ?? [])
+        .slice()
+        .sort((a: { rank?: number }, b: { rank?: number }) => (a.rank ?? 0) - (b.rank ?? 0))
+        .map((c: Fabric) => ({ id: c.id, name: c.name }))
+      const prod = (await prodRes.json()).product
+      const productCategoryIds: string[] = (prod.categories ?? []).map((c: { id: string }) => c.id)
       const fabricIds = new Set(children.map((c) => c.id))
-      const current = productCategoryIds.filter((id) => fabricIds.has(id))
 
       setFabrics(children)
+      setSelected(new Set(productCategoryIds.filter((id) => fabricIds.has(id))))
       setOtherCategoryIds(productCategoryIds.filter((id) => !fabricIds.has(id)))
-      setInitial(current)
-      setSelected(current)
-      setCurrentText(String(p?.metadata?.fabric ?? ""))
-    } catch {
-      setError("Could not load fabrics.")
+      setMetadata(prod.metadata ?? {})
+      setFabricText(typeof prod.metadata?.fabric === "string" ? prod.metadata.fabric : "")
+      setError(parent ? null : "There is no \"Fabric\" category yet (Products -> Categories).")
+    } catch (err) {
+      setError((err as Error).message)
     }
   }, [product.id])
 
@@ -56,37 +59,35 @@ const ProductFabricWidget = ({ data: product }: DetailWidgetProps<AdminProduct>)
     load()
   }, [load])
 
-  const changed = useMemo(
-    () => selected.length !== initial.length || selected.some((id) => !initial.includes(id)),
-    [selected, initial]
-  )
-  const selectedNames = (fabrics ?? []).filter((f) => selected.includes(f.id)).map((f) => f.name)
-  // "Cotton Sarees" -> "Cotton" for the product page's Fabric line.
-  const newText = selectedNames.map((n) => n.replace(/\s+Sarees?$/i, "")).join(" & ")
-  const textChange = updateText && Boolean(newText) && newText !== currentText
-
-  const toggle = (id: string, on: boolean) =>
-    setSelected((prev) => (on ? [...prev, id] : prev.filter((x) => x !== id)))
+  const toggle = (id: string, checked: boolean) => {
+    setSelected((prev) => {
+      const next = new Set(prev)
+      if (checked) {
+        next.add(id)
+      } else {
+        next.delete(id)
+      }
+      return next
+    })
+  }
 
   const save = async () => {
     setSaving(true)
     try {
-      const body: Record<string, unknown> = {
-        categories: [...otherCategoryIds, ...selected].map((id) => ({ id })),
-      }
-      if (textChange) {
-        body.metadata = { fabric: newText }
-      }
       const res = await fetch(`/admin/products/${product.id}`, {
         method: "POST",
         credentials: "include",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify(body),
+        body: JSON.stringify({
+          categories: [...otherCategoryIds, ...selected].map((id) => ({ id })),
+          metadata: { ...metadata, fabric: fabricText.trim() },
+        }),
       })
+      const body = await res.json()
       if (!res.ok) {
-        throw new Error((await res.json())?.message || "Could not save the fabric")
+        throw new Error(body?.message || "Could not save the fabric")
       }
-      toast.success(selectedNames.length ? `Fabric saved: ${selectedNames.join(", ")}. The website shows it on the next page load.` : "Removed from all fabrics.")
+      toast.success("Fabric saved. The website shows it on the next page load.")
       await load()
     } catch (err) {
       toast.error((err as Error).message)
@@ -99,47 +100,43 @@ const ProductFabricWidget = ({ data: product }: DetailWidgetProps<AdminProduct>)
     <Container className="divide-y p-0">
       <div className="px-6 py-4">
         <Heading level="h2">Fabric</Heading>
-        <Text size="small" className="text-ui-fg-subtle">
-          Which Fabric filter options this saree appears under on the website.
-        </Text>
       </div>
 
-      <div className="flex flex-col gap-y-3 px-6 py-4">
+      <div className="flex flex-col gap-y-4 px-6 py-4">
         {error ? (
           <Text size="small" className="text-ui-fg-subtle">{error}</Text>
         ) : !fabrics ? (
           <Text size="small" className="text-ui-fg-subtle">Loading…</Text>
         ) : (
           <>
-            {fabrics.map((f) => (
-              <div key={f.id} className="flex items-center gap-x-2">
-                <Checkbox
-                  id={`fabric-${f.id}`}
-                  checked={selected.includes(f.id)}
-                  onCheckedChange={(v) => toggle(f.id, v === true)}
-                />
-                <Label size="small" htmlFor={`fabric-${f.id}`}>{f.name}</Label>
-              </div>
-            ))}
+            <div className="flex flex-col gap-y-2">
+              <Text size="small" weight="plus">Website Fabric filter</Text>
+              {fabrics.map((f) => (
+                <div key={f.id} className="flex items-center gap-x-2">
+                  <Checkbox
+                    id={`fabric-${f.id}`}
+                    checked={selected.has(f.id)}
+                    onCheckedChange={(v) => toggle(f.id, v === true)}
+                  />
+                  <Label size="small" htmlFor={`fabric-${f.id}`}>{f.name}</Label>
+                </div>
+              ))}
+            </div>
 
-            <div className="flex items-start gap-x-2 border-t pt-3">
-              <Checkbox
-                id="fabric-update-text"
-                checked={updateText}
-                onCheckedChange={(v) => setUpdateText(v === true)}
+            <div className="flex flex-col gap-y-1">
+              <Label size="small" weight="plus" htmlFor="fabric-text">Fabric shown on the product page</Label>
+              <Input
+                id="fabric-text"
+                size="small"
+                placeholder="e.g. Kanjivaram Silk"
+                value={fabricText}
+                onChange={(e) => setFabricText(e.target.value)}
               />
-              <Label size="xsmall" htmlFor="fabric-update-text" className="text-ui-fg-subtle">
-                Also update the "Fabric" line on the product page
-                {currentText ? ` (now: "${currentText}")` : ""}
-                {updateText && newText ? ` to "${newText}"` : ""}
-              </Label>
             </div>
 
-            <div className="flex justify-end">
-              <Button size="small" variant="primary" isLoading={saving} disabled={!changed && !textChange} onClick={save}>
-                Save fabric
-              </Button>
-            </div>
+            <Button size="small" variant="secondary" isLoading={saving} onClick={save}>
+              Save fabric
+            </Button>
           </>
         )}
       </div>

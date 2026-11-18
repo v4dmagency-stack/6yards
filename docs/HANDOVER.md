@@ -84,14 +84,13 @@ Remove the starter T-shirts if present: `npx medusa exec ./src/scripts/clean-sta
 - **Fabric (website filter):** Products → Categories → **Fabric** has one sub-category per fabric (Banarasi
   Silk, Kanjivaram Silk, Pure Tussar Silk, Silk Cotton Blend, Cotton Sarees, Fancy Sarees, Designer Sarees,
   Katan Silk). The website's Fabric filter lists exactly these, in this order, with the sarees in each.
-  - To change a saree's fabric: open the saree; the **Fabric** box on the right lists every fabric. Tick the
-    right one(s), untick the old one, **Save fabric**. Its other categories are kept. Tick "Also update the
-    Fabric line on the product page" to change the text shown to shoppers too (e.g. to "Cotton"). A saree can
-    be in several fabrics (silk-cotton sarees are in both Silk Cotton and Cotton). (Organize → Categories
-    does the same, mixed in with the other categories.)
+  - To change a saree's fabric: open the saree; the **Fabric** box on the right lists every fabric with a
+    tick box, plus the "Fabric shown on the product page" text. Change them and click **Save fabric**.
+    A saree can be in several (silk-cotton sarees are in both Silk Cotton and Cotton). The same ticks are
+    also under Organize → Categories.
   - To add a new fabric (e.g. Organza): create a category inside **Fabric** and add sarees; it appears as a
     new filter option. Reorder sub-categories to change the filter order. Empty ones are hidden.
-  - The "Fabric" line on the product page is separate text (Metadata `fabric`); update it too if needed.
+  - The "Fabric" line on the product page is the text field in the same box (stored as Metadata `fabric`).
   - Fancy (15): the soft-silk dual-tones, zari tissues and brocades priced ₹3,200–4,500. Designer (13):
     art- and motif-led designs (Pichwai, Paithani, Kalamkari, Kalka, botanical, floral jaal, leaf and paisley).
   - The older top-level categories Silk, Pichwai, Organza and Chiffon are not used by the website.
