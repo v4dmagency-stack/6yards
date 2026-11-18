@@ -9,6 +9,8 @@ const CollectionsState = {
   products: [],
   activeCollection: null,
   activeSort: 'featured',
+  // 'legacy' = built-in Fabric options; 'category' = Medusa "Fabric" sub-categories.
+  fabricMode: 'legacy',
   priceBounds: { min: 0, max: 30000 },
 };
 
@@ -17,6 +19,19 @@ const OCCASION_KEYWORDS = {
   casual: ['casual', 'linen', 'cotton', 'slub'],
   comfort: ['comfort', 'breathable', 'tussar'],
   festive: ['festive', 'pichwai', 'temple', 'brocade'],
+};
+
+// Built-in Fabric options (used when Medusa is offline) and the Medusa category
+// (under "Fabric") each one corresponds to.
+const LEGACY_FABRIC_HANDLES = {
+  banarasi: 'banarasi',
+  kanjivaram: 'kanjivaram',
+  tussar: 'tussar-silk',
+  'silk cotton': 'cotton-silk',
+  cotton: 'cotton',
+  fancy: 'fancy-sarees',
+  designer: 'designer-sarees',
+  katan: 'katan-silk',
 };
 
 const COLLECTION_TITLES = {
@@ -28,9 +43,16 @@ document.addEventListener('DOMContentLoaded', () => {
   parseUrlParams();
   applyFilters();
 
-  window.Store.getCatalog().then((live) => {
+  Promise.all([
+    window.Store.getCatalog(),
+    window.MedusaClient?.listFabricCategories?.().catch(() => null),
+  ]).then(([live, fabrics]) => {
+    if (fabrics?.length) useFabricCategories(fabrics);
     if (live?.length && live !== window.PRODUCTS_DATA) {
       setProducts(live);
+      applyFilters();
+    } else if (fabrics?.length) {
+      updateFilterCounts();
       applyFilters();
     }
   });
@@ -40,6 +62,31 @@ document.addEventListener('DOMContentLoaded', () => {
     applyFilters();
   });
 });
+
+/**
+ * Replaces the built-in Fabric options with Medusa's "Fabric" sub-categories,
+ * so a saree's fabric is whatever categories it has in Admin. Ticked options
+ * and a ?fabric= link carry over.
+ */
+function useFabricCategories(fabrics) {
+  const group = document.querySelector('input[name="filter-fabric"]')?.closest('.filter-checkbox-group');
+  if (!group) return;
+  const { escapeHtml } = window.Store;
+  const toHandle = (value) => LEGACY_FABRIC_HANDLES[String(value).toLowerCase()] || String(value).toLowerCase();
+  const checked = new Set(checkedValues('fabric').map(toHandle));
+  const param = new URLSearchParams(window.location.search).get('fabric');
+  if (param) checked.add(toHandle(param));
+
+  group.innerHTML = fabrics.map((f) => `
+    <label class="filter-checkbox-label">
+      <div class="filter-checkbox-left">
+        <input type="checkbox" name="filter-fabric" value="${escapeHtml(f.handle)}" onchange="applyFilters()"${checked.has(f.handle) ? ' checked' : ''} />
+        <span>${escapeHtml(f.name)}</span>
+      </div>
+      <span class="filter-item-count"></span>
+    </label>`).join('');
+  CollectionsState.fabricMode = 'category';
+}
 
 function setProducts(list) {
   CollectionsState.products = list;
@@ -71,7 +118,8 @@ function parseUrlParams() {
     const value = params.get(key);
     if (!value) return;
     document.querySelectorAll(`input[name="filter-${key}"]`).forEach((cb) => {
-      if (cb.value.toLowerCase() === value.toLowerCase()) cb.checked = true;
+      const v = value.toLowerCase();
+      if (cb.value.toLowerCase() === v || (key === 'fabric' && cb.value === LEGACY_FABRIC_HANDLES[v])) cb.checked = true;
     });
   });
 
@@ -111,8 +159,11 @@ function includesAny(haystack, needle) {
 
 const MATCHERS = {
   collection: (item, value) => (item.collection || item.category || '').toLowerCase() === value.toLowerCase(),
-  // "Fancy" and "Designer" are Medusa categories (see medusa-client.js), not words in the fabric.
+  // Online: a saree's fabrics are its Medusa "Fabric" sub-categories.
+  // Offline: the built-in options match words in the fabric/name, plus the
+  // Fancy / Designer flags from the bundled catalog.
   fabric: (item, value) => {
+    if (CollectionsState.fabricMode === 'category') return (item.categoryHandles || []).includes(value);
     const key = value.toLowerCase();
     if (key === 'fancy') return item.fancy === true;
     if (key === 'designer') return item.designer === true;

@@ -376,7 +376,8 @@ export default async function seed6Yards({
 
     // Determine category id if matches
     let matchedCatId: string | undefined = undefined;
-    for (const [catName, catId] of Object.entries(categoryMap)) {
+    // Only the seed's own categories; fabric categories are assigned by prepare-store.ts.
+    for (const [catName, catId] of Object.entries(categoryMap).filter(([name]) => categoryNames.some((n) => n.toLowerCase() === name))) {
       if (p.fabric.toLowerCase().includes(catName) || p.weave.toLowerCase().includes(catName) || (p.tag && p.tag.toLowerCase().includes(catName))) {
         matchedCatId = catId;
         break;

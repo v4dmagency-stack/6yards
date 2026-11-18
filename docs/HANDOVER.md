@@ -81,12 +81,17 @@ Remove the starter T-shirts if present: `npx medusa exec ./src/scripts/clean-sta
 - **Products:** Products → edit title, price, images, stock. New products should be added to the
   "6 Yards Storefront" sales channel and a collection. Optional metadata keys the site understands:
   `occasion` (Wedding/Casual/Comfort/Festive), `originalPrice`, `tag`, `fabric`, `weave`, `color`, `origin`, `length`, `details` (list).
-- **Fancy Sarees / Designer Sarees:** these are Medusa product categories (Products → Categories), and the
-  website's Fabric filter lists the sarees in them. Add or remove sarees there (or on a product: Organize →
-  Categories). Keep the category handles `fancy-sarees` and `designer-sarees`; the website looks them up by handle.
-  - Fancy (15): the soft-silk dual-tones, zari tissues and brocades priced ₹3,200–4,500.
-  - Designer (13): art- and motif-led designs (Pichwai, Paithani, Kalamkari, Kalka, botanical, floral jaal,
-    leaf and paisley brocades). A saree can be in both.
+- **Fabric (website filter):** Products → Categories → **Fabric** has one sub-category per fabric (Banarasi
+  Silk, Kanjivaram Silk, Pure Tussar Silk, Silk Cotton Blend, Cotton Sarees, Fancy Sarees, Designer Sarees,
+  Katan Silk). The website's Fabric filter lists exactly these, in this order, with the sarees in each.
+  - To change a saree's fabric: open the saree → **Organize** → Categories, tick/untick the fabric
+    sub-categories, save. A saree can be in several (silk-cotton sarees are in both Silk Cotton and Cotton).
+  - To add a new fabric (e.g. Organza): create a category inside **Fabric** and add sarees; it appears as a
+    new filter option. Reorder sub-categories to change the filter order. Empty ones are hidden.
+  - The "Fabric" line on the product page is separate text (Metadata `fabric`); update it too if needed.
+  - Fancy (15): the soft-silk dual-tones, zari tissues and brocades priced ₹3,200–4,500. Designer (13):
+    art- and motif-led designs (Pichwai, Paithani, Kalamkari, Kalka, botanical, floral jaal, leaf and paisley).
+  - The older top-level categories Silk, Pichwai, Organza and Chiffon are not used by the website.
 - **Stock:** Inventory → set the real quantity of each saree (seeded as 5, so nothing shows as sold out until
   real stock is entered).
 - **Sold out:** open the saree in Products. The **Availability** box on the right has **Mark as sold out**; to

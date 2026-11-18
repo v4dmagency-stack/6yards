@@ -5617,3 +5617,24 @@ a.checkout-btn, .checkout-btn {
   text-transform: uppercase;
   color: #B3261E;
 }
+
+/* Shop address in the footer */
+.footer-address {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  margin: -8px 0 22px;
+  font-style: normal;
+  font-size: 0.85rem;
+  line-height: 1.6;
+  color: rgba(242, 228, 214, 0.75);
+}
+.footer-address i {
+  margin-top: 4px;
+  color: var(--color-gold-bright, #F7D784);
+}
+.footer-address a {
+  color: var(--color-gold-bright, #F7D784);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
