@@ -439,8 +439,6 @@ export default async function seed6Yards({
               length: p.length,
               origin: p.origin,
               details: p.details,
-              // Shown under the "Fancy Sarees" fabric filter on the website.
-              ...((p as any).fancy ? { fancy: true } : {}),
               // Placeholder prices the shop still has to confirm in Admin.
               ...((p as any).samplePrice ? { sample_price: true } : {}),
               ...((p as any).priceToConfirm ? { price_to_confirm: true } : {}),

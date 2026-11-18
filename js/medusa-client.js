@@ -160,6 +160,7 @@
         const gallery = imageUrls.length ? imageUrls : (base.gallery || (image ? [image] : []));
         const collectionHandle = mp.collection?.handle || meta.collection || base.collection || '';
         const inStock = variant.manage_inventory === false || variant.inventory_quantity == null || variant.inventory_quantity > 0;
+        const categoryHandles = (mp.categories || []).map((c) => c?.handle).filter(Boolean);
 
         return {
           ...base,
@@ -181,8 +182,9 @@
           reviewsCount: meta.reviewsCount ?? base.reviewsCount,
           isBestSeller: meta.isBestSeller ?? base.isBestSeller ?? false,
           isNew: meta.isNew ?? base.isNew ?? false,
-          // Admin metadata values may be strings, so accept "true" as well as true.
-          fancy: meta.fancy == null ? base.fancy === true : String(meta.fancy).toLowerCase() === 'true',
+          // Fabric filter groups come from Medusa categories (Admin -> Products -> Categories).
+          fancy: categoryHandles.includes('fancy-sarees'),
+          designer: categoryHandles.includes('designer-sarees'),
           tag: meta.tag || base.tag || (mp.categories?.[0]?.name || 'Handloom'),
           color: meta.color || base.color || '',
           fabric: meta.fabric || base.fabric || '',

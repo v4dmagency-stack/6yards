@@ -1,7 +1,9 @@
 import { ExecArgs } from "@medusajs/framework/types"
 import { ContainerRegistrationKeys } from "@medusajs/framework/utils"
 import {
+  batchLinkProductsToCategoryWorkflow,
   createInventoryLevelsWorkflow,
+  createProductCategoriesWorkflow,
   createPromotionsWorkflow,
   linkProductsToSalesChannelWorkflow,
   updateProductsWorkflow,
@@ -14,6 +16,22 @@ const STOREFRONT_CHANNEL = "6 Yards Storefront"
 const FREE_SHIPPING_THRESHOLD = 5000
 const DEFAULT_STOCK = Number(process.env.DEFAULT_STOCK_QUANTITY || 5)
 
+// Categories the website's Fabric filter reads (by handle; keep in sync with js/medusa-client.js).
+const STOREFRONT_CATEGORIES = [
+  {
+    name: "Fancy Sarees",
+    handle: "fancy-sarees",
+    flag: "fancy",
+    description: "Lighter soft-silk dual-tones, zari tissues and brocades.",
+  },
+  {
+    name: "Designer Sarees",
+    handle: "designer-sarees",
+    flag: "designer",
+    description: "Art- and motif-led designs: Pichwai, Paithani, Kalamkari, botanical and floral.",
+  },
+]
+
 /**
  * Makes a 6 Yards database ready to sell. Safe to run any number of times:
  * every step only fills in what is missing.
@@ -22,7 +40,8 @@ const DEFAULT_STOCK = Number(process.env.DEFAULT_STOCK_QUANTITY || 5)
  *
  * 1. Store uses INR as its default currency and the storefront sales channel.
  * 2. Every product is in the "6 Yards Storefront" sales channel.
- * 3. Every product has `metadata.storefront_id` (matches js/products.js ids).
+ * 3. Every product has `metadata.storefront_id` (matches js/products.js ids),
+ *    and the "Fancy Sarees" / "Designer Sarees" categories exist.
  * 4. Every inventory item has stock at the warehouse (DEFAULT_STOCK_QUANTITY,
  *    default 5) so variants can be added to carts. Adjust real stock in
  *    Admin -> Inventory afterwards.
@@ -126,21 +145,47 @@ export default async function prepareStore({ container }: ExecArgs) {
     logger.info(`Added storefront metadata to ${metadataUpdates.length} products.`)
   }
 
-  // 3a. "Fancy Sarees" filter flag. Only set where it was never set, so a change
-  // made later in Admin (metadata `fancy`) is kept.
-  const fancyIds = new Set(catalog.filter((c) => (c as { fancy?: boolean }).fancy).map((c) => c.id))
-  const { data: fancyRows } = await query.graph({ entity: "product", fields: ["id", "handle", "metadata"] })
-  const fancyUpdates = fancyRows.flatMap((p) => {
-    const metadata = (p.metadata ?? {}) as Record<string, unknown>
-    const storefrontId = (metadata.storefront_id as string) || p.handle
-    if (!fancyIds.has(storefrontId) || metadata.fancy !== undefined) {
-      return []
-    }
-    return [{ id: p.id, metadata: { ...metadata, fancy: true } }]
+  // 3a. "Fancy Sarees" and "Designer Sarees" product categories (website Fabric
+  // filter). Sarees flagged `fancy` / `designer` in products-data.json are added
+  // only when the category is first created, so later changes in Admin
+  // (Products -> Categories) are kept on re-runs.
+  const { data: rowsForCategories } = await query.graph({
+    entity: "product",
+    fields: ["id", "handle", "metadata"],
   })
-  if (fancyUpdates.length) {
-    await updateProductsWorkflow(container).run({ input: { products: fancyUpdates } })
-    logger.info(`Marked ${fancyUpdates.length} products as Fancy Sarees.`)
+  const storefrontIdOf = (p: { handle: string; metadata?: Record<string, unknown> | null }) =>
+    ((p.metadata ?? {}).storefront_id as string) || p.handle
+  for (const def of STOREFRONT_CATEGORIES) {
+    const { data: found } = await query.graph({
+      entity: "product_category",
+      fields: ["id"],
+      filters: { handle: def.handle },
+    })
+    if (found.length) {
+      continue
+    }
+    const { result: created } = await createProductCategoriesWorkflow(container).run({
+      input: {
+        product_categories: [{ name: def.name, handle: def.handle, description: def.description, is_active: true, is_internal: false }],
+      },
+    })
+    const flagged = new Set(catalog.filter((c) => (c as Record<string, unknown>)[def.flag] === true).map((c) => c.id))
+    const productIds = rowsForCategories.filter((p) => flagged.has(storefrontIdOf(p as any))).map((p) => p.id)
+    if (productIds.length) {
+      await batchLinkProductsToCategoryWorkflow(container).run({
+        input: { id: created[0].id, add: productIds, remove: [] },
+      })
+    }
+    logger.info(`Created category "${def.name}" with ${productIds.length} sarees.`)
+  }
+
+  // The first version of the Fancy filter used metadata `fancy`; the category replaces it.
+  const staleFancy = rowsForCategories.filter((p) => (p.metadata ?? {}).fancy !== undefined)
+  if (staleFancy.length) {
+    await updateProductsWorkflow(container).run({
+      input: { products: staleFancy.map((p) => ({ id: p.id, metadata: { fancy: "" } })) },
+    })
+    logger.info(`Removed the old "fancy" metadata from ${staleFancy.length} products.`)
   }
 
   // 3b. Root-relative image paths, so images also load inside Medusa Admin (/app)

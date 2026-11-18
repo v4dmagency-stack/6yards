@@ -81,7 +81,8 @@
       "occasion": "Festive",
       "prod_code": "PROD-719176",
       "thumbnail": "assets/thumbnails/PROD-719176_thumb.jpg",
-      "occasion_reason": "Graceful celebratory pink featuring heritage Pichwai motifs and shimmering borders for festive ceremonies."
+      "occasion_reason": "Graceful celebratory pink featuring heritage Pichwai motifs and shimmering borders for festive ceremonies.",
+      "designer": true
     },
     {
       "id": "saree-02",
@@ -113,7 +114,8 @@
       "occasion": "Festive",
       "prod_code": "PROD-542417",
       "thumbnail": "assets/thumbnails/PROD-542417_thumb.jpg",
-      "occasion_reason": "Celebrates sacred Shrinathji Pichwai art with blooming lotuses, crafted for Diwali, temple festivals, and festive gatherings."
+      "occasion_reason": "Celebrates sacred Shrinathji Pichwai art with blooming lotuses, crafted for Diwali, temple festivals, and festive gatherings.",
+      "designer": true
     },
     {
       "id": "saree-03",
@@ -791,7 +793,8 @@
       "occasion": "Festive",
       "prod_code": "PROD-408275",
       "thumbnail": "assets/thumbnails/PROD-408275_thumb.jpg",
-      "occasion_reason": "Celebratory ivory canvas showcasing exuberant nature motifs and peacocks, ideal for Griha Pravesh and festive pujas."
+      "occasion_reason": "Celebratory ivory canvas showcasing exuberant nature motifs and peacocks, ideal for Griha Pravesh and festive pujas.",
+      "designer": true
     },
     {
       "id": "saree-adaa-mint-leaf",
@@ -831,7 +834,8 @@
       "prod_code": "PROD-506183",
       "thumbnail": "assets/thumbnails/PROD-506183_thumb.jpg",
       "occasion_reason": "Light-as-air fabric that floats effortlessly around the silhouette with a delicate, gentle tactile sheen.",
-      "fancy": true
+      "fancy": true,
+      "designer": true
     },
     {
       "id": "saree-adaa-teal-elephant",
@@ -870,7 +874,8 @@
       "occasion": "Festive",
       "prod_code": "PROD-749320",
       "thumbnail": "assets/thumbnails/PROD-749320_thumb.jpg",
-      "occasion_reason": "Ancient sacred symbols of prosperity and festivity woven in deep jewel tones for family festivities and rituals."
+      "occasion_reason": "Ancient sacred symbols of prosperity and festivity woven in deep jewel tones for family festivities and rituals.",
+      "designer": true
     },
     {
       "id": "saree-adaa-lilac-sketch",
@@ -910,7 +915,8 @@
       "prod_code": "PROD-927461",
       "thumbnail": "assets/thumbnails/PROD-927461_thumb.jpg",
       "occasion_reason": "Official Six Yards Festive Top Pick — whimsical modern festive aesthetic blending floral illustration with gold zari.",
-      "fancy": true
+      "fancy": true,
+      "designer": true
     },
     {
       "id": "saree-roop-teal-peacock",
@@ -1027,7 +1033,8 @@
       "occasion": "Casual",
       "prod_code": "PROD-163948",
       "thumbnail": "assets/thumbnails/PROD-163948_thumb.jpg",
-      "occasion_reason": "Playful yet refined flamingo prints on a soothing peach-beige base, great for casual garden parties and holidays."
+      "occasion_reason": "Playful yet refined flamingo prints on a soothing peach-beige base, great for casual garden parties and holidays.",
+      "designer": true
     },
     {
       "id": "saree-vastra-beige-tussar",
@@ -1105,7 +1112,8 @@
       "occasion": "Casual",
       "prod_code": "PROD-692154",
       "thumbnail": "assets/thumbnails/PROD-692154_thumb.jpg",
-      "occasion_reason": "Contemporary minimalist slate tone with light motifs, bridging smart office wear and informal dinners."
+      "occasion_reason": "Contemporary minimalist slate tone with light motifs, bridging smart office wear and informal dinners.",
+      "designer": true
     },
     {
       "id": "saree-leher-bronze-kalamkari",
@@ -1144,7 +1152,8 @@
       "occasion": "Festive",
       "prod_code": "PROD-850193",
       "thumbnail": "assets/thumbnails/PROD-850193_thumb.jpg",
-      "occasion_reason": "Rich handcrafted Kalamkari narrative pallu paired with geometric checks, perfect for festive arts and Navratri."
+      "occasion_reason": "Rich handcrafted Kalamkari narrative pallu paired with geometric checks, perfect for festive arts and Navratri.",
+      "designer": true
     },
     {
       "id": "saree-riwayat-purple-silver",
@@ -1408,7 +1417,8 @@
       "prod_code": "ADISS-016",
       "thumbnail": "assets/catalog/adaa/ivory-maroon-floral-1.jpg",
       "samplePrice": false,
-      "priceToConfirm": false
+      "priceToConfirm": false,
+      "designer": true
     },
     {
       "id": "saree-riwayat-mustard-coffee-zari",
@@ -1821,7 +1831,8 @@
       "thumbnail": "assets/catalog/roop/violet-black-leaf-1.jpg",
       "samplePrice": true,
       "priceToConfirm": false,
-      "fancy": true
+      "fancy": true,
+      "designer": true
     },
     {
       "id": "saree-vastra-black-checks",
@@ -1980,7 +1991,8 @@
       "thumbnail": "assets/catalog/adaa/navy-floral-blush-1.jpg",
       "samplePrice": true,
       "priceToConfirm": false,
-      "fancy": true
+      "fancy": true,
+      "designer": true
     },
     {
       "id": "saree-leher-mint-green-tissue",
@@ -2177,7 +2189,8 @@
       "thumbnail": "assets/catalog/roop/orange-coffee-paisley-1.jpg",
       "samplePrice": false,
       "priceToConfirm": false,
-      "fancy": true
+      "fancy": true,
+      "designer": true
     },
     {
       "id": "saree-leher-silver-grey-lime",
