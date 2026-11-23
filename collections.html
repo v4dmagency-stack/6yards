@@ -473,22 +473,34 @@
               </label>
               <label class="filter-checkbox-label">
                 <div class="filter-checkbox-left">
-                  <input type="checkbox" name="filter-fabric" value="Fancy" onchange="applyFilters()" />
+                  <input type="checkbox" name="filter-fabric" value="Katan" onchange="applyFilters()" />
+                  <span>Katan Silk</span>
+                </div>
+                <span class="filter-item-count"></span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Filter 4: Category (Medusa categories; separate from fabric) -->
+        <div class="filter-accordion-item open">
+          <button type="button" class="filter-accordion-toggle" onclick="toggleFilterAccordion(this)">
+            <span>Category</span>
+            <i class="fa-solid fa-chevron-down"></i>
+          </button>
+          <div class="filter-accordion-body">
+            <div class="filter-checkbox-group">
+              <label class="filter-checkbox-label">
+                <div class="filter-checkbox-left">
+                  <input type="checkbox" name="filter-category" value="fancy-sarees" onchange="applyFilters()" />
                   <span>Fancy Sarees</span>
                 </div>
                 <span class="filter-item-count"></span>
               </label>
               <label class="filter-checkbox-label">
                 <div class="filter-checkbox-left">
-                  <input type="checkbox" name="filter-fabric" value="Designer" onchange="applyFilters()" />
+                  <input type="checkbox" name="filter-category" value="designer-sarees" onchange="applyFilters()" />
                   <span>Designer Sarees</span>
-                </div>
-                <span class="filter-item-count"></span>
-              </label>
-              <label class="filter-checkbox-label">
-                <div class="filter-checkbox-left">
-                  <input type="checkbox" name="filter-fabric" value="Katan" onchange="applyFilters()" />
-                  <span>Katan Silk</span>
                 </div>
                 <span class="filter-item-count"></span>
               </label>

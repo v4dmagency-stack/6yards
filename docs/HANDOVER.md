@@ -81,19 +81,20 @@ Remove the starter T-shirts if present: `npx medusa exec ./src/scripts/clean-sta
 - **Products:** Products → edit title, price, images, stock. New products should be added to the
   "6 Yards Storefront" sales channel and a collection. Optional metadata keys the site understands:
   `occasion` (Wedding/Casual/Comfort/Festive), `originalPrice`, `tag`, `fabric`, `weave`, `color`, `origin`, `length`, `details` (list).
-- **Fabric (website filter):** Products → Categories → **Fabric** has one sub-category per fabric (Banarasi
-  Silk, Kanjivaram Silk, Pure Tussar Silk, Silk Cotton Blend, Cotton Sarees, Fancy Sarees, Designer Sarees,
-  Katan Silk). The website's Fabric filter lists exactly these, in this order, with the sarees in each.
-  - To change a saree's fabric: open the saree; the **Fabric** box on the right lists every fabric with a
-    tick box, plus the "Fabric shown on the product page" text. Change them and click **Save fabric**.
-    A saree can be in several (silk-cotton sarees are in both Silk Cotton and Cotton). The same ticks are
-    also under Organize → Categories.
-  - To add a new fabric (e.g. Organza): create a category inside **Fabric** and add sarees; it appears as a
-    new filter option. Reorder sub-categories to change the filter order. Empty ones are hidden.
-  - The "Fabric" line on the product page is the text field in the same box (stored as Metadata `fabric`).
-  - Fancy (15): the soft-silk dual-tones, zari tissues and brocades priced ₹3,200–4,500. Designer (13):
-    art- and motif-led designs (Pichwai, Paithani, Kalamkari, Kalka, botanical, floral jaal, leaf and paisley).
-  - The older top-level categories Silk, Pichwai, Organza and Chiffon are not used by the website.
+- **Fabric and Category are two separate attributes.**
+  - **Fabric** is each saree's own **Material** attribute (one fabric per saree). To change it, open the saree:
+    the **Fabric** box on the right has the fabric (pick an existing one or type a new one) and the longer
+    "Fabric shown on the product page" text (Metadata `fabric`); click **Save fabric**. Material is also
+    under the product's Attributes section and in the CSV import/export ("Product Material").
+    The website's Fabric filter lists every fabric used by at least one saree, A–Z, so typing a new fabric
+    adds a filter option. Current fabrics: Kanjivaram Silk, Silk Cotton Blend, Soft Silk, Katan Silk,
+    Tussar Silk, Cotton, Zari Tissue, Mulberry Silk, Chanderi Silk Blend, Modal Silk Blend.
+  - **Category** is Medusa's categories (Products → Categories, or a product's Organize → Categories).
+    The website's Category filter lists the categories that have sarees: Fancy Sarees (15, the soft-silk
+    dual-tones, zari tissues and brocades priced ₹3,200–4,500) and Designer Sarees (13, art- and motif-led
+    designs). A new category with sarees appears there automatically. The old fabric-type categories
+    (Fabric and its sub-categories, Silk, Cotton Silk, Banarasi, Kanjivaram, Organza, Chiffon, Pichwai)
+    are not shown on the website.
 - **Stock:** Inventory → set the real quantity of each saree (seeded as 5, so nothing shows as sold out until
   real stock is entered).
 - **Sold out:** open the saree in Products. The **Availability** box on the right has **Mark as sold out**; to

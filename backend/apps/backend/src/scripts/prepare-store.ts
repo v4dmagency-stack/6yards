@@ -17,18 +17,28 @@ const STOREFRONT_CHANNEL = "6 Yards Storefront"
 const FREE_SHIPPING_THRESHOLD = 5000
 const DEFAULT_STOCK = Number(process.env.DEFAULT_STOCK_QUANTITY || 5)
 
-// The website's Fabric filter lists the children of the "Fabric" category, in
-// this order (rank). Initial members: `word` = sarees whose fabric or title
-// contains it (the filter's previous rule); `flag` = sarees flagged in
-// products-data.json. After that, membership is managed in Admin.
-type FabricCategory = { name: string; handle: string; word?: string; flag?: string; description?: string }
-const FABRIC_PARENT = { name: "Fabric", handle: "fabric" }
-const FABRIC_CATEGORIES: FabricCategory[] = [
-  { name: "Banarasi Silk", handle: "banarasi", word: "Banarasi" },
-  { name: "Kanjivaram Silk", handle: "kanjivaram", word: "Kanjivaram" },
-  { name: "Pure Tussar Silk", handle: "tussar-silk", word: "Tussar" },
-  { name: "Silk Cotton Blend", handle: "cotton-silk", word: "Silk Cotton" },
-  { name: "Cotton Sarees", handle: "cotton", word: "Cotton" },
+// Fabric is the product's own "Material" attribute (one per saree, Admin ->
+// product -> Attributes / Fabric box), separate from categories. Where a saree
+// has no Material yet, it is filled from its fabric text (first match wins,
+// most specific first), else from the old fabric categories, else left blank.
+const FABRIC_RULES: { name: string; words: string[]; categoryHandle: string }[] = [
+  { name: "Tussar Silk", words: ["tussar"], categoryHandle: "tussar-silk" },
+  { name: "Katan Silk", words: ["katan"], categoryHandle: "katan-silk" },
+  { name: "Silk Cotton Blend", words: ["silk cotton", "cotton-silk", "cotton silk"], categoryHandle: "cotton-silk" },
+  { name: "Cotton", words: ["cotton"], categoryHandle: "cotton" },
+  { name: "Kanjivaram Silk", words: ["kanjivaram", "kanchipuram"], categoryHandle: "kanjivaram" },
+  { name: "Banarasi Silk", words: ["banarasi"], categoryHandle: "banarasi" },
+  // Taken from the sarees' own fabric text.
+  { name: "Zari Tissue", words: ["tissue"], categoryHandle: "" },
+  { name: "Soft Silk", words: ["soft silk"], categoryHandle: "" },
+  { name: "Mulberry Silk", words: ["mulberry"], categoryHandle: "" },
+  { name: "Chanderi Silk Blend", words: ["chanderi"], categoryHandle: "" },
+  { name: "Modal Silk Blend", words: ["modal"], categoryHandle: "" },
+]
+
+// Categories (a separate attribute from fabric): top-level, website Category filter.
+// Created once with the sarees flagged in products-data.json; then managed in Admin.
+const STYLE_CATEGORIES = [
   {
     name: "Fancy Sarees",
     handle: "fancy-sarees",
@@ -41,7 +51,6 @@ const FABRIC_CATEGORIES: FabricCategory[] = [
     flag: "designer",
     description: "Art- and motif-led designs: Pichwai, Paithani, Kalamkari, botanical and floral.",
   },
-  { name: "Katan Silk", handle: "katan-silk", word: "Katan" },
 ]
 
 /**
@@ -53,7 +62,8 @@ const FABRIC_CATEGORIES: FabricCategory[] = [
  * 1. Store uses INR as its default currency and the storefront sales channel.
  * 2. Every product is in the "6 Yards Storefront" sales channel.
  * 3. Every product has `metadata.storefront_id` (matches js/products.js ids),
- *    and the "Fabric" category with its fabric sub-categories exists.
+ *    a fabric (Material) where one can be worked out, and the top-level
+ *    "Fancy Sarees" / "Designer Sarees" categories exist.
  * 4. Every inventory item has stock at the warehouse (DEFAULT_STOCK_QUANTITY,
  *    default 5) so variants can be added to carts. Adjust real stock in
  *    Admin -> Inventory afterwards.
@@ -157,90 +167,76 @@ export default async function prepareStore({ container }: ExecArgs) {
     logger.info(`Added storefront metadata to ${metadataUpdates.length} products.`)
   }
 
-  // 3a. Fabric categories (website Fabric filter). A fabric category is set up
-  // once, when it is not yet under "Fabric": it is created or moved there and
-  // given its initial sarees. Re-runs skip it, so changes made in Admin
-  // (Products -> Categories, or a product's Organize -> Categories) are kept.
+  // 3a. Fabric (product Material) and the Fancy / Designer categories.
   const { data: rowsForCategories } = await query.graph({
     entity: "product",
-    fields: ["id", "title", "handle", "metadata"],
+    fields: ["id", "title", "handle", "material", "metadata", "categories.handle"],
   })
   const storefrontIdOf = (p: { handle: string; metadata?: Record<string, unknown> | null }) =>
     ((p.metadata ?? {}).storefront_id as string) || p.handle
   const catalogById = new Map(catalog.map((c) => [c.id, c as Record<string, unknown>]))
 
-  const findCategory = async (handle: string) => {
-    const { data } = await query.graph({
-      entity: "product_category",
-      fields: ["id", "parent_category_id", "products.id"],
-      filters: { handle },
-    })
-    return data[0] as { id: string; parent_category_id: string | null; products?: { id: string }[] } | undefined
-  }
-
-  let parent = await findCategory(FABRIC_PARENT.handle)
-  if (!parent) {
-    const { result } = await createProductCategoriesWorkflow(container).run({
-      input: { product_categories: [{ ...FABRIC_PARENT, is_active: true, is_internal: false, rank: 0 }] },
-    })
-    parent = { id: result[0].id, parent_category_id: null }
-    logger.info(`Created the "${FABRIC_PARENT.name}" category.`)
-  }
-
-  for (const [rank, def] of FABRIC_CATEGORIES.entries()) {
-    const existing = await findCategory(def.handle)
-    if (existing?.parent_category_id === parent.id) {
+  // Fabric: fill Material only where it is empty, so edits in Admin are kept.
+  const fabricUpdates: { id: string; material: string }[] = []
+  const noFabric: string[] = []
+  for (const p of rowsForCategories as any[]) {
+    if (p.material && String(p.material).trim()) {
       continue
     }
-
-    const wanted = new Set(
-      rowsForCategories
-        .filter((p) => {
-          const meta = (p.metadata ?? {}) as Record<string, unknown>
-          const base = catalogById.get(storefrontIdOf(p as any))
-          if (def.flag) {
-            return base?.[def.flag] === true
-          }
-          const text = `${(meta.fabric as string) || (base?.fabric as string) || ""} ${p.title}`.toLowerCase()
-          return text.includes(def.word!.toLowerCase())
-        })
-        .map((p) => p.id)
-    )
-
-    let categoryId: string
-    let current = new Set<string>()
-    if (existing) {
-      categoryId = existing.id
-      current = new Set((existing.products ?? []).map((p) => p.id))
-      await updateProductCategoriesWorkflow(container).run({
-        input: { selector: { id: existing.id }, update: { name: def.name, parent_category_id: parent.id, rank } },
-      })
+    const base = catalogById.get(storefrontIdOf(p))
+    const text = `${(p.metadata?.fabric as string) || (base?.fabric as string) || ""} ${p.title ?? ""}`.toLowerCase()
+    const handles = new Set<string>((p.categories ?? []).map((c: { handle: string }) => c?.handle))
+    const rule =
+      FABRIC_RULES.find((r) => r.words.some((w) => text.includes(w))) ||
+      FABRIC_RULES.find((r) => handles.has(r.categoryHandle))
+    if (rule) {
+      fabricUpdates.push({ id: p.id, material: rule.name })
     } else {
-      const { result } = await createProductCategoriesWorkflow(container).run({
-        input: {
-          product_categories: [{
-            name: def.name,
-            handle: def.handle,
-            description: def.description,
-            parent_category_id: parent.id,
-            rank,
-            is_active: true,
-            is_internal: false,
-          }],
-        },
-      })
-      categoryId = result[0].id
+      noFabric.push(p.title || p.handle)
     }
+  }
+  if (fabricUpdates.length) {
+    await updateProductsWorkflow(container).run({ input: { products: fabricUpdates } })
+    const counts = fabricUpdates.reduce<Record<string, number>>((acc, u) => {
+      acc[u.material] = (acc[u.material] ?? 0) + 1
+      return acc
+    }, {})
+    logger.info(`Set the fabric (Material) of ${fabricUpdates.length} products: ${JSON.stringify(counts)}`)
+    if (noFabric.length) {
+      logger.info(`No fabric could be worked out for ${noFabric.length} products (set it in Admin): ${noFabric.join("; ")}`)
+    }
+  }
 
-    // Flag categories (Fancy, Designer) that already exist keep their members.
-    const keepMembers = Boolean(existing && def.flag)
-    const add = keepMembers ? [] : [...wanted].filter((id) => !current.has(id))
-    const remove = keepMembers ? [] : [...current].filter((id) => !wanted.has(id))
-    if (add.length || remove.length) {
-      await batchLinkProductsToCategoryWorkflow(container).run({ input: { id: categoryId, add, remove } })
+  // Categories: Fancy / Designer are top-level categories, not under "Fabric".
+  for (const def of STYLE_CATEGORIES) {
+    const { data: found } = await query.graph({
+      entity: "product_category",
+      fields: ["id", "parent_category_id"],
+      filters: { handle: def.handle },
+    })
+    const existing = found[0] as { id: string; parent_category_id: string | null } | undefined
+    if (existing) {
+      if (existing.parent_category_id) {
+        await updateProductCategoriesWorkflow(container).run({
+          input: { selector: { id: existing.id }, update: { parent_category_id: null } },
+        })
+        logger.info(`Category "${def.name}" moved to the top level.`)
+      }
+      continue
     }
-    const total = keepMembers ? current.size : wanted.size
-    logger.info(`Fabric "${def.name}": ${existing ? "moved under Fabric" : "created"} with ${total} sarees.`)
+    const { result: created } = await createProductCategoriesWorkflow(container).run({
+      input: {
+        product_categories: [{ name: def.name, handle: def.handle, description: def.description, is_active: true, is_internal: false }],
+      },
+    })
+    const flagged = new Set(catalog.filter((c) => (c as Record<string, unknown>)[def.flag] === true).map((c) => c.id))
+    const productIds = rowsForCategories.filter((p) => flagged.has(storefrontIdOf(p as any))).map((p) => p.id)
+    if (productIds.length) {
+      await batchLinkProductsToCategoryWorkflow(container).run({
+        input: { id: created[0].id, add: productIds, remove: [] },
+      })
+    }
+    logger.info(`Created category "${def.name}" with ${productIds.length} sarees.`)
   }
 
   // The first version of the Fancy filter used metadata `fancy`; the category replaces it.

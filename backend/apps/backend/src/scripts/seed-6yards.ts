@@ -8,7 +8,6 @@ import {
 import {
   createApiKeysWorkflow,
   createCollectionsWorkflow,
-  createProductCategoriesWorkflow,
   createProductOptionsWorkflow,
   createProductsWorkflow,
   createRegionsWorkflow,
@@ -329,32 +328,8 @@ export default async function seed6Yards({
     }
   }
 
-  // 9. Categories
-  const categoryNames = ["Silk", "Cotton Silk", "Banarasi", "Pichwai", "Organza", "Chiffon", "Kanjivaram"];
-  const { data: existingCategories } = await query.graph({
-    entity: "product_category",
-    fields: ["id", "name", "handle"],
-  });
-  const categoryMap: Record<string, string> = {};
-  for (const cat of existingCategories) {
-    categoryMap[cat.name.toLowerCase()] = cat.id;
-  }
-
-  const categoriesToCreate = categoryNames.filter(name => !categoryMap[name.toLowerCase()]);
-  if (categoriesToCreate.length > 0) {
-    const { result: createdCategories } = await createProductCategoriesWorkflow(container).run({
-      input: {
-        product_categories: categoriesToCreate.map(name => ({
-          name,
-          is_active: true,
-        })),
-      },
-    });
-    for (const cat of createdCategories) {
-      categoryMap[cat.name.toLowerCase()] = cat.id;
-    }
-    logger.info(`✓ Created Categories: ${categoriesToCreate.join(", ")}`);
-  }
+  // 9. Categories: none here. Fabric is each product's Material and the
+  // Fancy / Designer categories are set up by prepare-store.ts.
 
   // 10. Products (all sarees in products-data.json)
   const { data: existingProducts } = await query.graph({
@@ -374,16 +349,6 @@ export default async function seed6Yards({
 
     const colId = collectionMap[p.collection];
 
-    // Determine category id if matches
-    let matchedCatId: string | undefined = undefined;
-    // Only the seed's own categories; fabric categories are assigned by prepare-store.ts.
-    for (const [catName, catId] of Object.entries(categoryMap).filter(([name]) => categoryNames.some((n) => n.toLowerCase() === name))) {
-      if (p.fabric.toLowerCase().includes(catName) || p.weave.toLowerCase().includes(catName) || (p.tag && p.tag.toLowerCase().includes(catName))) {
-        matchedCatId = catId;
-        break;
-      }
-    }
-
     const images = (p.gallery && p.gallery.length > 0)
       ? p.gallery.map((url: string) => ({ url: toSitePath(url) }))
       : [{ url: toSitePath(p.image) }];
@@ -396,7 +361,6 @@ export default async function seed6Yards({
             handle: handle,
             description: p.description,
             collection_id: colId,
-            category_ids: matchedCatId ? [matchedCatId] : [],
             status: ProductStatus.PUBLISHED,
             shipping_profile_id: defaultProfile.id,
             sales_channels: [{ id: salesChannel.id }],

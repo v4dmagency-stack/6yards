@@ -128,33 +128,6 @@
       }
     }
 
-    /**
-     * Sub-categories of the "Fabric" category, in Admin order: the options of
-     * the collections page's Fabric filter. Null when the backend is offline
-     * or the category doesn't exist (the page then keeps its built-in options).
-     */
-    async listFabricCategories() {
-      await this.ready;
-      if (!this.isBackendAvailable) return null;
-      if (this._fabricCache !== undefined) return this._fabricCache;
-      try {
-        const query = new URLSearchParams({
-          handle: 'fabric',
-          fields: 'id,category_children.id,category_children.name,category_children.handle,category_children.rank,category_children.is_active',
-        });
-        const data = await this.request(`/store/product-categories?${query}`);
-        const children = (data.product_categories?.[0]?.category_children || [])
-          .filter((c) => c && c.handle && c.is_active !== false)
-          .sort((a, b) => (a.rank ?? 0) - (b.rank ?? 0))
-          .map((c) => ({ handle: c.handle, name: c.name }));
-        this._fabricCache = children.length ? children : null;
-      } catch (err) {
-        console.warn('[Medusa] Fabric categories failed; using the built-in fabric filter.', err);
-        this._fabricCache = null;
-      }
-      return this._fabricCache;
-    }
-
     /** One product by storefront id or Medusa handle. */
     async getProduct(idOrHandle) {
       const list = await this.listProducts();
@@ -209,8 +182,10 @@
           reviewsCount: meta.reviewsCount ?? base.reviewsCount,
           isBestSeller: meta.isBestSeller ?? base.isBestSeller ?? false,
           isNew: meta.isNew ?? base.isNew ?? false,
-          // Fabric filter groups come from Medusa categories (Admin -> Products -> Categories).
+          // Fabric = the product's Material attribute; categories (Fancy, Designer...) are separate.
+          material: String(mp.material || '').trim(),
           categoryHandles,
+          categoryList: (mp.categories || []).filter((c) => c?.handle).map((c) => ({ handle: c.handle, name: c.name })),
           fancy: categoryHandles.includes('fancy-sarees'),
           designer: categoryHandles.includes('designer-sarees'),
           tag: meta.tag || base.tag || (mp.categories?.[0]?.name || 'Handloom'),

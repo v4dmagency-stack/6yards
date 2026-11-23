@@ -1,77 +1,57 @@
 import { defineWidgetConfig } from "@medusajs/admin-sdk"
 import { AdminProduct, DetailWidgetProps } from "@medusajs/framework/types"
-import { Button, Checkbox, Container, Heading, Input, Label, Text, toast } from "@medusajs/ui"
+import { Badge, Button, Container, Heading, Input, Label, Text, toast } from "@medusajs/ui"
 import { useCallback, useEffect, useState } from "react"
-
-type Fabric = { id: string; name: string }
 
 /**
  * "Fabric" box on the product page in Medusa Admin.
  *
- * - Fabric filter: ticks = the saree's sub-categories of the "Fabric" category,
- *   which is what the website's Fabric filter uses. New fabrics added under
- *   Products -> Categories -> Fabric appear here automatically.
- * - Fabric shown on the product page: the `fabric` metadata text.
- * Other categories and metadata of the product are kept as they are.
+ * Fabric is its own attribute, separate from categories: it is the product's
+ * Material (also shown under Attributes). The website's Fabric filter lists
+ * every fabric used by a saree, so typing a new one adds a new filter option.
+ * The second field is the longer fabric text shown on the product page
+ * (metadata `fabric`). Categories (Fancy, Designer...) are not touched here.
  */
 const ProductFabricWidget = ({ data: product }: DetailWidgetProps<AdminProduct>) => {
-  const [fabrics, setFabrics] = useState<Fabric[] | null>(null)
-  const [selected, setSelected] = useState<Set<string>>(new Set())
-  const [otherCategoryIds, setOtherCategoryIds] = useState<string[]>([])
+  const [fabric, setFabric] = useState("")
+  const [details, setDetails] = useState("")
   const [metadata, setMetadata] = useState<Record<string, unknown>>({})
-  const [fabricText, setFabricText] = useState("")
+  const [known, setKnown] = useState<string[]>([])
+  const [loaded, setLoaded] = useState(false)
   const [saving, setSaving] = useState(false)
-  const [error, setError] = useState<string | null>(null)
 
   const load = useCallback(async () => {
-    try {
-      const [catRes, prodRes] = await Promise.all([
-        fetch(
-          "/admin/product-categories?handle=fabric&fields=id,category_children.id,category_children.name,category_children.rank",
-          { credentials: "include" }
-        ),
-        fetch(`/admin/products/${product.id}?fields=id,metadata,categories.id`, { credentials: "include" }),
-      ])
-      if (!catRes.ok || !prodRes.ok) {
-        throw new Error("Could not load fabrics")
-      }
-      const parent = (await catRes.json()).product_categories?.[0]
-      const children: Fabric[] = (parent?.category_children ?? [])
-        .slice()
-        .sort((a: { rank?: number }, b: { rank?: number }) => (a.rank ?? 0) - (b.rank ?? 0))
-        .map((c: Fabric) => ({ id: c.id, name: c.name }))
+    const [prodRes, allRes] = await Promise.all([
+      fetch(`/admin/products/${product.id}?fields=id,material,metadata`, { credentials: "include" }),
+      fetch("/admin/products?fields=material&limit=1000", { credentials: "include" }),
+    ])
+    if (prodRes.ok) {
       const prod = (await prodRes.json()).product
-      const productCategoryIds: string[] = (prod.categories ?? []).map((c: { id: string }) => c.id)
-      const fabricIds = new Set(children.map((c) => c.id))
-
-      setFabrics(children)
-      setSelected(new Set(productCategoryIds.filter((id) => fabricIds.has(id))))
-      setOtherCategoryIds(productCategoryIds.filter((id) => !fabricIds.has(id)))
+      setFabric(prod.material ?? "")
       setMetadata(prod.metadata ?? {})
-      setFabricText(typeof prod.metadata?.fabric === "string" ? prod.metadata.fabric : "")
-      setError(parent ? null : "There is no \"Fabric\" category yet (Products -> Categories).")
-    } catch (err) {
-      setError((err as Error).message)
+      setDetails(typeof prod.metadata?.fabric === "string" ? prod.metadata.fabric : "")
     }
+    if (allRes.ok) {
+      const names = new Map<string, string>()
+      for (const p of (await allRes.json()).products ?? []) {
+        const name = String(p.material ?? "").trim()
+        if (name && !names.has(name.toLowerCase())) {
+          names.set(name.toLowerCase(), name)
+        }
+      }
+      setKnown([...names.values()].sort((a, b) => a.localeCompare(b)))
+    }
+    setLoaded(true)
   }, [product.id])
 
   useEffect(() => {
     load()
   }, [load])
 
-  const toggle = (id: string, checked: boolean) => {
-    setSelected((prev) => {
-      const next = new Set(prev)
-      if (checked) {
-        next.add(id)
-      } else {
-        next.delete(id)
-      }
-      return next
-    })
-  }
-
   const save = async () => {
+    // Reuse the existing spelling when the same fabric is typed in another case.
+    const typed = fabric.trim()
+    const material = known.find((k) => k.toLowerCase() === typed.toLowerCase()) ?? typed
     setSaving(true)
     try {
       const res = await fetch(`/admin/products/${product.id}`, {
@@ -79,8 +59,8 @@ const ProductFabricWidget = ({ data: product }: DetailWidgetProps<AdminProduct>)
         credentials: "include",
         headers: { "content-type": "application/json" },
         body: JSON.stringify({
-          categories: [...otherCategoryIds, ...selected].map((id) => ({ id })),
-          metadata: { ...metadata, fabric: fabricText.trim() },
+          material: material || null,
+          metadata: { ...metadata, fabric: details.trim() },
         }),
       })
       const body = await res.json()
@@ -103,34 +83,47 @@ const ProductFabricWidget = ({ data: product }: DetailWidgetProps<AdminProduct>)
       </div>
 
       <div className="flex flex-col gap-y-4 px-6 py-4">
-        {error ? (
-          <Text size="small" className="text-ui-fg-subtle">{error}</Text>
-        ) : !fabrics ? (
+        {!loaded ? (
           <Text size="small" className="text-ui-fg-subtle">Loading…</Text>
         ) : (
           <>
-            <div className="flex flex-col gap-y-2">
-              <Text size="small" weight="plus">Website Fabric filter</Text>
-              {fabrics.map((f) => (
-                <div key={f.id} className="flex items-center gap-x-2">
-                  <Checkbox
-                    id={`fabric-${f.id}`}
-                    checked={selected.has(f.id)}
-                    onCheckedChange={(v) => toggle(f.id, v === true)}
-                  />
-                  <Label size="small" htmlFor={`fabric-${f.id}`}>{f.name}</Label>
+            <div className="flex flex-col gap-y-1">
+              <Label size="small" weight="plus" htmlFor="fabric-material">Fabric (website filter)</Label>
+              <Input
+                id="fabric-material"
+                size="small"
+                list="fabric-material-options"
+                placeholder="Choose or type a fabric"
+                value={fabric}
+                onChange={(e) => setFabric(e.target.value)}
+              />
+              <datalist id="fabric-material-options">
+                {known.map((k) => (
+                  <option key={k} value={k} />
+                ))}
+              </datalist>
+              {known.length > 0 && (
+                <div className="flex flex-wrap gap-1 pt-1">
+                  {known.map((k) => (
+                    <button key={k} type="button" onClick={() => setFabric(k)}>
+                      <Badge size="2xsmall" color={k.toLowerCase() === fabric.trim().toLowerCase() ? "blue" : "grey"}>{k}</Badge>
+                    </button>
+                  ))}
                 </div>
-              ))}
+              )}
+              <Text size="xsmall" className="text-ui-fg-subtle">
+                Pick one, or type a new fabric to add it to the website filter.
+              </Text>
             </div>
 
             <div className="flex flex-col gap-y-1">
-              <Label size="small" weight="plus" htmlFor="fabric-text">Fabric shown on the product page</Label>
+              <Label size="small" weight="plus" htmlFor="fabric-details">Fabric shown on the product page</Label>
               <Input
-                id="fabric-text"
+                id="fabric-details"
                 size="small"
-                placeholder="e.g. Kanjivaram Silk"
-                value={fabricText}
-                onChange={(e) => setFabricText(e.target.value)}
+                placeholder="e.g. Pure Mulberry Katan Silk"
+                value={details}
+                onChange={(e) => setDetails(e.target.value)}
               />
             </div>
 
