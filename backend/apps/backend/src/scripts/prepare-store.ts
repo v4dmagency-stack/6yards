@@ -53,6 +53,40 @@ const STYLE_CATEGORIES = [
   },
 ]
 
+// Category tree for the shop: "Silk" and "Cotton" with sub-categories the client
+// adds sarees to (Admin -> Products -> Categories, or a product's Organize ->
+// Categories). Only created when missing; never assigns sarees; a category the
+// client has renamed or moved keeps its place (matched by handle).
+const CATEGORY_TREE: { name: string; handle: string; children: [string, string][] }[] = [
+  {
+    name: "Silk",
+    handle: "silk",
+    children: [
+      ["Kanjivaram", "silk-kanjivaram"],
+      ["Banarasi", "silk-banarasi"],
+      ["Tussar", "silk-tussar"],
+      ["Semi Silk", "silk-semi-silk"],
+      ["Mysore Silk", "silk-mysore"],
+      ["Soft Silk", "silk-soft-silk"],
+      ["Katan Silk", "silk-katan"],
+    ],
+  },
+  {
+    name: "Cotton",
+    handle: "cotton-sarees",
+    children: [
+      ["Silk Cotton Blend", "cotton-silk-cotton-blend"],
+      ["Mangalagiri", "cotton-mangalagiri"],
+      ["Kanchi", "cotton-kanchi"],
+      ["Chanderi", "cotton-chanderi"],
+      ["Kota", "cotton-kota"],
+      ["Jaipuri", "cotton-jaipuri"],
+      ["Chettinad", "cotton-chettinad"],
+      ["Sungudi", "cotton-sungudi"],
+    ],
+  },
+]
+
 /**
  * Makes a 6 Yards database ready to sell. Safe to run any number of times:
  * every step only fills in what is missing.
@@ -237,6 +271,36 @@ export default async function prepareStore({ container }: ExecArgs) {
       })
     }
     logger.info(`Created category "${def.name}" with ${productIds.length} sarees.`)
+  }
+
+  // Silk / Cotton category tree (see CATEGORY_TREE): add missing ones only.
+  const findByHandle = async (handle: string) => {
+    const { data } = await query.graph({ entity: "product_category", fields: ["id"], filters: { handle } })
+    return (data[0] as { id: string } | undefined)?.id
+  }
+  for (const parentDef of CATEGORY_TREE) {
+    let parentId = await findByHandle(parentDef.handle)
+    if (!parentId) {
+      const { result } = await createProductCategoriesWorkflow(container).run({
+        input: { product_categories: [{ name: parentDef.name, handle: parentDef.handle, is_active: true, is_internal: false }] },
+      })
+      parentId = result[0].id
+      logger.info(`Created category "${parentDef.name}".`)
+    }
+    const missing: { name: string; handle: string; rank: number }[] = []
+    for (const [rank, [name, handle]] of parentDef.children.entries()) {
+      if (!(await findByHandle(handle))) {
+        missing.push({ name, handle, rank })
+      }
+    }
+    if (missing.length) {
+      await createProductCategoriesWorkflow(container).run({
+        input: {
+          product_categories: missing.map((c) => ({ ...c, parent_category_id: parentId, is_active: true, is_internal: false })),
+        },
+      })
+      logger.info(`Added under "${parentDef.name}": ${missing.map((c) => c.name).join(", ")}.`)
+    }
   }
 
   // The first version of the Fancy filter used metadata `fancy`; the category replaces it.

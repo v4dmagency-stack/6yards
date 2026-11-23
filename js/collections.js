@@ -34,10 +34,11 @@ const LEGACY_FABRIC_NAMES = {
   katan: 'katan silk',
 };
 
-// Category filter: Medusa category handles that are NOT shown (old fabric-type
-// categories from the original setup). Any other category with sarees is shown.
+// Category filter: Medusa category handles that are NOT shown (old categories
+// from the original setup). Every other category with sarees is shown; Silk and
+// Cotton list their sub-categories underneath.
 const HIDDEN_CATEGORY_HANDLES = new Set([
-  'fabric', 'silk', 'cotton-silk', 'banarasi', 'kanjivaram', 'organza', 'chiffon', 'pichwai',
+  'fabric', 'cotton-silk', 'banarasi', 'kanjivaram', 'organza', 'chiffon', 'pichwai',
   'tussar-silk', 'cotton', 'katan-silk',
 ]);
 // Old ?fabric=Fancy / Designer links now point at the Category filter.
@@ -52,9 +53,12 @@ document.addEventListener('DOMContentLoaded', () => {
   parseUrlParams();
   applyFilters();
 
-  window.Store.getCatalog().then((live) => {
+  Promise.all([
+    window.Store.getCatalog(),
+    window.MedusaClient?.listCategories?.().catch(() => null),
+  ]).then(([live, categoryTree]) => {
     if (live?.length && live !== window.PRODUCTS_DATA) {
-      useMedusaFilters(live);
+      useMedusaFilters(live, categoryTree);
       setProducts(live);
       applyFilters();
     }
@@ -72,7 +76,7 @@ document.addEventListener('DOMContentLoaded', () => {
  * so both follow what is set in Admin. Ticked options and ?fabric= /
  * ?category= links carry over. Offline, the built-in options stay.
  */
-function useMedusaFilters(products) {
+function useMedusaFilters(products, categoryTree) {
   const params = new URLSearchParams(window.location.search);
 
   // Fabric: distinct Material values (trimmed, case-insensitive), A-Z.
@@ -91,20 +95,40 @@ function useMedusaFilters(products) {
     CollectionsState.fabricMode = 'material';
   }
 
-  // Category: every category the sarees are in, except the hidden old ones.
-  const categories = new Map();
-  products.forEach((p) => (p.categoryList || []).forEach((c) => {
-    if (c?.handle && !HIDDEN_CATEGORY_HANDLES.has(c.handle) && !categories.has(c.handle)) categories.set(c.handle, c.name || c.handle);
-  }));
-  if (categories.size) {
+  // Category: the category tree from Medusa (parents with their sub-categories
+  // underneath); without it, every category the sarees are in. Hidden old
+  // categories are skipped; empty options are hidden by updateFilterCounts().
+  let options = [];
+  const descendants = {};
+  if (categoryTree?.length) {
+    const byRank = (a, b) => (a.rank - b.rank) || a.name.localeCompare(b.name);
+    const childrenOf = (id) => categoryTree.filter((c) => c.parentId === id && !HIDDEN_CATEGORY_HANDLES.has(c.handle)).sort(byRank);
+    const collect = (cat) => [cat.handle, ...childrenOf(cat.id).flatMap(collect)];
+    const walk = (cat, depth) => {
+      // A parent with sub-categories (Silk, Cotton) shows the sarees in its
+      // sub-categories only, not old direct links from the original setup.
+      const kids = childrenOf(cat.id);
+      descendants[cat.handle] = new Set(kids.length ? kids.flatMap(collect) : [cat.handle]);
+      options.push({ value: cat.handle, label: cat.name, depth });
+      childrenOf(cat.id).forEach((child) => walk(child, depth + 1));
+    };
+    categoryTree.filter((c) => !c.parentId && !HIDDEN_CATEGORY_HANDLES.has(c.handle)).sort((a, b) => a.name.localeCompare(b.name)).forEach((c) => walk(c, 0));
+  } else {
+    const categories = new Map();
+    products.forEach((p) => (p.categoryList || []).forEach((c) => {
+      if (c?.handle && !HIDDEN_CATEGORY_HANDLES.has(c.handle) && !categories.has(c.handle)) categories.set(c.handle, c.name || c.handle);
+    }));
+    options = [...categories.entries()].sort((a, b) => a[1].localeCompare(b[1])).map(([handle, name]) => ({ value: handle, label: name, depth: 0 }));
+  }
+  if (options.length) {
     const toHandle = (v) => LEGACY_CATEGORY_WORDS[String(v).toLowerCase()] || String(v).toLowerCase();
     const checked = new Set(checkedValues('category').map(toHandle));
     ['category', 'fabric'].forEach((key) => {
       const param = params.get(key);
       if (param && (key === 'category' || LEGACY_CATEGORY_WORDS[param.toLowerCase()])) checked.add(toHandle(param));
     });
-    const options = [...categories.entries()].sort((a, b) => a[1].localeCompare(b[1])).map(([handle, name]) => ({ value: handle, label: name }));
     renderFilterOptions('category', options, checked);
+    CollectionsState.categoryDescendants = descendants;
     CollectionsState.categoryMode = 'medusa';
   }
 }
@@ -114,7 +138,7 @@ function renderFilterOptions(name, options, checked) {
   if (!group) return;
   const { escapeHtml } = window.Store;
   group.innerHTML = options.map((o) => `
-    <label class="filter-checkbox-label">
+    <label class="filter-checkbox-label${o.depth ? ' filter-checkbox-label--child' : ''}">
       <div class="filter-checkbox-left">
         <input type="checkbox" name="filter-${name}" value="${escapeHtml(o.value)}" onchange="applyFilters()"${checked.has(o.value) ? ' checked' : ''} />
         <span>${escapeHtml(o.label)}</span>
@@ -204,7 +228,11 @@ const MATCHERS = {
   },
   // Online: the saree's Medusa categories. Offline: the bundled Fancy / Designer flags.
   category: (item, value) => {
-    if (CollectionsState.categoryMode === 'medusa') return (item.categoryHandles || []).includes(value);
+    if (CollectionsState.categoryMode === 'medusa') {
+      // A parent (e.g. Silk) also matches sarees in its sub-categories.
+      const wanted = CollectionsState.categoryDescendants?.[value] || new Set([value]);
+      return (item.categoryHandles || []).some((h) => wanted.has(h));
+    }
     if (value === 'fancy-sarees') return item.fancy === true;
     if (value === 'designer-sarees') return item.designer === true;
     return false;

@@ -128,6 +128,28 @@
       }
     }
 
+    /**
+     * All public categories with their parent, in Admin order (used to show
+     * Silk / Cotton and their sub-categories in the Category filter).
+     * Null when offline or the request fails.
+     */
+    async listCategories() {
+      await this.ready;
+      if (!this.isBackendAvailable) return null;
+      if (this._categoriesCache !== undefined) return this._categoriesCache;
+      try {
+        const query = new URLSearchParams({ limit: '200', fields: 'id,name,handle,rank,parent_category_id' });
+        const data = await this.request(`/store/product-categories?${query}`);
+        this._categoriesCache = (data.product_categories || []).map((c) => ({
+          id: c.id, name: c.name, handle: c.handle, rank: c.rank ?? 0, parentId: c.parent_category_id || null,
+        }));
+      } catch (err) {
+        console.warn('[Medusa] Category list failed.', err);
+        this._categoriesCache = null;
+      }
+      return this._categoriesCache;
+    }
+
     /** One product by storefront id or Medusa handle. */
     async getProduct(idOrHandle) {
       const list = await this.listProducts();

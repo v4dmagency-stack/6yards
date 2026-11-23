@@ -90,11 +90,19 @@ Remove the starter T-shirts if present: `npx medusa exec ./src/scripts/clean-sta
     adds a filter option. Current fabrics: Kanjivaram Silk, Silk Cotton Blend, Soft Silk, Katan Silk,
     Tussar Silk, Cotton, Zari Tissue, Mulberry Silk, Chanderi Silk Blend, Modal Silk Blend.
   - **Category** is Medusa's categories (Products → Categories, or a product's Organize → Categories).
-    The website's Category filter lists the categories that have sarees: Fancy Sarees (15, the soft-silk
-    dual-tones, zari tissues and brocades priced ₹3,200–4,500) and Designer Sarees (13, art- and motif-led
-    designs). A new category with sarees appears there automatically. The old fabric-type categories
-    (Fabric and its sub-categories, Silk, Cotton Silk, Banarasi, Kanjivaram, Organza, Chiffon, Pichwai)
-    are not shown on the website.
+    - **Silk** has sub-categories Kanjivaram, Banarasi, Tussar, Semi Silk, Mysore Silk, Soft Silk and Katan
+      Silk; **Cotton** has Silk Cotton Blend, Mangalagiri, Kanchi, Chanderi, Kota, Jaipuri, Chettinad and
+      Sungudi. Add a saree to the sub-category it belongs to (open the saree → Organize → Categories, or
+      the sub-category → Add products). They start empty.
+    - Also: Fancy Sarees (15, soft-silk dual-tones, zari tissues and brocades priced ₹3,200–4,500) and
+      Designer Sarees (13, art- and motif-led designs).
+    - The website's Category filter shows Silk and Cotton with their sub-categories underneath, plus Fancy
+      and Designer. "Silk" / "Cotton" there means all sarees in their sub-categories. Options with no sarees
+      are hidden, so a sub-category appears once a saree is added. A new category (or sub-category under
+      Silk / Cotton) with sarees appears automatically.
+    - Organza, Chiffon and Pichwai (from the original setup) are kept but not shown on the website.
+      Sarees still linked directly to "Silk" from the original setup are not counted on the website;
+      only its sub-categories are.
 - **Stock:** Inventory → set the real quantity of each saree (seeded as 5, so nothing shows as sold out until
   real stock is entered).
 - **Sold out:** open the saree in Products. The **Availability** box on the right has **Mark as sold out**; to
