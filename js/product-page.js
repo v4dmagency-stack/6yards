@@ -79,17 +79,8 @@ function renderProductDetails(product) {
   setText('pdp-saree-title', product.name);
 
   // Pricing
+  // Only the selling price is shown (no struck-out "original" price or "Save %").
   setText('pdp-current-price', formatINR(product.price));
-  const origEl = document.getElementById('pdp-original-price');
-  const discountTag = document.getElementById('pdp-discount-tag');
-  if (product.originalPrice && product.originalPrice > product.price) {
-    const percent = Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100);
-    if (origEl) { origEl.textContent = formatINR(product.originalPrice); origEl.hidden = false; }
-    if (discountTag) { discountTag.textContent = `Save ${percent}%`; discountTag.hidden = false; }
-  } else {
-    if (origEl) origEl.hidden = true;
-    if (discountTag) discountTag.hidden = true;
-  }
 
   // Item code
   const itemCode = (product.details || []).find((d) => d.startsWith('Item Code:'));
@@ -240,7 +231,6 @@ function renderRecommendations(allProducts, current) {
           <a href="${url}" class="catalog-card-title" title="${name}">${name}</a>
           <div class="catalog-card-price-row">
             <span class="catalog-card-price">${formatINR(item.price)}</span>
-            ${item.originalPrice > item.price ? `<span class="catalog-card-original-price">${formatINR(item.originalPrice)}</span>` : ''}
           </div>
         </div>
       </div>`;
