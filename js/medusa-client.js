@@ -190,6 +190,8 @@
           handle: mp.handle,
           medusaId: mp.id,
           variantId: variant.id,
+          // Item code shown on the product page (Admin: Inventory or variant SKU).
+          sku: typeof variant.sku === 'string' ? variant.sku : '',
           inStock,
           name: mp.title || base.name,
           description: mp.description || base.description || '',

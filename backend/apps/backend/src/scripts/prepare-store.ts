@@ -12,6 +12,7 @@ import {
   updateStoresWorkflow,
 } from "@medusajs/medusa/core-flows"
 import SEED_DATA from "./products-data.json"
+import { syncSkuFromVariant } from "../lib/sku-sync"
 
 const STOREFRONT_CHANNEL = "6 Yards Storefront"
 const FREE_SHIPPING_THRESHOLD = 5000
@@ -310,6 +311,18 @@ export default async function prepareStore({ container }: ExecArgs) {
       input: { products: staleFancy.map((p) => ({ id: p.id, metadata: { fancy: "" } })) },
     })
     logger.info(`Removed the old "fancy" metadata from ${staleFancy.length} products.`)
+  }
+
+  // 3c. Item codes: the variant SKU is the item code the website shows. Copy it
+  // to the inventory item where they differ (afterwards the sku-sync
+  // subscribers keep the two in step when either is edited in Admin).
+  const { data: variantRows } = await query.graph({ entity: "product_variant", fields: ["id"] })
+  let skuSynced = 0
+  for (const v of variantRows) {
+    skuSynced += await syncSkuFromVariant(container, v.id)
+  }
+  if (skuSynced) {
+    logger.info(`Copied the item code (SKU) of ${skuSynced} variants to their inventory items.`)
   }
 
   // 3b. Root-relative image paths, so images also load inside Medusa Admin (/app)

@@ -81,9 +81,17 @@ function renderProductDetails(product) {
   // Only the selling price is shown (no struck-out "original" price or "Save %").
   setText('pdp-current-price', formatINR(product.price));
 
-  // Item code
-  const itemCode = (product.details || []).find((d) => d.startsWith('Item Code:'));
-  setText('pdp-item-code', itemCode || `Item Code: ${product.prod_code || product.id.toUpperCase()}`);
+  // Item code = the SKU in Medusa (editable in Admin -> Inventory or the saree's
+  // variant), read live on every page load. Placeholder SKUs ("6YD-...") are not
+  // shown. Offline, the code from the bundled catalog is used.
+  let itemCode = '';
+  if (typeof product.sku === 'string') {
+    itemCode = /^6YD-/i.test(product.sku.trim()) ? '' : product.sku.trim();
+  } else {
+    const line = (product.details || []).find((d) => d.startsWith('Item Code:'));
+    itemCode = line ? line.slice('Item Code:'.length).replace(/\(.*$/, '').trim() : '';
+  }
+  setText('pdp-item-code', itemCode ? ` · Item Code: ${itemCode}` : '');
 
   // Specifications
   setText('spec-fabric', product.fabric || '—');
@@ -256,7 +264,7 @@ function updateStructuredData(product) {
     name: product.name,
     description: product.description,
     image: [...new Set(images)],
-    sku: product.prod_code || product.id,
+    sku: (product.sku && !/^6YD-/i.test(product.sku) ? product.sku : '') || product.prod_code || product.id,
     brand: { '@type': 'Brand', name: '6 Yards Sarees' },
     offers: {
       '@type': 'Offer',
