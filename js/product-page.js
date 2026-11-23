@@ -74,8 +74,7 @@ function renderProductDetails(product) {
   }
   setText('pdp-crumb-title', product.name);
 
-  const occasion = product.occasion ? ` • ${product.occasion.toUpperCase()} EDIT` : '';
-  setText('pdp-brand-collection', `6 YARDS • ${collectionTitle.toUpperCase()}${occasion}`);
+  setText('pdp-brand-collection', `6 YARDS • ${collectionTitle.toUpperCase()}`);
   setText('pdp-saree-title', product.name);
 
   // Pricing

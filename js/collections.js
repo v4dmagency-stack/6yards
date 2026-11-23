@@ -446,7 +446,6 @@ function renderCatalogGrid(products) {
         <div class="catalog-card-content">
           <div class="catalog-card-meta-row">
             ${collectionLabel ? `<span class="catalog-card-tag">${escapeHtml(collectionLabel)}</span>` : '<span></span>'}
-            ${product.occasion ? `<span class="catalog-card-occasion">${escapeHtml(product.occasion)}</span>` : ''}
           </div>
           <a href="${url}" class="catalog-card-title" title="${name}">${name}</a>
           <div class="catalog-card-price-row">
