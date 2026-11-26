@@ -41,13 +41,30 @@ export type SareeOptions = {
   occasions: string[]
 }
 
+const OFFLINE_MESSAGE = "Couldn't reach the server. Check your internet connection and try again."
+
 export async function api<T>(path: string, init?: { method?: string; body?: unknown }): Promise<T> {
-  const res = await fetch(path, {
-    method: init?.method ?? "GET",
-    credentials: "include",
-    headers: init?.body !== undefined ? { "content-type": "application/json" } : undefined,
-    body: init?.body !== undefined ? JSON.stringify(init.body) : undefined,
-  })
+  const method = init?.method ?? "GET"
+  const send = () =>
+    fetch(path, {
+      method,
+      credentials: "include",
+      headers: init?.body !== undefined ? { "content-type": "application/json" } : undefined,
+      body: init?.body !== undefined ? JSON.stringify(init.body) : undefined,
+    })
+  let res: Response
+  try {
+    res = await send()
+  } catch {
+    // A dropped connection: loading is retried once by itself; saving is not
+    // (it might have gone through), so the person is asked to try again.
+    if (method !== "GET") throw new Error(OFFLINE_MESSAGE)
+    try {
+      res = await send()
+    } catch {
+      throw new Error(OFFLINE_MESSAGE)
+    }
+  }
   const data = await res.json().catch(() => ({}))
   if (!res.ok) {
     throw new Error((data as { message?: string })?.message || `Something went wrong (${res.status}). Please try again.`)
@@ -64,7 +81,12 @@ export async function uploadPhoto(file: File): Promise<string> {
   const form = new FormData()
   const name = file.name.replace(/\.[^.]+$/, "") + ".jpg"
   form.append("files", new File([blob], name, { type: "image/jpeg" }))
-  const res = await fetch("/admin/uploads", { method: "POST", credentials: "include", body: form })
+  let res: Response
+  try {
+    res = await fetch("/admin/uploads", { method: "POST", credentials: "include", body: form })
+  } catch {
+    throw new Error(`Could not upload ${file.name}: ${OFFLINE_MESSAGE}`)
+  }
   const data = await res.json().catch(() => ({}))
   if (!res.ok || !data?.files?.[0]?.url) {
     throw new Error(data?.message || `Could not upload ${file.name}.`)

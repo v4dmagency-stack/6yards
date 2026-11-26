@@ -83,7 +83,7 @@ const SareesPage = () => {
       )}
 
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-3">
-        {sarees.map((s) => {
+        {!error && sarees.map((s) => {
           const soldOut = s.stock_tracked && (s.stock ?? 0) <= 0
           return (
             <Link
@@ -125,7 +125,7 @@ const SareesPage = () => {
       </div>
 
       {loading && <Text className="text-ui-fg-subtle">Loading sarees…</Text>}
-      {!loading && sarees.length < count && (
+      {!loading && !error && sarees.length < count && (
         <Button variant="secondary" onClick={() => load(query, sarees.length)}>Show more sarees</Button>
       )}
     </Container>
