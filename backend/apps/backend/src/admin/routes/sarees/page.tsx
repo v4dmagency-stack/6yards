@@ -1,7 +1,7 @@
 import { defineRouteConfig } from "@medusajs/admin-sdk"
 import { Swatch } from "@medusajs/icons"
 import { Badge, Button, Container, Heading, Input, Text } from "@medusajs/ui"
-import { useCallback, useEffect, useState } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import { api, formatINR, Saree } from "../../lib/sarees-api"
 
@@ -19,19 +19,24 @@ const SareesPage = () => {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
+  // Only the newest request may update the list, so a slow earlier load can't
+  // replace the results of a search typed after it.
+  const latest = useRef(0)
   const load = useCallback(async (q: string, offset: number) => {
+    const ticket = ++latest.current
     setLoading(true)
     setError(null)
     try {
       const params = new URLSearchParams({ limit: String(PAGE), offset: String(offset) })
       if (q) params.set("q", q)
       const data = await api<{ sarees: Saree[]; count: number }>(`/admin/sarees?${params}`)
+      if (ticket !== latest.current) return
       setSarees((prev) => (offset ? [...prev, ...data.sarees] : data.sarees))
       setCount(data.count)
     } catch (err) {
-      setError((err as Error).message)
+      if (ticket === latest.current) setError((err as Error).message)
     } finally {
-      setLoading(false)
+      if (ticket === latest.current) setLoading(false)
     }
   }, [])
 
