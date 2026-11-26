@@ -78,9 +78,32 @@ Remove the starter T-shirts if present: `npx medusa exec ./src/scripts/clean-sta
 
 ## 3. Day-to-day for the client (Medusa Admin at `/app`)
 
-- **Products:** Products → edit title, price, images, stock. New products should be added to the
-  "6 Yards Storefront" sales channel and a collection. Optional metadata keys the site understands:
-  `occasion` (Wedding/Casual/Comfort/Festive), `originalPrice`, `tag`, `fabric`, `weave`, `color`, `origin`, `length`, `details` (list).
+- **Sarees (the simple editor — use this one):** the **Sarees** page in the Admin sidebar lists every saree
+  with its photo, price, item code and stock. Click a saree to edit it, or **+ Add a saree**. One page has
+  everything the product page shows, then **Save**:
+  - Photos (upload, reorder, remove; the first is the main photo; big camera photos are shrunk automatically).
+  - Name and description.
+  - **Selling price** (what customers pay) and an optional **Regular price**. When the regular price is higher,
+    the website shows it struck out with "Save X%" (worked out automatically). Leave it empty for no discount.
+    No saree has a regular price yet, so no discounts show until one is entered.
+  - Stock (0 = sold out) and **item code** (shown on the product page; must be unique).
+  - Show on website (on/off), collection, occasion, photo label, Bestseller, categories.
+  - **Fabric** (the Fabric filter) and **Colours** (a list: type a colour and press Enter; each one shows on the
+    product page and in the website's Colour filter).
+  - Product details: Fabric details, Weave & motif, Colour description, Saree length, Blouse piece, Origin.
+    Empty rows use the standard text (length, blouse piece) or are hidden (the others).
+  - Design & craftsmanship bullets, and Care instructions (one per line; empty = the standard silk care).
+  - Delete saree (asks first).
+  The website reads all of this from Medusa on every page load. The web address (handle) is made from the name
+  when a saree is added and never changes; it is separate from the item code. Medusa's own Products page still
+  works (and shows the handle) and has an **Open in the simple Sarees editor** button. Sarees with more than
+  one variant can't be edited on the simple page.
+- **Products (advanced):** Products → edit title, price, images, stock. New products should be added to the
+  "6 Yards Storefront" sales channel and a collection. Metadata keys the site reads: `occasion`, `regular_price`,
+  `tag`, `fabric`, `weave`, `color`, `colors` (list), `origin`, `length`, `blouse_piece`, `care`, `details` (list).
+  The old `originalPrice` and `thumbnail` keys are no longer used.
+- **Item codes:** the item code is the variant SKU. Changing it in Sarees, Inventory or the variant keeps the
+  other places in step. Placeholder codes starting `6YD-` are not shown on the website.
 - **Fabric and Category are two separate attributes.**
   - **Fabric** is each saree's own **Material** attribute (one fabric per saree). To change it, open the saree:
     the **Fabric** box on the right has the fabric (pick an existing one or type a new one) and the longer

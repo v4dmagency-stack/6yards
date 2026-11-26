@@ -49,19 +49,32 @@ const COLLECTION_TITLES = {
 };
 
 document.addEventListener('DOMContentLoaded', () => {
-  setProducts(Array.isArray(window.PRODUCTS_DATA) ? window.PRODUCTS_DATA : []);
+  const bundled = Array.isArray(window.PRODUCTS_DATA) ? window.PRODUCTS_DATA : [];
+  // With a live store, wait for it (Admin -> Sarees) instead of flashing the
+  // old bundled catalog; without one, show the bundled catalog straight away.
+  const waitForLive = Boolean(window.MedusaClient?.config?.publishableApiKey);
   parseUrlParams();
-  applyFilters();
+  if (waitForLive) {
+    showCatalogLoading();
+  } else {
+    setProducts(bundled);
+    applyFilters();
+  }
 
   Promise.all([
     window.Store.getCatalog(),
     window.MedusaClient?.listCategories?.().catch(() => null),
   ]).then(([live, categoryTree]) => {
-    if (live?.length && live !== window.PRODUCTS_DATA) {
-      useMedusaFilters(live, categoryTree);
-      setProducts(live);
+    const isLive = live?.length && live !== window.PRODUCTS_DATA;
+    if (isLive) useMedusaFilters(live, categoryTree);
+    if (isLive || waitForLive) {
+      setProducts(isLive ? live : bundled);
       applyFilters();
     }
+  }).catch((err) => {
+    console.error(err);
+    setProducts(bundled);
+    applyFilters();
   });
 
   window.addEventListener('popstate', () => {
@@ -69,6 +82,13 @@ document.addEventListener('DOMContentLoaded', () => {
     applyFilters();
   });
 });
+
+function showCatalogLoading() {
+  const container = document.getElementById('catalog-products-grid');
+  const counter = document.getElementById('catalog-products-counter');
+  if (counter) counter.textContent = '';
+  if (container) container.innerHTML = '<p class="catalog-loading-note" aria-live="polite">Loading sarees…</p>';
+}
 
 /**
  * With the live Medusa catalog, the Fabric options are the sarees' fabrics
@@ -130,6 +150,29 @@ function useMedusaFilters(products, categoryTree) {
     renderFilterOptions('category', options, checked);
     CollectionsState.categoryDescendants = descendants;
     CollectionsState.categoryMode = 'medusa';
+  }
+
+  // Colour: the built-in colour families plus every colour tag set in
+  // Admin -> Sarees -> Colours. Each option matches the colour tags, the
+  // colour description and the name.
+  const tagColors = new Map();
+  products.forEach((p) => (p.colors || []).forEach((c) => {
+    const name = String(c || '').trim();
+    if (name && !tagColors.has(name.toLowerCase())) tagColors.set(name.toLowerCase(), name);
+  }));
+  if (tagColors.size) {
+    const builtIn = Array.from(document.querySelectorAll('input[name="filter-color"]')).map((cb) => ({
+      value: cb.value,
+      label: cb.closest('label')?.querySelector('.filter-checkbox-left span')?.textContent || cb.value,
+      checked: cb.checked,
+    }));
+    const known = new Set(builtIn.map((o) => o.value.toLowerCase()));
+    const extra = [...tagColors.values()].filter((c) => !known.has(c.toLowerCase())).sort((a, b) => a.localeCompare(b))
+      .map((c) => ({ value: c, label: c, checked: false }));
+    const all = [...builtIn, ...extra];
+    const param = (params.get('color') || '').toLowerCase();
+    const checked = new Set(all.filter((o) => o.checked || (param && o.value.toLowerCase() === param)).map((o) => o.value));
+    renderFilterOptions('color', all.map((o) => ({ value: o.value, label: o.label, depth: 0 })), checked);
   }
 }
 
@@ -193,7 +236,7 @@ function updateHeading() {
   const params = new URLSearchParams(window.location.search);
   const occ = params.get('occasion');
   const col = CollectionsState.activeCollection;
-  let title = 'Silk Sarees';
+  let title = 'All Sarees';
   let crumb = 'All Sarees';
   if (col) {
     const name = COLLECTION_TITLES[col] || col;
@@ -237,7 +280,7 @@ const MATCHERS = {
     if (value === 'designer-sarees') return item.designer === true;
     return false;
   },
-  color: (item, value) => includesAny(item.color, value) || includesAny(item.name, value),
+  color: (item, value) => includesAny([...(item.colors || []), item.color, item.name].join(' | '), value),
   pattern: (item, value) => includesAny(item.weave, value) || includesAny(item.tag, value) || includesAny(item.description, value),
   technique: (item, value) => includesAny(item.weave, value) || includesAny(item.fabric, value) || includesAny(item.description, value),
   occasion: (item, value) => {
@@ -478,6 +521,7 @@ function renderCatalogGrid(products) {
           <a href="${url}" class="catalog-card-title" title="${name}">${name}</a>
           <div class="catalog-card-price-row">
             <span class="catalog-card-price">${formatINR(product.price)}</span>
+            ${product.originalPrice > product.price ? `<span class="catalog-card-original-price">${formatINR(product.originalPrice)}</span>` : ''}
           </div>
         </div>
       </div>`;

@@ -2620,7 +2620,9 @@ const COLLECTIONS_DATA = [
 ];
 
 if (typeof window !== 'undefined') {
-  window.PRODUCTS_DATA = PRODUCTS_DATA;
+  // Offline copy of the catalog. Discounts are set live in Admin -> Sarees
+  // (Regular price), so the old "originalPrice" values here are not shown.
+  window.PRODUCTS_DATA = PRODUCTS_DATA.map((p) => ({ ...p, originalPrice: null }));
   window.COLLECTIONS_DATA = COLLECTIONS_DATA;
 }
 

@@ -24,7 +24,7 @@
   <!-- Stylesheet -->
   <link rel="stylesheet" href="css/styles.css" />
 </head>
-<body>
+<body class="pdp-is-loading">
 
   <!-- Main Navigation Header -->
   <header class="header-main">
@@ -222,12 +222,13 @@
       <i class="fa-solid fa-angle-right"></i>
       <a href="collections.html">Sarees</a>
       <i class="fa-solid fa-angle-right"></i>
-      <a href="collections.html" id="pdp-crumb-collection">Silk Sarees</a>
+      <a href="collections.html" id="pdp-crumb-collection">Sarees</a>
       <i class="fa-solid fa-angle-right"></i>
       <span id="pdp-crumb-title">Handloom Saree</span>
     </nav>
 
     <!-- 2-Column PDP Stage (Image 3 Style) -->
+    <p class="pdp-loading-note" aria-live="polite">Loading saree…</p>
     <div class="pdp-stage">
 
       <!-- Left Column: Photoshoot Gallery -->
@@ -245,14 +246,17 @@
 
       <!-- Right Column: Saree Details & Action Block -->
       <div class="pdp-details-wrap">
-        <span class="pdp-brand-subtitle" id="pdp-brand-collection">6 YARDS • HEIRLOOM SILK</span>
-        <h1 class="pdp-title" id="pdp-saree-title">Handloom Silk Saree</h1>
+        <span class="pdp-brand-subtitle" id="pdp-brand-collection">6 YARDS</span>
+        <h1 class="pdp-title" id="pdp-saree-title"></h1>
 
         <!-- Price Row -->
         <div class="pdp-price-row">
           <span class="pdp-current-price" id="pdp-current-price"></span>
+          <span class="pdp-original-price" id="pdp-original-price" hidden></span>
+          <span class="pdp-discount-tag" id="pdp-discount-tag" hidden></span>
         </div>
         <p class="pdp-tax-caption">Inclusive of all taxes<span id="pdp-item-code"></span></p>
+        <div class="pdp-colors" id="pdp-colors" hidden></div>
 
         <!-- Quantity & Action Buttons (Image 3) -->
         <div class="pdp-action-block">
@@ -313,27 +317,27 @@
               <table class="pdp-specs-table">
                 <tr>
                   <td>Fabric:</td>
-                  <td id="spec-fabric">Fine Handloom Silk Cotton Blend</td>
+                  <td id="spec-fabric"></td>
                 </tr>
                 <tr>
                   <td>Weave & Motif:</td>
-                  <td id="spec-weave">Pichwai Kamdhenu, Lotus & Tassel Finish</td>
+                  <td id="spec-weave"></td>
                 </tr>
                 <tr>
                   <td>Color:</td>
-                  <td id="spec-color">Mauve Rose & Gold Zari</td>
+                  <td id="spec-color"></td>
                 </tr>
                 <tr>
                   <td>Saree Length:</td>
-                  <td id="spec-length">6.3 Meters (includes unstitched blouse piece)</td>
+                  <td id="spec-length"></td>
                 </tr>
                 <tr>
                   <td>Blouse Piece:</td>
-                  <td>Included, unstitched (approx. 80 cm)</td>
+                  <td id="spec-blouse"></td>
                 </tr>
                 <tr>
                   <td>Origin Cluster:</td>
-                  <td id="spec-origin">Varanasi, Uttar Pradesh</td>
+                  <td id="spec-origin"></td>
                 </tr>
               </table>
             </div>
@@ -359,13 +363,7 @@
               <i class="fa-solid fa-chevron-down"></i>
             </button>
             <div class="pdp-accordion-body">
-              <ul style="padding-left: 20px; display: flex; flex-direction: column; gap: 8px;">
-                <li>Dry clean only, preferably by a specialist experienced with silk and zari.</li>
-                <li>Never spray alcohol-based perfumes or deodorants directly onto gold zari threads.</li>
-                <li>Store folded in the muslin cloth it arrives in, away from direct sunlight.</li>
-                <li>Change folds every 3 months to prevent creasing of heavy zari brocade.</li>
-                <li>Iron on the reverse side only using low to medium silk temperature settings.</li>
-              </ul>
+              <ul id="pdp-care-list" style="padding-left: 20px; display: flex; flex-direction: column; gap: 8px;"></ul>
             </div>
           </div>
 
@@ -407,7 +405,7 @@
 
       <div style="text-align: center; margin-top: 38px;">
         <a href="collections.html" class="pdp-explore-all-btn">
-          View All Silk Sarees <i class="fa-solid fa-arrow-right"></i>
+          View All Sarees <i class="fa-solid fa-arrow-right"></i>
         </a>
       </div>
     </section>

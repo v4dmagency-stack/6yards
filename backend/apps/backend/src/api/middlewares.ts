@@ -6,6 +6,7 @@ import {
 import { NewsletterSchema } from "./store/newsletter/validators"
 import { stripUnsupportedImportColumns } from "./admin/products/imports/strip-unsupported-columns"
 import { AvailabilitySchema } from "./admin/products/[id]/availability/validators"
+import { CreateSareeSchema, UpdateSareeSchema } from "./admin/sarees/validators"
 
 // The product index declares filterable `status` and `sales_channel_ids`, so
 // the route narrows it to published products in the key's sales channels.
@@ -36,6 +37,16 @@ export default defineMiddlewares({
       method: ["POST"],
       matcher: "/admin/products/:id/availability",
       middlewares: [validateAndTransformBody(AvailabilitySchema)],
+    },
+    {
+      method: ["POST"],
+      matcher: "/admin/sarees",
+      middlewares: [validateAndTransformBody(CreateSareeSchema)],
+    },
+    {
+      method: ["POST"],
+      matcher: "/admin/sarees/:id",
+      middlewares: [validateAndTransformBody(UpdateSareeSchema)],
     },
   ],
 })

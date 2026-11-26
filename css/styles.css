@@ -5646,3 +5646,44 @@ a.checkout-btn, .checkout-btn {
 .filter-checkbox-label--child .filter-checkbox-left span {
   font-size: 0.92em;
 }
+
+/* Product page: colour tags (Admin -> Sarees -> Colours) */
+.pdp-colors {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin: -6px 0 16px;
+  font-size: 0.8125rem;
+}
+.pdp-colors[hidden] { display: none; }
+.pdp-colors-label {
+  color: var(--color-text-muted);
+  margin-right: 2px;
+}
+.pdp-color-chip {
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  padding: 2px 10px;
+  color: var(--color-text-main);
+  background: #FFF;
+}
+
+/* Product page: wait for the live catalog instead of flashing old details */
+.pdp-loading-note { display: none; }
+.pdp-is-loading .pdp-loading-note {
+  display: block;
+  text-align: center;
+  padding: 80px 16px;
+  color: var(--color-text-muted);
+}
+.pdp-is-loading .pdp-stage,
+.pdp-is-loading .pdp-recommendations-section { display: none; }
+
+/* Collections page: loading message while the live catalog arrives */
+.catalog-loading-note {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 60px 16px;
+  color: var(--color-text-muted);
+}

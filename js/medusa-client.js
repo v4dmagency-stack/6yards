@@ -14,7 +14,9 @@
     cartStorageKey: '6yards_medusa_cart_id',
     currencyCode: 'inr',
     countryCode: 'in',
-    healthTimeoutMs: 4000,
+    // The server can take ~15 s to wake up after a quiet spell; wait for it
+    // rather than showing the old bundled catalog.
+    healthTimeoutMs: 25000,
   };
 
   const PRODUCT_FIELDS = '*variants,*variants.calculated_price,+variants.inventory_quantity,+variants.manage_inventory,*collection,*categories,*images,+metadata';
@@ -157,73 +159,83 @@
     }
 
     /**
-     * Medusa products merged over the bundled catalog entry with the same
-     * handle (or title), so storefront ids, occasions and copy stay stable even
-     * if a product was created in the admin without the custom metadata.
+     * Medusa products in the storefront shape. Everything shown on the website
+     * comes from Medusa (Admin -> Sarees), so an edit there is what customers
+     * see. The bundled catalog is only used to keep old product links working.
      */
     normalizeMedusaProducts(medusaProducts) {
       const catalog = staticCatalog();
+      const text = (v) => (typeof v === 'string' ? v.trim() : '');
+      const list = (v) => (Array.isArray(v) ? v.map((x) => text(x)).filter(Boolean) : []);
+      const lines = (v) => text(v).split(/\r?\n/).map((l) => l.trim()).filter(Boolean);
+
       return medusaProducts.map((mp) => {
         const meta = mp.metadata || {};
-        const base =
-          catalog.find((p) => p.id === meta.storefront_id) ||
-          catalog.find((p) => p.id === mp.handle) ||
-          catalog.find((p) => p.name?.toLowerCase() === mp.title?.toLowerCase()) ||
-          {};
+        const legacy = catalog.find((p) => p.id === meta.storefront_id) || catalog.find((p) => p.id === mp.handle) || null;
 
         const variant = (mp.variants || []).find((v) => v.calculated_price) || mp.variants?.[0] || {};
         const calculated = variant.calculated_price?.calculated_amount;
-        const original = variant.calculated_price?.original_amount;
-        const price = typeof calculated === 'number' ? calculated : (base.price ?? meta.price ?? 0);
-        const compareAt = Number(meta.originalPrice) || (original > price ? original : null) || base.originalPrice || null;
+        const price = typeof calculated === 'number' ? calculated : 0;
+        // Regular price (Admin -> Sarees -> "Regular price"): shown struck out
+        // with "Save X%" only when it is higher than the selling price.
+        const regular = Number(meta.regular_price);
+        const originalPrice = Number.isFinite(regular) && regular > price && price > 0 ? regular : null;
 
-        const imageUrls = (mp.images || []).map((img) => img.url).filter(Boolean);
-        const image = mp.thumbnail || imageUrls[0] || base.image;
-        const gallery = imageUrls.length ? imageUrls : (base.gallery || (image ? [image] : []));
-        const collectionHandle = mp.collection?.handle || meta.collection || base.collection || '';
+        const imageUrls = (mp.images || [])
+          .slice()
+          .sort((a, b) => (a.rank ?? 0) - (b.rank ?? 0))
+          .map((img) => img.url)
+          .filter(Boolean);
+        const image = imageUrls[0] || mp.thumbnail || '';
+        const collectionHandle = mp.collection?.handle || '';
         const inStock = variant.manage_inventory === false || variant.inventory_quantity == null || variant.inventory_quantity > 0;
         const categoryHandles = (mp.categories || []).map((c) => c?.handle).filter(Boolean);
+        const colors = list(meta.colors);
+        const material = text(mp.material);
 
         return {
-          ...base,
-          id: base.id || meta.storefront_id || mp.handle || mp.id,
+          id: text(meta.storefront_id) || legacy?.id || mp.handle || mp.id,
           handle: mp.handle,
           medusaId: mp.id,
           variantId: variant.id,
-          // Item code shown on the product page (Admin: Inventory or variant SKU).
+          // Item code shown on the product page (Admin: Sarees, Inventory or variant SKU).
           sku: typeof variant.sku === 'string' ? variant.sku : '',
           inStock,
-          name: mp.title || base.name,
-          description: mp.description || base.description || '',
-          category: collectionHandle || base.category,
+          name: mp.title || '',
+          description: mp.description || '',
+          category: collectionHandle,
           collection: collectionHandle,
-          collectionName: mp.collection?.title
-            ? `${mp.collection.title} - Curated stories, woven in six yards.`
-            : (meta.collectionName || base.collectionName || ''),
+          collectionName: mp.collection?.title ? `${mp.collection.title} - Curated stories, woven in six yards.` : '',
           price,
-          originalPrice: compareAt && compareAt > price ? compareAt : null,
-          rating: meta.rating ?? base.rating,
-          reviewsCount: meta.reviewsCount ?? base.reviewsCount,
-          isBestSeller: meta.isBestSeller ?? base.isBestSeller ?? false,
-          isNew: meta.isNew ?? base.isNew ?? false,
+          originalPrice,
+          discountPercent: originalPrice ? Math.round(((originalPrice - price) / originalPrice) * 100) : 0,
+          rating: meta.rating,
+          reviewsCount: meta.reviewsCount,
+          isBestSeller: meta.isBestSeller === true,
+          isNew: meta.isNew === true,
           // Fabric = the product's Material attribute; categories (Fancy, Designer...) are separate.
-          material: String(mp.material || '').trim(),
+          material,
           categoryHandles,
           categoryList: (mp.categories || []).filter((c) => c?.handle).map((c) => ({ handle: c.handle, name: c.name })),
           fancy: categoryHandles.includes('fancy-sarees'),
           designer: categoryHandles.includes('designer-sarees'),
-          tag: meta.tag || base.tag || (mp.categories?.[0]?.name || 'Handloom'),
-          color: meta.color || base.color || '',
-          fabric: meta.fabric || base.fabric || '',
-          weave: meta.weave || base.weave || '',
-          length: meta.length || base.length || '6.3 Meters (includes unstitched blouse piece)',
-          origin: meta.origin || base.origin || '',
-          occasion: meta.occasion || base.occasion || '',
-          details: Array.isArray(meta.details) ? meta.details : (base.details || []),
+          tag: text(meta.tag) || 'Handloom',
+          colors,
+          // "Color" row: the written colour description, else the colour tags.
+          color: text(meta.color) || colors.join(', '),
+          // "Fabric" row: the written fabric details, else the Fabric attribute.
+          fabric: text(meta.fabric) || material,
+          weave: text(meta.weave),
+          length: text(meta.length),
+          blousePiece: text(meta.blouse_piece),
+          origin: text(meta.origin),
+          occasion: text(meta.occasion),
+          details: list(meta.details),
+          care: lines(meta.care),
           image,
-          hoverImage: imageUrls[1] || base.hoverImage || image,
-          gallery,
-          thumbnail: meta.thumbnail || base.thumbnail || image,
+          hoverImage: imageUrls[1] || image,
+          gallery: imageUrls.length ? imageUrls : (image ? [image] : []),
+          thumbnail: image,
         };
       });
     }

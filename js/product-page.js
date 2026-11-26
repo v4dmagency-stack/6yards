@@ -12,17 +12,53 @@ const PdpState = {
 
 document.addEventListener('DOMContentLoaded', async () => {
   const id = new URLSearchParams(window.location.search).get('id');
-  const fallbackList = Array.isArray(window.PRODUCTS_DATA) ? window.PRODUCTS_DATA : [];
 
-  // Render instantly from the bundled catalog, then refresh with live data.
-  const local = fallbackList.find((p) => p.id === id);
-  if (local) renderProduct(local, fallbackList);
-
-  const catalog = await window.Store.getCatalog();
-  const live = catalog.find((p) => p.id === id || p.handle === id);
-  if (live) renderProduct(live, catalog);
-  else if (!local) renderNotFound();
+  // Wait for the live catalog (Admin -> Sarees) so customers never see old
+  // prices or details. Offline, getCatalog() returns the bundled catalog.
+  try {
+    const catalog = await window.Store.getCatalog();
+    const product = catalog.find((p) => p.id === id || p.handle === id);
+    if (product) renderProduct(product, catalog);
+    else renderNotFound();
+  } catch (err) {
+    console.error(err);
+    renderNotFound();
+  } finally {
+    document.body.classList.remove('pdp-is-loading');
+  }
 });
+
+// Shown when a saree has no text of its own for these rows (same defaults as Admin -> Sarees).
+const PDP_DEFAULTS = {
+  length: '6.3 Meters (includes unstitched blouse piece)',
+  blousePiece: 'Included, unstitched (approx. 80 cm)',
+  care: [
+    'Dry clean only, preferably by a specialist experienced with silk and zari.',
+    'Never spray alcohol-based perfumes or deodorants directly onto gold zari threads.',
+    'Store folded in the muslin cloth it arrives in, away from direct sunlight.',
+    'Change folds every 3 months to prevent creasing of heavy zari brocade.',
+    'Iron on the reverse side only using low to medium silk temperature settings.',
+  ],
+};
+
+function fillList(id, items) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.innerHTML = '';
+  items.forEach((text) => {
+    const li = document.createElement('li');
+    li.textContent = text;
+    el.appendChild(li);
+  });
+}
+
+/** "Save X%" for a regular price above the selling price, else 0. */
+function discountPercent(product) {
+  const regular = Number(product.originalPrice);
+  const price = Number(product.price);
+  if (!(regular > price) || !(price > 0)) return 0;
+  return Math.round(((regular - price) / regular) * 100);
+}
 
 function renderProduct(product, catalog) {
   PdpState.product = product;
@@ -77,9 +113,14 @@ function renderProductDetails(product) {
   setText('pdp-brand-collection', `6 YARDS • ${collectionTitle.toUpperCase()}`);
   setText('pdp-saree-title', product.name);
 
-  // Pricing
-  // Only the selling price is shown (no struck-out "original" price or "Save %").
+  // Pricing: the selling price; with a higher regular price (Admin -> Sarees),
+  // also the struck-out regular price and "Save X%".
   setText('pdp-current-price', formatINR(product.price));
+  const percent = discountPercent(product);
+  const origEl = document.getElementById('pdp-original-price');
+  const discountTag = document.getElementById('pdp-discount-tag');
+  if (origEl) { origEl.textContent = percent ? formatINR(product.originalPrice) : ''; origEl.hidden = !percent; }
+  if (discountTag) { discountTag.textContent = percent ? `Save ${percent}%` : ''; discountTag.hidden = !percent; }
 
   // Item code = the SKU in Medusa (editable in Admin -> Inventory or the saree's
   // variant), read live on every page load. Placeholder SKUs ("6YD-...") are not
@@ -94,23 +135,35 @@ function renderProductDetails(product) {
   setText('pdp-item-code', itemCode ? ` · Item Code: ${itemCode}` : '');
 
   // Specifications
-  setText('spec-fabric', product.fabric || '—');
-  setText('spec-weave', product.weave || '—');
-  setText('spec-color', product.color || '—');
-  setText('spec-length', product.length || '6.3 Meters (includes unstitched blouse piece)');
-  setText('spec-origin', product.origin || '—');
+  // Specifications (each row is hidden when the saree has nothing for it)
+  const specRow = (id, value) => {
+    setText(id, value || '');
+    const row = document.getElementById(id)?.closest('tr');
+    if (row) row.hidden = !value;
+  };
+  specRow('spec-fabric', product.fabric || product.material);
+  specRow('spec-weave', product.weave);
+  specRow('spec-color', product.color || (product.colors || []).join(', '));
+  specRow('spec-length', product.length || PDP_DEFAULTS.length);
+  specRow('spec-blouse', product.blousePiece || PDP_DEFAULTS.blousePiece);
+  specRow('spec-origin', product.origin);
+
+  // Colour tags (Admin -> Sarees -> Colours)
+  const colorsEl = document.getElementById('pdp-colors');
+  if (colorsEl) {
+    const colors = product.colors || [];
+    colorsEl.hidden = !colors.length;
+    colorsEl.innerHTML = colors.length
+      ? `<span class="pdp-colors-label">Colours:</span>${colors.map((c) => `<span class="pdp-color-chip">${window.Store.escapeHtml(c)}</span>`).join('')}`
+      : '';
+  }
+
+  // Care instructions (one per line in Admin), else the standard silk care.
+  fillList('pdp-care-list', product.care?.length ? product.care : PDP_DEFAULTS.care);
 
   // Design story
   setText('pdp-design-desc', product.description || '');
-  const bullets = document.getElementById('pdp-details-bullets');
-  if (bullets) {
-    bullets.innerHTML = '';
-    (product.details || []).filter((d) => !d.startsWith('Item Code:')).forEach((d) => {
-      const li = document.createElement('li');
-      li.textContent = d;
-      bullets.appendChild(li);
-    });
-  }
+  fillList('pdp-details-bullets', (product.details || []).filter((d) => !/^item code:/i.test(d)));
 
   // Wishlist button + stock state
   document.getElementById('pdp-wishlist-btn')?.setAttribute('data-wishlist-toggle', product.id);
@@ -145,8 +198,12 @@ function setupGallery(product) {
   if (mainImg) {
     mainImg.src = photos[0] || '';
     mainImg.alt = product.name;
+    // A photo that fails to load falls back to the next one.
     mainImg.onerror = () => {
-      if (product.thumbnail && mainImg.src.indexOf(product.thumbnail) === -1) mainImg.src = product.thumbnail;
+      const current = photos.indexOf(mainImg.getAttribute('src'));
+      const next = photos[current + 1];
+      if (next) mainImg.src = next;
+      else mainImg.onerror = null;
     };
   }
 
@@ -238,6 +295,7 @@ function renderRecommendations(allProducts, current) {
           <a href="${url}" class="catalog-card-title" title="${name}">${name}</a>
           <div class="catalog-card-price-row">
             <span class="catalog-card-price">${formatINR(item.price)}</span>
+            ${discountPercent(item) ? `<span class="catalog-card-original-price">${formatINR(item.originalPrice)}</span>` : ''}
           </div>
         </div>
       </div>`;
