@@ -135,7 +135,9 @@ export function toSaree(product: any, stock: ReturnType<typeof summarizeStock> |
     occasion: text(meta.occasion),
     badge: text(meta.tag),
     colors: list(meta.colors),
-    details: list(meta.details),
+    // Old "Item Code: ..." lines are left over from the first catalog; the item
+    // code has its own box, so they are not shown (or saved back).
+    details: list(meta.details).filter((d) => !/^item code:/i.test(d)),
     bestseller: meta.isBestSeller === true || meta.isBestSeller === "true",
     variant_count: (product.variants ?? []).length,
     updated_at: product.updated_at,
@@ -294,6 +296,9 @@ export async function updateSaree(container: MedusaContainer, id: string, input:
     )
   }
 
+  // Only what actually changed is written, so saving an untouched saree
+  // leaves its photos and stock exactly as they were.
+  const current = await getSaree(container, id)
   const productUpdate: Record<string, unknown> = { id }
   if (input.title !== undefined) productUpdate.title = input.title.trim()
   if (input.description !== undefined) productUpdate.description = input.description.trim()
@@ -301,8 +306,8 @@ export async function updateSaree(container: MedusaContainer, id: string, input:
   if (input.fabric !== undefined) productUpdate.material = input.fabric.trim() || null
   if (input.collection_id !== undefined) productUpdate.collection_id = input.collection_id || null
   if (input.category_ids !== undefined) productUpdate.category_ids = [...new Set(input.category_ids)]
-  if (input.images !== undefined) {
-    const urls = [...new Set(input.images.filter(Boolean))]
+  const urls = input.images !== undefined ? [...new Set(input.images.filter(Boolean))] : null
+  if (urls && JSON.stringify(urls) !== JSON.stringify(current.images)) {
     productUpdate.images = urls.map((url) => ({ url }))
     productUpdate.thumbnail = urls[0] ?? null
   }
@@ -313,7 +318,7 @@ export async function updateSaree(container: MedusaContainer, id: string, input:
     await updateProductsWorkflow(container).run({ input: { products: [productUpdate] } as any })
   }
   await setVariantPriceAndSku(container, product.variants[0].id, input)
-  if (input.stock !== undefined) {
+  if (input.stock !== undefined && Math.max(0, Math.floor(input.stock)) !== current.stock) {
     await setAvailableStock(container, id, input.stock)
   }
   return getSaree(container, id)
