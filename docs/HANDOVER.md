@@ -138,7 +138,10 @@ Remove the starter T-shirts if present: `npx medusa exec ./src/scripts/clean-sta
     available).
   - A product created in Admin without any stock shows as sold out until stock is added (Back in stock does that).
     If "Manage inventory" is off for its variant, it can always be bought and the box explains how to turn it on.
-- **Orders:** Orders → confirm, mark paid when payment arrives, create fulfillment and add tracking.
+- **Orders:** Orders → confirm, mark paid when payment arrives. Shipping goes through **Shiprocket**: the
+  order page has a Shiprocket box (send as Paid or Cash on delivery); courier updates mark the order shipped
+  and delivered automatically, and customers follow it on **Track Your Order**. Setup and daily use:
+  [SHIPROCKET.md](SHIPROCKET.md).
 - **Promotions:** Promotions → create codes. `WELCOME10` is advertised on the newsletter signup.
 - **Newsletter subscribers:** Customers with metadata `newsletter_opt_in = true`.
 

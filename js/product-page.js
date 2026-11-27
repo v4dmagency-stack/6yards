@@ -26,7 +26,67 @@ document.addEventListener('DOMContentLoaded', async () => {
   } finally {
     document.body.classList.remove('pdp-is-loading');
   }
+  setupDeliveryCheck();
 });
+
+/* --------------------------------------------------------------------------
+   Delivery check by PIN code (Shiprocket). Shown only when it works.
+   -------------------------------------------------------------------------- */
+const DELIVERY_PIN_KEY = '6yards_delivery_pincode';
+
+async function setupDeliveryCheck() {
+  const form = document.getElementById('pdp-delivery-check');
+  if (!form || !window.MedusaClient?.deliveryEstimate) return;
+  const status = await window.MedusaClient.deliveryEstimate();
+  if (!status?.available) return;
+  form.hidden = false;
+
+  const input = document.getElementById('pdp-delivery-pincode');
+  try {
+    const saved = localStorage.getItem(DELIVERY_PIN_KEY);
+    if (saved && /^[1-9]\d{5}$/.test(saved)) input.value = saved;
+  } catch (e) { /* storage unavailable */ }
+
+  form.addEventListener('submit', (event) => {
+    event.preventDefault();
+    checkDelivery(input.value.trim());
+  });
+  if (input.value) checkDelivery(input.value);
+}
+
+async function checkDelivery(pincode) {
+  const result = document.getElementById('pdp-delivery-result');
+  const button = document.getElementById('pdp-delivery-btn');
+  const show = (text, bad) => {
+    result.textContent = text;
+    result.classList.toggle('is-bad', Boolean(bad));
+    result.hidden = false;
+  };
+  if (!/^[1-9]\d{5}$/.test(pincode)) {
+    show('Enter a valid 6-digit PIN code.', true);
+    return;
+  }
+  button.disabled = true;
+  show('Checking…');
+  try {
+    const r = await window.MedusaClient.deliveryEstimate(pincode);
+    if (!r?.available) {
+      show('We deliver across India. WhatsApp us to confirm delivery to your PIN code.');
+      return;
+    }
+    try { localStorage.setItem(DELIVERY_PIN_KEY, pincode); } catch (e) { /* storage unavailable */ }
+    if (!r.serviceable) {
+      show(`Sorry, our couriers don't deliver to ${pincode} yet. WhatsApp us and we'll find a way.`, true);
+      return;
+    }
+    const when = r.days
+      ? `Usually delivered in ${r.days} ${r.days === 1 ? 'day' : 'days'}${r.etd ? ` (by ${r.etd})` : ''}`
+      : 'Delivery available';
+    show(`${when}.${r.cod ? ' Cash on delivery available.' : ''}`);
+  } finally {
+    button.disabled = false;
+  }
+}
 
 // Shown when a saree has no text of its own for these rows (same defaults as Admin -> Sarees).
 const PDP_DEFAULTS = {

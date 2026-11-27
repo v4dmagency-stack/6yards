@@ -71,6 +71,12 @@
       }
     },
     {
+      "source": "/hooks/(.*)",
+      "destination": {
+        "service": "medusa"
+      }
+    },
+    {
       "source": "/files",
       "destination": {
         "service": "medusa"

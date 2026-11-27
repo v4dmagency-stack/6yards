@@ -283,6 +283,16 @@
           <p class="pdp-stock-note" id="pdp-stock-note" hidden></p>
         </div>
 
+        <!-- Delivery check by PIN code (shown when Shiprocket is connected) -->
+        <form class="pdp-delivery-check" id="pdp-delivery-check" hidden novalidate>
+          <label for="pdp-delivery-pincode">Check delivery to your PIN code</label>
+          <div class="pdp-delivery-row">
+            <input type="text" id="pdp-delivery-pincode" inputmode="numeric" maxlength="6" autocomplete="postal-code" placeholder="6-digit PIN code" />
+            <button type="submit" id="pdp-delivery-btn">Check</button>
+          </div>
+          <p class="pdp-delivery-result" id="pdp-delivery-result" aria-live="polite" hidden></p>
+        </form>
+
 
         <!-- Trust Highlights Grid -->
         <div class="pdp-trust-grid">
@@ -481,6 +491,7 @@
         <div class="footer-nav-col">
           <h4>Customer Care</h4>
           <ul class="footer-links">
+            <li><a href="track-order.html">Track Your Order</a></li>
             <li><a href="#" data-policy="shipping">Shipping Policy</a></li>
             <li><a href="#" data-policy="returns">Returns & Exchanges</a></li>
             <li><a href="#" data-policy="size">Size Guide</a></li>

@@ -160,6 +160,13 @@ async function onDetailsSubmit(event) {
 
   try {
     if (window.Store.isOnline()) {
+      // Shiprocket PIN code check. Only a clear "not deliverable" stops the
+      // order; if the check can't be done, checkout carries on as normal.
+      const delivery = await window.MedusaClient.deliveryEstimate(details.address.postal_code);
+      if (delivery?.available && delivery.serviceable === false) {
+        showFieldErrors([['co-pincode', 'Sorry, our couriers do not deliver to this PIN code yet. Please WhatsApp us and we will find a way.']]);
+        return;
+      }
       await window.MedusaClient.updateCartDetails(details);
       const [options, providers] = await Promise.all([
         window.MedusaClient.listShippingOptions(),
@@ -360,6 +367,14 @@ function showConfirmation({ reference, email, total, online }) {
     ? 'We have received your order and will contact you shortly to confirm payment and dispatch. A copy of your order details has been saved with this reference.'
     : 'Your order details are ready in WhatsApp. Please press send so our team can confirm availability and share payment options. Your bag is kept until you clear it.');
   document.getElementById('checkout-clear-bag').hidden = online;
+  const track = document.getElementById('checkout-track-order');
+  if (track) {
+    track.hidden = !online;
+    const number = String(reference || '').replace(/[^d]/g, '');
+    if (online && number) {
+      track.href = `track-order.html?${new URLSearchParams({ order: number, email: email || '' })}`;
+    }
+  }
   document.getElementById('checkout-clear-bag').onclick = () => {
     window.Store.Cart.clear();
     window.location.href = 'collections.html';

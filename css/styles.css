@@ -5687,3 +5687,58 @@ a.checkout-btn, .checkout-btn {
   padding: 60px 16px;
   color: var(--color-text-muted);
 }
+
+/* Track your order (track-order.html) */
+.track-section { padding: 48px 0 96px; background-color: #FAF6F1; }
+.track-container { max-width: 760px; display: flex; flex-direction: column; gap: 24px; }
+.track-form, .track-result {
+  background: #FFF;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  padding: 24px;
+}
+.track-form { display: grid; grid-template-columns: 1fr 1.4fr auto; gap: 12px; align-items: end; }
+.track-form .checkout-field { margin-bottom: 0; }
+.track-form .checkout-btn { width: auto; padding: 12px 24px; white-space: nowrap; }
+.track-message { grid-column: 1 / -1; margin: 0; color: #B3261E; font-size: 0.875rem; }
+.track-message[hidden], .track-result[hidden], .track-courier-link[hidden], .track-steps[hidden], .track-events[hidden] { display: none; }
+.track-result-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; flex-wrap: wrap; }
+.track-eyebrow { font-size: 0.8rem; color: var(--color-text-muted); text-transform: uppercase; letter-spacing: 0.06em; }
+.track-stage { font-size: 1.9rem; color: var(--color-navy); margin: 4px 0; }
+.track-meta { color: var(--color-text-muted); font-size: 0.9rem; margin: 0; }
+.track-courier-link { width: auto; padding: 10px 20px; }
+.track-steps { list-style: none; display: grid; grid-template-columns: repeat(5, 1fr); gap: 4px; margin: 24px 0 8px; padding: 0; }
+.track-step { display: flex; flex-direction: column; align-items: center; gap: 8px; text-align: center; font-size: 0.78rem; color: var(--color-text-light); position: relative; }
+.track-step::before { content: ""; position: absolute; top: 7px; left: -50%; width: 100%; height: 2px; background: var(--color-border); z-index: 0; }
+.track-step:first-child::before { display: none; }
+.track-step-dot { width: 16px; height: 16px; border-radius: 50%; background: #FFF; border: 2px solid var(--color-border); position: relative; z-index: 1; }
+.track-step.is-done, .track-step.is-current { color: var(--color-navy); font-weight: 600; }
+.track-step.is-done .track-step-dot, .track-step.is-current .track-step-dot { background: var(--color-gold); border-color: var(--color-gold); }
+.track-step.is-done::before, .track-step.is-current::before { background: var(--color-gold); }
+.track-details dl { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px 24px; margin: 20px 0 0; }
+.track-details dt { font-size: 0.75rem; color: var(--color-text-muted); text-transform: uppercase; letter-spacing: 0.05em; }
+.track-details dd { margin: 2px 0 0; color: var(--color-navy); font-size: 0.925rem; }
+.track-events { list-style: none; margin: 20px 0 0; padding: 16px 0 0; border-top: 1px solid var(--color-border); display: flex; flex-direction: column; gap: 10px; }
+.track-events li { display: grid; grid-template-columns: 120px 1fr; gap: 12px; font-size: 0.875rem; }
+.track-event-time { color: var(--color-text-muted); }
+.track-event-place { color: var(--color-text-light); }
+.track-help { margin: 20px 0 0; font-size: 0.85rem; color: var(--color-text-muted); }
+@media (max-width: 640px) {
+  .track-form { grid-template-columns: 1fr; }
+  .track-form .checkout-btn { width: 100%; }
+  .track-steps { font-size: 0.7rem; }
+  .track-step { font-size: 0.68rem; }
+  .track-events li { grid-template-columns: 1fr; gap: 2px; }
+}
+
+/* Product page: delivery check by PIN code (Shiprocket) */
+.pdp-delivery-check { margin: 4px 0 20px; padding: 14px 16px; border: 1px solid var(--color-border); border-radius: 6px; background: #FFF; }
+.pdp-delivery-check[hidden] { display: none; }
+.pdp-delivery-check label { display: block; font-size: 0.8rem; font-weight: 600; color: var(--color-text-muted); margin-bottom: 8px; }
+.pdp-delivery-row { display: flex; gap: 8px; }
+.pdp-delivery-row input { flex: 1; min-width: 0; padding: 10px 12px; border: 1px solid var(--color-border); border-radius: 4px; font: inherit; }
+.pdp-delivery-row button { padding: 10px 18px; border-radius: 4px; background: var(--color-navy); color: #FFF; font-weight: 600; border: 0; cursor: pointer; }
+.pdp-delivery-row button:disabled { opacity: 0.6; cursor: default; }
+.pdp-delivery-result { margin: 10px 0 0; font-size: 0.875rem; color: var(--color-navy); }
+.pdp-delivery-result.is-bad { color: #B3261E; }
+.pdp-delivery-result[hidden] { display: none; }

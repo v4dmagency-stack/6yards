@@ -404,6 +404,37 @@
       this.forgetCart();
       return res.order;
     }
+
+    /* ---------------------------------------------------------------------
+       Delivery (Shiprocket)
+       --------------------------------------------------------------------- */
+
+    /**
+     * Delivery check for a PIN code: { available, serviceable, cod, days, etd }.
+     * available = false when the check can't be done (Shiprocket not connected,
+     * backend offline); callers then simply don't show anything.
+     */
+    async deliveryEstimate(pincode = '') {
+      await this.ready;
+      if (!this.isBackendAvailable) return { available: false };
+      try {
+        return await this.request(`/store/delivery-estimate?pincode=${encodeURIComponent(pincode)}`);
+      } catch (err) {
+        return { available: false };
+      }
+    }
+
+    /** Order status for the "Track your order" page (order number + email). */
+    async trackOrder(orderNumber, email) {
+      await this.ready;
+      if (!this.isBackendAvailable) {
+        const err = new Error('Tracking is not available right now. Please try again in a minute or WhatsApp us.');
+        err.offline = true;
+        throw err;
+      }
+      const query = new URLSearchParams({ order: orderNumber, email });
+      return this.request(`/store/order-tracking?${query}`);
+    }
   }
 
   function safeStorageGet(key) {
